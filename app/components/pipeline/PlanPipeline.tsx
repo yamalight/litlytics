@@ -1,0 +1,80 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import { useStore } from '../../store/store';
+import { Button } from '../catalyst/button';
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogDescription,
+  DialogTitle,
+} from '../catalyst/dialog';
+import { Field, FieldGroup, Label } from '../catalyst/fieldset';
+import { Textarea } from '../catalyst/textarea';
+import { Spinner } from '../Spinner';
+import { runPrompt } from '../util';
+import system from './pipeline.txt';
+
+export default function PlanPipeline() {
+  const contentInputRef = useRef<HTMLTextAreaElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const setPipelinePlan = useStore((state) => state.setPipelinePlan);
+
+  const runPlan = async () => {
+    const description = contentInputRef.current?.value;
+
+    if (!description?.length) {
+      return;
+    }
+    setLoading(true);
+
+    // generate plan from LLM
+    const plan = await runPrompt({ system, user: description });
+
+    setPipelinePlan(plan.result ?? '');
+    setLoading(false);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>Plan pipeline</Button>
+      <Dialog open={isOpen} onClose={setIsOpen}>
+        <DialogTitle>Plan your pipeline</DialogTitle>
+        <DialogDescription>
+          Assists with planning your data processing pipeline based on your
+          task.
+        </DialogDescription>
+        <DialogBody>
+          <FieldGroup>
+            <Field>
+              <Label>Describe your task</Label>
+              <Textarea
+                name="task"
+                placeholder="Task description"
+                autoFocus
+                ref={contentInputRef}
+                disabled={loading}
+              />
+            </Field>
+          </FieldGroup>
+        </DialogBody>
+        <DialogActions>
+          {loading && (
+            <div className="flex flex-1">
+              <Spinner />
+            </div>
+          )}
+          <Button plain onClick={() => setIsOpen(false)} disabled={loading}>
+            Cancel
+          </Button>
+          <Button onClick={runPlan} disabled={loading}>
+            Plan
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}

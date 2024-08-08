@@ -1,7 +1,9 @@
 - Insert 2 example docs
-- Ask LLM to plan pipeline
+- Ask LLM to plan pipeline:
+  I want to analyze product reviews to find most frequent complaints in them.
 - Preview results
-- Ask LLM to generate a step 1: classify whether game review is useful
+- Ask LLM to generate a step 1: run sentiment analysis:
+  Analyze sentiments of the product review.
 - Preview results
 - Ask LLM to generate mapping function that filters out negative docs
 - Preview results
