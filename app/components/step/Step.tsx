@@ -43,7 +43,7 @@ export function StepItem({ step }: { step: Step }) {
     const system = step.prompt!;
 
     if (step.type === 'llm') {
-      if (prevResult?.result?.length === 0) {
+      if (prevResult && prevResult.result?.length === 0) {
         setResult(`No need to run based on previous result.`);
         setLoading(false);
         return;
