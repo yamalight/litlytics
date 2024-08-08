@@ -1,14 +1,19 @@
 'use client';
 
+import { XMarkIcon } from '@heroicons/react/16/solid';
+import { useState } from 'react';
 import Markdown from 'react-markdown';
 import AddProject from './components/AddProject';
 import AddStep from './components/addStep/AddStep';
 import AddTestDoc from './components/AddTestDoc';
-import PlanPipeline from './components/pipeline/PlanPipeline';
+import { ApplicationLayout } from './components/ApplicationLayout';
+import { Button } from './components/catalyst/button';
+import { Sidebar } from './components/catalyst/sidebar';
 import { StepItem } from './components/step/Step';
 import { useStore } from './store/store';
 
 export default function Home() {
+  const [showHelp, setShowHelp] = useState(false);
   const state = useStore((state) => state);
 
   return (
@@ -23,35 +28,30 @@ export default function Home() {
             </div>
           )}
         {Boolean(state.testDocs?.length) && (
-          <div className="flex w-full items-center justify-center">
-            <div className="flex flex-col gap-2">
-              <div>Working on {state.projectName}</div>
-              <div>
-                Docs:{' '}
-                {state.testDocs.map((d) => (
-                  <div key={d.id}>{d.name}</div>
-                ))}
-                <AddTestDoc />
-              </div>
-              <div>
-                Steps:
+          <ApplicationLayout showAssist={() => setShowHelp((c) => !c)}>
+            <div className="flex w-full items-center justify-center">
+              <div className="flex flex-col gap-2 prose prose-sm dark:prose-invert">
+                <h1>Pipeline</h1>
                 {state.steps.map((s) => (
                   <StepItem key={s.id} step={s} />
                 ))}
-              </div>
-              <div>
-                {!Boolean(state.pipelinePlan?.length) && <PlanPipeline />}
-                {Boolean(state.pipelinePlan?.length) && <AddStep />}
+                <AddStep />
               </div>
             </div>
-          </div>
+          </ApplicationLayout>
         )}
 
-        {Boolean(state.pipelinePlan?.length) && (
-          <div className="w-5/12 h-full max-h-screen overflow-auto p-4 prose prose-sm dark:prose-invert lg:bg-zinc-200 dark:bg-zinc-800 dark:lg:bg-zinc-800">
-            <h1>Suggested pipeline:</h1>
+        {Boolean(state.pipelinePlan?.length) && showHelp && (
+          <Sidebar className="w-5/12 h-full min-h-screen max-h-screen overflow-auto p-4 prose prose-sm dark:prose-invert lg:bg-zinc-200 dark:bg-zinc-800 dark:lg:bg-zinc-800">
+            <div className="flex w-full items-center justify-between">
+              <h1 className="m-0">Suggested pipeline:</h1>
+              <Button plain onClick={() => setShowHelp(false)}>
+                <XMarkIcon />
+              </Button>
+            </div>
+
             <Markdown>{state.pipelinePlan}</Markdown>
-          </div>
+          </Sidebar>
         )}
       </div>
     </main>

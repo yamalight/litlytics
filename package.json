@@ -12,6 +12,7 @@
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "clsx": "^2.1.1",
+    "framer-motion": "^11.3.24",
     "next": "14.2.5",
     "openai": "^4.55.1",
     "p-retry": "^6.2.0",

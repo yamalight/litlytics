@@ -19,6 +19,7 @@ import { Spinner } from '../Spinner';
 import { runPrompt } from '../util';
 import codeSystem from './code-step.txt';
 import llmSystem from './llm-step.txt';
+import { PlusIcon } from '@heroicons/react/16/solid';
 
 export default function AddStep() {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -67,8 +68,10 @@ Step description: ${description}`;
   };
 
   return (
-    <>
-      <Button onClick={() => setIsOpen(true)}>Add processing step</Button>
+    <div className="flex w-full mt-4">
+      <Button className="w-full" onClick={() => setIsOpen(true)}>
+        <PlusIcon className="w-4 h-4" /> Add processing step
+      </Button>
       <Dialog open={isOpen} onClose={setIsOpen}>
         <DialogTitle>Add processing step</DialogTitle>
         <DialogDescription>
@@ -129,6 +132,6 @@ Step description: ${description}`;
           <Button onClick={createStep}>Create</Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   );
 }

@@ -1,6 +1,8 @@
 import { Step, TestResult, useStore } from '@/app/store/store';
+import { BeakerIcon } from '@heroicons/react/16/solid';
 import { useRef, useState } from 'react';
 import Markdown from 'react-markdown';
+import { Badge } from '../catalyst/badge';
 import { Button } from '../catalyst/button';
 import {
   Dialog,
@@ -9,6 +11,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from '../catalyst/dialog';
+import { Divider } from '../catalyst/divider';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Select } from '../catalyst/select';
 import { Spinner } from '../Spinner';
@@ -112,11 +115,16 @@ export function StepItem({ step }: { step: Step }) {
   };
 
   return (
-    <div>
-      {step.name}
-      <Button plain className="ml-2" onClick={() => setIsOpen(true)}>
-        Test step
-      </Button>
+    <div className="flex flex-col">
+      <Divider soft className="my-2" />
+      <div className="flex items-center gap-2">
+        <span>{step.name}</span>
+        <Badge>{step.type}</Badge>
+        <div className="flex flex-1" />
+        <Button outline className="ml-2" onClick={() => setIsOpen(true)}>
+          <BeakerIcon className="w-4 h-4" /> Test
+        </Button>
+      </div>
       <Dialog open={isOpen} onClose={setIsOpen}>
         <DialogTitle>Test step</DialogTitle>
         <DialogDescription>

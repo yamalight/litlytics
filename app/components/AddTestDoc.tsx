@@ -57,7 +57,7 @@ export default function AddTestDoc() {
               const name = nameInputRef.current?.value;
               if (content?.length && name?.length) {
                 state.addTestDoc({
-                  id: String(state.testDocs.length),
+                  id: String(parseInt(state.testDocs.at(-1)?.id ?? '-1') + 1),
                   name,
                   content,
                 });
