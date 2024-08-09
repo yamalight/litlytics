@@ -32,12 +32,35 @@ export interface State {
   addTestDoc: (doc: Doc) => void;
 
   // pipeline steps
+  pipelineDescription?: string;
+  setPipelineDescription: (description: string) => void;
   pipelinePlan?: string;
   setPipelinePlan: (plan: string) => void;
   steps: Step[];
   addStep: (step: Step) => void;
   setSteps: (steps: Step[]) => void;
 }
+
+/* export const useStore = create<State>((set) => ({
+  // project setup
+  projectName: '',
+  setProjectName: (name: string) => set({ projectName: name }),
+
+  // test docs
+  testDocs: [],
+  addTestDoc: (doc: Doc) =>
+    set((state) => ({ testDocs: state.testDocs.concat(doc) })),
+
+  // pipeline plan
+  pipelinePlan: '',
+  setPipelinePlan: (plan: string) => set({ pipelinePlan: plan }),
+
+  // pipeline steps
+  steps: [],
+  addStep: (step: Step) =>
+    set((state) => ({ steps: state.steps.concat(step) })),
+  setSteps: (steps: Step[]) => set({ steps }),
+})); */
 
 export const useStore = create<State>((set) => ({
   // project setup
@@ -94,6 +117,10 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
 
 4) **LLM Step - Summarize Findings**: Use a language model to summarize the most frequent complaints identified in the previous step, providing a clear overview of the key issues customers are facing with the product.`,
   setPipelinePlan: (plan: string) => set({ pipelinePlan: plan }),
+
+  pipelineDescription:
+    'I need to analyze a set of product reviews to get a list of common complaints.',
+  setPipelineDescription: (desc: string) => set({ pipelineDescription: desc }),
 
   // pipeline steps
   steps: [

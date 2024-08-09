@@ -71,13 +71,13 @@ export function ApplicationLayout({
       navbar={
         <Navbar>
           <NavbarSpacer />
-          <NavbarSection>Cogniloom</NavbarSection>
+          <NavbarSection>CogniLoom</NavbarSection>
         </Navbar>
       }
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            <SidebarLabel>Cogniloom</SidebarLabel>
+            <SidebarLabel>CogniLoom</SidebarLabel>
           </SidebarHeader>
 
           <SidebarBody>
@@ -99,10 +99,12 @@ export function ApplicationLayout({
 
           <SidebarFooter className="max-lg:hidden">
             {!Boolean(state.pipelinePlan?.length) && <PlanPipeline />}
-            <SidebarItem onClick={showAssist}>
-              <QuestionMarkCircleIcon />
-              <SidebarLabel>Show assist</SidebarLabel>
-            </SidebarItem>
+            {Boolean(state.pipelinePlan?.length) && (
+              <SidebarItem onClick={showAssist}>
+                <QuestionMarkCircleIcon />
+                <SidebarLabel>Show assist</SidebarLabel>
+              </SidebarItem>
+            )}
           </SidebarFooter>
         </Sidebar>
       }

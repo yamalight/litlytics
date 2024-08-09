@@ -10,4 +10,13 @@
 - Ask LLM to generate step 2: extract features from reviews
 - Preview results
 - Save pipeline
+
+ToDo:
+
+- Improve starting flow (create -> docs -> steps)
+- Allow viewing steps data
+- Allow iterating on pipeline and steps
+
+Future ideas:
+
 - Show cost estimate

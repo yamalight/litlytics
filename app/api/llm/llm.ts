@@ -28,21 +28,14 @@ async function executeOpenaiWithFallback(
  * Executes LLM prompt and returns all results
  */
 async function executeOnLLMBase({
-  system,
-  user,
+  messages,
   modelName,
   modelArgs,
 }: {
-  system?: string;
-  user: string;
+  messages: ChatCompletionMessageParam[];
   modelName?: string | null;
   modelArgs?: Partial<ChatCompletionCreateParamsBase>;
 }) {
-  const messages: ChatCompletionMessageParam[] = [];
-  if (system) {
-    messages.push({ role: 'system', content: system.trim() });
-  }
-  messages.push({ role: 'user', content: user.trim() });
   const chatCompletion = await executeOpenaiWithFallback({
     ...defaultModelArgs,
     ...modelArgs,
@@ -68,23 +61,16 @@ async function executeOnLLMBase({
  * Executes LLM prompt with tools and returns all results
  */
 async function executeOnLLMToolsBase({
-  system,
-  user,
+  messages,
   modelName,
   modelArgs,
   tools,
 }: {
-  system?: string;
-  user: string;
+  messages: ChatCompletionMessageParam[];
   tools: ChatCompletionTool[];
   modelName?: string | null;
   modelArgs?: Partial<ChatCompletionCreateParamsBase>;
 }) {
-  const messages: ChatCompletionMessageParam[] = [];
-  if (system) {
-    messages.push({ role: 'system', content: system.trim() });
-  }
-  messages.push({ role: 'user', content: user.trim() });
   const chatCompletion = await executeOpenaiWithFallback({
     ...defaultModelArgs,
     ...modelArgs,
@@ -115,19 +101,16 @@ async function executeOnLLMToolsBase({
  * Executes LLM prompt and returns a single result
  */
 async function executeOnLLMSingleBase({
-  system,
-  user,
+  messages,
   modelName,
   modelArgs,
 }: {
-  system?: string;
-  user: string;
+  messages: ChatCompletionMessageParam[];
   modelName?: string | null;
   modelArgs?: Partial<ChatCompletionCreateParamsBase>;
 }) {
   const { answers, usage } = await executeOnLLMBase({
-    system,
-    user,
+    messages,
     modelName,
     modelArgs,
   });
@@ -139,18 +122,16 @@ async function executeOnLLMSingleBase({
  * Executes LLM prompt and returns a single result
  */
 export async function executeOnLLM({
-  system,
-  user,
+  messages,
   modelName,
   modelArgs,
 }: {
-  system?: string;
-  user: string;
+  messages: ChatCompletionMessageParam[];
   modelName?: string | null;
   modelArgs?: Partial<ChatCompletionCreateParamsBase>;
 }) {
   return pRetry(
-    () => executeOnLLMSingleBase({ system, user, modelName, modelArgs }),
+    () => executeOnLLMSingleBase({ messages, modelName, modelArgs }),
     {
       retries: 3,
       shouldRetry: () => true, // always retry
@@ -162,20 +143,18 @@ export async function executeOnLLM({
  * Executes LLM prompt with tools and returns a single result
  */
 export async function executeOnLLMWithTools({
-  system,
-  user,
+  messages,
   modelName,
   modelArgs,
   tools,
 }: {
-  system?: string;
-  user: string;
+  messages: ChatCompletionMessageParam[];
   tools: ChatCompletionTool[];
   modelName?: string | null;
   modelArgs?: Partial<ChatCompletionCreateParamsBase>;
 }) {
   return pRetry(
-    () => executeOnLLMToolsBase({ system, user, tools, modelName, modelArgs }),
+    () => executeOnLLMToolsBase({ messages, tools, modelName, modelArgs }),
     {
       retries: 3,
       shouldRetry: () => true, // always retry
@@ -187,21 +166,16 @@ export async function executeOnLLMWithTools({
  * Executes LLM prompt and returns all results
  */
 export async function executeOnLLMMulti({
-  system,
-  user,
+  messages,
   modelName,
   modelArgs,
 }: {
-  system?: string;
-  user: string;
+  messages: ChatCompletionMessageParam[];
   modelName?: string | null;
   modelArgs?: Partial<ChatCompletionCreateParamsBase>;
 }) {
-  return pRetry(
-    () => executeOnLLMBase({ system, user, modelName, modelArgs }),
-    {
-      retries: 3,
-      shouldRetry: () => true, // always retry
-    }
-  );
+  return pRetry(() => executeOnLLMBase({ messages, modelName, modelArgs }), {
+    retries: 3,
+    shouldRetry: () => true, // always retry
+  });
 }

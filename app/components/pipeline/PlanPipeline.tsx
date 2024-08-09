@@ -1,5 +1,6 @@
 'use client';
 
+import { PuzzlePieceIcon } from '@heroicons/react/16/solid';
 import { useRef, useState } from 'react';
 import { useStore } from '../../store/store';
 import { Button } from '../catalyst/button';
@@ -20,7 +21,7 @@ export default function PlanPipeline() {
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const setPipelinePlan = useStore((state) => state.setPipelinePlan);
+  const state = useStore((state) => state);
 
   const runPlan = async () => {
     const description = contentInputRef.current?.value;
@@ -33,14 +34,16 @@ export default function PlanPipeline() {
     // generate plan from LLM
     const plan = await runPrompt({ system, user: description });
 
-    setPipelinePlan(plan.result ?? '');
+    state.setPipelinePlan(plan.result ?? '');
     setLoading(false);
     setIsOpen(false);
   };
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Plan pipeline</Button>
+      <Button outline onClick={() => setIsOpen(true)}>
+        <PuzzlePieceIcon className="w-3 h-3" /> Help me plan a pipeline
+      </Button>
       <Dialog open={isOpen} onClose={setIsOpen}>
         <DialogTitle>Plan your pipeline</DialogTitle>
         <DialogDescription>
@@ -52,6 +55,7 @@ export default function PlanPipeline() {
             <Field>
               <Label>Describe your task</Label>
               <Textarea
+                rows={5}
                 name="task"
                 placeholder="Task description"
                 autoFocus

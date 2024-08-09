@@ -13,6 +13,7 @@ import {
 import { Field, FieldGroup, Label } from './catalyst/fieldset';
 import { Input } from './catalyst/input';
 import { Textarea } from './catalyst/textarea';
+import { DocumentIcon } from '@heroicons/react/16/solid';
 
 export default function AddTestDoc() {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -21,9 +22,12 @@ export default function AddTestDoc() {
   const state = useStore((state) => state);
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Add test doc</Button>
+      <Button onClick={() => setIsOpen(true)}>
+        <DocumentIcon className="w-4 h-4" />
+        Add document
+      </Button>
       <Dialog open={isOpen} onClose={setIsOpen}>
-        <DialogTitle>Add test document</DialogTitle>
+        <DialogTitle>Add document</DialogTitle>
         <DialogDescription>Add new test document to project</DialogDescription>
         <DialogBody>
           <FieldGroup>

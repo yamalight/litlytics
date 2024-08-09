@@ -5,11 +5,10 @@ import { executeOnLLM } from './llm';
 export async function POST(request: NextRequest) {
   // get prompt
   const body = await request.json();
-  const { system, user, args } = body;
+  const { messages, args } = body;
 
   const response = await executeOnLLM({
-    system,
-    user,
+    messages,
     modelArgs: {
       ...defaultModelArgs,
       ...(args ?? {}),
