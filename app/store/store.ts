@@ -41,7 +41,7 @@ export interface State {
   setSteps: (steps: Step[]) => void;
 }
 
-/* export const useStore = create<State>((set) => ({
+export const useStore = create<State>((set) => ({
   // project setup
   projectName: '',
   setProjectName: (name: string) => set({ projectName: name }),
@@ -54,14 +54,17 @@ export interface State {
   // pipeline plan
   pipelinePlan: '',
   setPipelinePlan: (plan: string) => set({ pipelinePlan: plan }),
+  pipelineDescription: '',
+  setPipelineDescription: (d: string) => set({ pipelineDescription: d }),
 
   // pipeline steps
   steps: [],
   addStep: (step: Step) =>
     set((state) => ({ steps: state.steps.concat(step) })),
   setSteps: (steps: Step[]) => set({ steps }),
-})); */
+}));
 
+/*
 export const useStore = create<State>((set) => ({
   // project setup
   projectName: 'test',
@@ -207,3 +210,4 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
     set((state) => ({ steps: state.steps.concat(step) })),
   setSteps: (steps: Step[]) => set({ steps }),
 }));
+*/
