@@ -1,5 +1,6 @@
 'use client';
 
+import { PlusIcon } from '@heroicons/react/16/solid';
 import { useRef, useState } from 'react';
 import { Step, useStore } from '../../store/store';
 import { Button } from '../catalyst/button';
@@ -19,7 +20,6 @@ import { Spinner } from '../Spinner';
 import { runPrompt } from '../util';
 import codeSystem from './code-step.txt';
 import llmSystem from './llm-step.txt';
-import { PlusIcon } from '@heroicons/react/16/solid';
 
 export default function AddStep() {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -56,7 +56,8 @@ Step description: ${description}`;
       description,
       type,
       aggregate,
-      prompt: step.result ?? '',
+      code: type === 'code' ? step.result ?? '' : '',
+      prompt: type === 'llm' ? step.result ?? '' : '',
       testResults: [],
     };
     console.log(newStep);

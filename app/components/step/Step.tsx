@@ -21,6 +21,7 @@ import { loadModule } from './util';
 export function StepItem({ step }: { step: Step }) {
   const testDocRef = useRef<HTMLSelectElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isTestOpen, setTestOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | undefined>();
   const state = useStore((state) => state);
@@ -118,14 +119,16 @@ export function StepItem({ step }: { step: Step }) {
     <div className="flex flex-col">
       <Divider soft className="my-2" />
       <div className="flex items-center gap-2">
-        <span>{step.name}</span>
+        <Button plain onClick={() => setIsOpen(true)}>
+          {step.name}
+        </Button>
         <Badge>{step.type}</Badge>
         <div className="flex flex-1" />
-        <Button outline className="ml-2" onClick={() => setIsOpen(true)}>
+        <Button outline className="ml-2" onClick={() => setTestOpen(true)}>
           <BeakerIcon className="w-4 h-4" /> Test
         </Button>
       </div>
-      <Dialog open={isOpen} onClose={setIsOpen}>
+      <Dialog open={isTestOpen} onClose={setTestOpen}>
         <DialogTitle>Test step</DialogTitle>
         <DialogDescription>
           Test step {step.name} with a document.
@@ -162,10 +165,33 @@ export function StepItem({ step }: { step: Step }) {
               <Spinner />
             </div>
           )}
-          <Button plain onClick={() => setIsOpen(false)}>
+          <Button plain onClick={() => setTestOpen(false)}>
             Close
           </Button>
           <Button onClick={testStep}>Test</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog size="3xl" open={isOpen} onClose={setIsOpen}>
+        <DialogTitle>Step: {step.name}</DialogTitle>
+        <DialogDescription>Config for {step.name}.</DialogDescription>
+        <DialogBody className="w-full">
+          <div className="prose prose-sm dark:prose-invert w-full max-w-full">
+            <pre className="whitespace-pre-wrap w-full">
+              {step.type === 'llm' ? step.prompt : step.code}
+            </pre>
+          </div>
+        </DialogBody>
+        <DialogActions>
+          {loading && (
+            <div className="flex flex-1">
+              <Spinner />
+            </div>
+          )}
+          <Button plain onClick={() => setIsOpen(false)}>
+            Close
+          </Button>
+          <Button onClick={() => {}}>Save</Button>
         </DialogActions>
       </Dialog>
     </div>

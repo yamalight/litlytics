@@ -7,7 +7,6 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/16/solid';
 import { useStore } from '../store/store';
-import AddTestDoc from './AddTestDoc';
 import {
   DropdownDivider,
   DropdownItem,
@@ -26,6 +25,8 @@ import {
   SidebarSection,
 } from './catalyst/sidebar';
 import { SidebarLayout } from './catalyst/sidebar-layout';
+import AddTestDoc from './docs/AddTestDoc';
+import { DocItem } from './docs/DocItem';
 import PlanPipeline from './pipeline/PlanPipeline';
 
 function AccountDropdownMenu({
@@ -91,7 +92,7 @@ export function ApplicationLayout({
             <SidebarSection className="max-lg:hidden">
               <SidebarHeading>Documents</SidebarHeading>
               {state.testDocs.map((doc) => (
-                <SidebarItem key={doc.id}>{doc.name}</SidebarItem>
+                <DocItem doc={doc} key={doc.id} />
               ))}
               <AddTestDoc />
             </SidebarSection>

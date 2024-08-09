@@ -1,19 +1,19 @@
 'use client';
 
+import { DocumentIcon } from '@heroicons/react/16/solid';
 import { useRef, useState } from 'react';
-import { useStore } from '../store/store';
-import { Button } from './catalyst/button';
+import { useStore } from '../../store/store';
+import { Button } from '../catalyst/button';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from './catalyst/dialog';
-import { Field, FieldGroup, Label } from './catalyst/fieldset';
-import { Input } from './catalyst/input';
-import { Textarea } from './catalyst/textarea';
-import { DocumentIcon } from '@heroicons/react/16/solid';
+} from '../catalyst/dialog';
+import { Field, FieldGroup, Label } from '../catalyst/fieldset';
+import { Input } from '../catalyst/input';
+import { Textarea } from '../catalyst/textarea';
 
 export default function AddTestDoc() {
   const nameInputRef = useRef<HTMLInputElement>(null);
