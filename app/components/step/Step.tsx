@@ -1,4 +1,6 @@
-import { Step, TestResult, useStore } from '@/app/store/store';
+import { useStore } from '@/app/store/store';
+import { testPipeline } from '@/src/engine/test';
+import { Step } from '@/src/step/Step';
 import { BeakerIcon } from '@heroicons/react/16/solid';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
@@ -16,8 +18,6 @@ import { Divider } from '../catalyst/divider';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Select } from '../catalyst/select';
 import { Spinner } from '../Spinner';
-import { runPrompt } from '../util';
-import { loadModule } from './util';
 
 export function StepItem({ step }: { step: Step }) {
   const testDocRef = useRef<HTMLSelectElement>(null);
@@ -29,93 +29,34 @@ export function StepItem({ step }: { step: Step }) {
 
   const testStep = async () => {
     const id = testDocRef.current?.value;
-    const doc = state.testDocs.find((d) => d.id === id);
-    if (!doc && !step.aggregate) {
+    if (!id) {
       return;
     }
 
-    // if not first step - use result of previous step instead of doc
-    let usePrevResult = false;
-    let prevResult: TestResult | undefined;
-    if (step.id !== '0') {
-      usePrevResult = true;
-      prevResult = state.steps
-        .find((s) => s.id === String(parseInt(step.id) - 1))
-        ?.testResults.find((r) => r.docId === id);
-    }
-
     setLoading(true);
-    const system = step.prompt!;
 
-    if (step.type === 'llm') {
-      if (
-        prevResult &&
-        (!prevResult.result || prevResult.result.length === 0)
-      ) {
-        setResult(`No need to run based on previous result.`);
-        setLoading(false);
-        return;
-      }
-
-      let input: string = doc?.content ?? '';
-
-      if (step.id !== '0' && step.aggregate) {
-        const prevDocs = state.steps
-          .find((s) => s.id === String(parseInt(step.id) - 1))
-          ?.testResults.map((r) => r.result);
-        input = prevDocs?.join('\n------\n') ?? '';
-      }
-
-      console.log(input);
-
-      const user = input;
-      const res = await runPrompt({ system, user });
-      const newSteps = state.steps.map((s) => {
-        if (s.id === step.id) {
-          s.testResults = s.testResults.concat({
-            docId: step.aggregate ? 'aggregate' : doc!.id,
-            result: res.result!,
-          });
-          return s;
-        }
-        return s;
+    try {
+      const { doc, result } = await testPipeline({
+        pipeline: state.pipeline,
+        step,
+        docId: id,
       });
-      console.log(newSteps);
-      state.setSteps(newSteps);
 
-      setResult(res.result ?? '');
-    } else {
-      const code = step.code!.replace(/^```(.+?)\n/g, '').replace(/```$/g, '');
-      const mod = await loadModule(code);
-
-      const singleInput = usePrevResult ? prevResult?.result : doc?.content;
-      let aggregateInput: string[] = [];
-
-      if (step.id !== '0') {
-        const prevDocs = state.steps
-          .find((s) => s.id === String(parseInt(step.id) - 1))
-          ?.testResults.map((r) => r.result);
-        aggregateInput = prevDocs ?? [];
-      }
-
-      const input = step.aggregate ? aggregateInput : singleInput;
-      console.log(input);
-      const res = await mod(input);
-      const newSteps = state.steps.map((s) => {
-        if (s.id === step.id) {
-          s.testResults = s.testResults.concat({
-            docId: step.aggregate ? 'aggregate' : doc!.id,
-            result: res,
-          });
-          return s;
-        }
-        return s;
+      state.setPipeline({
+        ...state.pipeline,
+        documents: state.pipeline.documents.map((d) => {
+          if (d.id === doc?.id) {
+            return doc;
+          }
+          return d;
+        }),
       });
-      console.log(newSteps);
-      state.setSteps(newSteps);
 
-      setResult(`Function result: ${res}`);
+      setResult(result ?? '');
+    } catch (err) {
+      setResult((err as Error).message);
     }
+
     setLoading(false);
   };
 
@@ -137,7 +78,7 @@ export function StepItem({ step }: { step: Step }) {
         <DialogTitle>Test step</DialogTitle>
         <DialogDescription>
           Test step {step.name} with a document.
-          {step.aggregate && (
+          {step.input === 'aggregate' && (
             <>
               <br />
               Running on all docs.
@@ -145,12 +86,12 @@ export function StepItem({ step }: { step: Step }) {
           )}
         </DialogDescription>
         <DialogBody>
-          {!step.aggregate && (
+          {step.input !== 'aggregate' && (
             <FieldGroup>
               <Field>
                 <Label>Document to test</Label>
                 <Select aria-label="Document" name="document" ref={testDocRef}>
-                  {state.testDocs.map((d) => (
+                  {state.pipeline.documents.map((d) => (
                     <option key={d.id} value={d.id}>
                       {d.name}
                     </option>

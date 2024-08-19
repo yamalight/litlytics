@@ -1,10 +1,10 @@
 'use client';
 
+import { Step, StepInput } from '@/src/step/Step';
 import { PlusIcon } from '@heroicons/react/16/solid';
 import { useRef, useState } from 'react';
-import { Step, useStore } from '../../store/store';
+import { useStore } from '../../store/store';
 import { Button } from '../catalyst/button';
-import { Checkbox, CheckboxField } from '../catalyst/checkbox';
 import {
   Dialog,
   DialogActions,
@@ -12,7 +12,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from '../catalyst/dialog';
-import { Description, Field, FieldGroup, Label } from '../catalyst/fieldset';
+import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
 import { Textarea } from '../catalyst/textarea';
@@ -27,7 +27,7 @@ export default function AddStep() {
   const [type, setType] = useState<'llm' | 'code'>('llm');
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [aggregate, setAggregate] = useState(false);
+  const [input, setInput] = useState<StepInput>('doc');
   const state = useStore((state) => state);
   const addStep = useStore((state) => state.addStep);
 
@@ -55,10 +55,9 @@ Step description: ${description}`;
       name,
       description,
       type,
-      aggregate,
+      input,
       code: type === 'code' ? step.result ?? '' : '',
       prompt: type === 'llm' ? step.result ?? '' : '',
-      testResults: [],
     };
     console.log(newStep);
 
@@ -110,15 +109,18 @@ Step description: ${description}`;
                 ref={contentInputRef}
               />
             </Field>
-            <CheckboxField>
-              <Checkbox
-                name="aggregate"
-                checked={aggregate}
-                onChange={(e) => setAggregate(e)}
-              />
-              <Label>Aggregate</Label>
-              <Description>Run on all docs or just one.</Description>
-            </CheckboxField>
+            <Field>
+              <Label>Step input</Label>
+              <Select
+                name="step-input"
+                value={input}
+                onChange={(e) => setInput(e.target.value as StepInput)}
+              >
+                <option value="doc">Document</option>
+                <option value="result">Previous step result</option>
+                <option value="aggregate">All documents</option>
+              </Select>
+            </Field>
           </FieldGroup>
         </DialogBody>
         <DialogActions>

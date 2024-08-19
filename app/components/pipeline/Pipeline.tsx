@@ -31,8 +31,8 @@ export function Pipeline({ hide }: { hide: () => void }) {
 
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: system.trim() },
-      { role: 'user', content: state.pipelineDescription!.trim() },
-      { role: 'assistant', content: state.pipelinePlan!.trim() },
+      { role: 'user', content: state.pipeline.pipelineDescription!.trim() },
+      { role: 'assistant', content: state.pipeline.pipelinePlan!.trim() },
       { role: 'user', content: refine.trim() },
     ];
 
@@ -40,7 +40,10 @@ export function Pipeline({ hide }: { hide: () => void }) {
     const plan = await runPromptFromMessages({ messages });
 
     // save
-    state.setPipelinePlan(plan.result ?? '');
+    state.setPipeline({
+      ...state.pipeline,
+      pipelinePlan: plan.result ?? '',
+    });
     setLoading(false);
   };
 
@@ -56,7 +59,7 @@ export function Pipeline({ hide }: { hide: () => void }) {
       </SidebarHeader>
 
       <SidebarBody>
-        <Markdown>{state.pipelinePlan}</Markdown>
+        <Markdown>{state.pipeline.pipelinePlan}</Markdown>
       </SidebarBody>
       <SidebarFooter>
         <div className="flex gap-1">

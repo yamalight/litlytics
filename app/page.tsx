@@ -13,21 +13,21 @@ export default function Home() {
   const state = useStore((state) => state);
 
   useEffect(() => {
-    if (state.pipelinePlan?.length) {
+    if (state.pipeline.pipelinePlan?.length) {
       setShowHelp(true);
     }
-  }, [state.pipelinePlan]);
+  }, [state.pipeline.pipelinePlan]);
 
   return (
     <main className="flex min-h-screen">
       <div className="flex items-center justify-center w-full h-full min-h-screen">
-        {!Boolean(state.projectName?.length) && <AddProject />}
-        {Boolean(state.projectName?.length) && (
+        {!Boolean(state.pipeline.name?.length) && <AddProject />}
+        {Boolean(state.pipeline.name?.length) && (
           <ApplicationLayout showAssist={() => setShowHelp((c) => !c)}>
             <div className="flex w-full items-center justify-center">
               <div className="flex flex-col gap-2 prose prose-sm dark:prose-invert">
                 <h1>Pipeline</h1>
-                {state.steps.map((s) => (
+                {state.pipeline.steps.map((s) => (
                   <StepItem key={s.id} step={s} />
                 ))}
                 <AddStep />
@@ -36,7 +36,7 @@ export default function Home() {
           </ApplicationLayout>
         )}
 
-        {Boolean(state.pipelinePlan?.length) && showHelp && (
+        {Boolean(state.pipeline.pipelinePlan?.length) && showHelp && (
           <Pipeline hide={() => setShowHelp((c) => !c)} />
         )}
       </div>

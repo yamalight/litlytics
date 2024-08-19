@@ -72,26 +72,26 @@ export function ApplicationLayout({
       navbar={
         <Navbar>
           <NavbarSpacer />
-          <NavbarSection>CogniLoom</NavbarSection>
+          <NavbarSection>Convolitics</NavbarSection>
         </Navbar>
       }
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            <SidebarLabel>CogniLoom</SidebarLabel>
+            <SidebarLabel>Convolitics</SidebarLabel>
           </SidebarHeader>
 
           <SidebarBody>
             <SidebarSection>
               <SidebarItem>
                 <ClipboardIcon />
-                <SidebarLabel>{state.projectName}</SidebarLabel>
+                <SidebarLabel>{state.pipeline.name}</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 
             <SidebarSection className="max-lg:hidden">
               <SidebarHeading>Documents</SidebarHeading>
-              {state.testDocs.map((doc) => (
+              {state.pipeline.documents.map((doc) => (
                 <DocItem doc={doc} key={doc.id} />
               ))}
               <AddTestDoc />
@@ -99,8 +99,8 @@ export function ApplicationLayout({
           </SidebarBody>
 
           <SidebarFooter className="max-lg:hidden">
-            {!Boolean(state.pipelinePlan?.length) && <PlanPipeline />}
-            {Boolean(state.pipelinePlan?.length) && (
+            {!Boolean(state.pipeline.pipelinePlan?.length) && <PlanPipeline />}
+            {Boolean(state.pipeline.pipelinePlan?.length) && (
               <SidebarItem onClick={showAssist}>
                 <QuestionMarkCircleIcon />
                 <SidebarLabel>Show assist</SidebarLabel>

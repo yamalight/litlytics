@@ -20,6 +20,21 @@ export default function AddTestDoc() {
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const state = useStore((state) => state);
+
+  const addDoc = () => {
+    const content = contentInputRef.current?.value;
+    const name = nameInputRef.current?.value;
+    if (content?.length && name?.length) {
+      state.addTestDoc({
+        id: String(parseInt(state.testDocs.at(-1)?.id ?? '-1') + 1),
+        name,
+        content,
+        processingResults: [],
+      });
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>
@@ -55,22 +70,7 @@ export default function AddTestDoc() {
           <Button plain onClick={() => setIsOpen(false)}>
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              const content = contentInputRef.current?.value;
-              const name = nameInputRef.current?.value;
-              if (content?.length && name?.length) {
-                state.addTestDoc({
-                  id: String(parseInt(state.testDocs.at(-1)?.id ?? '-1') + 1),
-                  name,
-                  content,
-                });
-                setIsOpen(false);
-              }
-            }}
-          >
-            Create
-          </Button>
+          <Button onClick={addDoc}>Create</Button>
         </DialogActions>
       </Dialog>
     </>

@@ -16,7 +16,7 @@ import { Input } from './catalyst/input';
 export default function AddProject() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const setProjectName = useStore((state) => state.setProjectName);
+  const state = useStore((state) => state);
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>Create new project</Button>
@@ -46,7 +46,10 @@ export default function AddProject() {
             onClick={() => {
               const name = nameInputRef.current?.value;
               if (name?.length) {
-                setProjectName(name);
+                state.setPipeline({
+                  ...state.pipeline,
+                  name,
+                });
                 setIsOpen(false);
               }
             }}
