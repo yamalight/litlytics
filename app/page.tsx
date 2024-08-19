@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import AddProject from './components/AddProject';
-import AddStep from './components/addStep/AddStep';
 import { ApplicationLayout } from './components/ApplicationLayout';
+import PipelineFlow from './components/pipeline/Flow';
 import { Pipeline } from './components/pipeline/Pipeline';
-import { StepItem } from './components/step/Step';
 import { useStore } from './store/store';
 
 export default function Home() {
@@ -14,7 +13,7 @@ export default function Home() {
 
   useEffect(() => {
     if (state.pipeline.pipelinePlan?.length) {
-      setShowHelp(true);
+      // setShowHelp(true);
     }
   }, [state.pipeline.pipelinePlan]);
 
@@ -24,15 +23,15 @@ export default function Home() {
         {!Boolean(state.pipeline.name?.length) && <AddProject />}
         {Boolean(state.pipeline.name?.length) && (
           <ApplicationLayout showAssist={() => setShowHelp((c) => !c)}>
-            <div className="flex w-full items-center justify-center">
-              <div className="flex flex-col gap-2 prose prose-sm dark:prose-invert">
+            <PipelineFlow pipeline={state.pipeline} />
+
+            {/* <div className="flex flex-col gap-2 prose prose-sm dark:prose-invert">
                 <h1>Pipeline</h1>
                 {state.pipeline.steps.map((s) => (
                   <StepItem key={s.id} step={s} />
                 ))}
                 <AddStep />
-              </div>
-            </div>
+              </div> */}
           </ApplicationLayout>
         )}
 

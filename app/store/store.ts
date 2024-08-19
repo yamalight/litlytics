@@ -88,6 +88,8 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
         prompt:
           'Analyze the sentiment of the provided product review and determine whether it contains complaints. Please return only the overall sentiment of the document.',
         input: 'doc',
+        position: { x: 0, y: 0 },
+        connectsTo: ['1'],
       },
       {
         id: '1',
@@ -97,6 +99,8 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
         type: 'code',
         code: "```javascript\nexport default function extractOverallDocumentSentiment(inputString) {\n    const negativeSentimentKeywords = ['bad', 'terrible', 'awful', 'horrible', 'negative', 'poor', 'disappointing', 'sad', 'angry', 'frustrating'];\n    \n    const lowerCaseInput = inputString.toLowerCase();\n    \n    for (let keyword of negativeSentimentKeywords) {\n        if (lowerCaseInput.includes(keyword)) {\n            return 'Negative';\n        }\n    }\n    \n    return '';\n}\n```",
         input: 'result',
+        position: { x: 0, y: 60 },
+        connectsTo: ['2'],
       },
       {
         id: '2',
@@ -107,6 +111,8 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
         input: 'doc',
         prompt:
           'Please analyze the provided product review and extract only the negative feedback. Return a list containing the identified negative points mentioned by the reviewer.',
+        position: { x: 0, y: 140 },
+        connectsTo: ['3'],
       },
       {
         id: '3',
@@ -117,6 +123,8 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
         input: 'aggregate',
         prompt:
           'Please analyze the provided text document and identify the most common complaints mentioned. Summarize these complaints, highlighting the key themes and issues that appear most frequently.',
+        position: { x: 0, y: 240 },
+        connectsTo: [],
       },
     ],
   },

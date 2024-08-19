@@ -11,7 +11,7 @@ export type StepType = 'code' | 'llm';
 // whether step input is full document, previous processing result or all docs
 export type StepInput = 'doc' | 'result' | 'aggregate';
 
-export interface Step {
+export interface Step extends Record<string, unknown> {
   id: string;
   name: string;
   description: string;
@@ -19,4 +19,6 @@ export interface Step {
   input: StepInput;
   prompt?: string;
   code?: string;
+  position: { x: number; y: number };
+  connectsTo: string[];
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { runPrompt } from '@/src/engine/runPrompt';
 import { PuzzlePieceIcon } from '@heroicons/react/16/solid';
 import { useRef, useState } from 'react';
 import { useStore } from '../../store/store';
@@ -14,7 +15,6 @@ import {
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Textarea } from '../catalyst/textarea';
 import { Spinner } from '../Spinner';
-import { runPrompt } from '../util';
 import system from './pipeline.txt';
 
 export default function PlanPipeline() {
@@ -34,7 +34,10 @@ export default function PlanPipeline() {
     // generate plan from LLM
     const plan = await runPrompt({ system, user: description });
 
-    state.setPipelinePlan(plan.result ?? '');
+    state.setPipeline({
+      ...state.pipeline,
+      pipelinePlan: plan.result ?? '',
+    });
     setLoading(false);
     setIsOpen(false);
   };

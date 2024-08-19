@@ -1,5 +1,6 @@
 'use client';
 
+import { runPrompt } from '@/src/engine/runPrompt';
 import { Step, StepInput } from '@/src/step/Step';
 import { PlusIcon } from '@heroicons/react/16/solid';
 import { useRef, useState } from 'react';
@@ -17,7 +18,6 @@ import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
 import { Textarea } from '../catalyst/textarea';
 import { Spinner } from '../Spinner';
-import { runPrompt } from '../util';
 import codeSystem from './code-step.txt';
 import llmSystem from './llm-step.txt';
 
@@ -29,7 +29,6 @@ export default function AddStep() {
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState<StepInput>('doc');
   const state = useStore((state) => state);
-  const addStep = useStore((state) => state.addStep);
 
   const createStep = async () => {
     const name = nameInputRef.current?.value;
@@ -51,7 +50,7 @@ Step description: ${description}`;
     const step = await runPrompt({ system, user });
 
     const newStep: Step = {
-      id: String(state.steps.length),
+      id: String(state.pipeline.steps.length),
       name,
       description,
       type,
@@ -62,7 +61,10 @@ Step description: ${description}`;
     console.log(newStep);
 
     // add
-    addStep(newStep);
+    state.setPipeline({
+      ...state.pipeline,
+      steps: state.pipeline.steps.concat(newStep),
+    });
     setIsOpen(false);
     setLoading(false);
   };
