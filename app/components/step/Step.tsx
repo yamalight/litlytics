@@ -35,27 +35,27 @@ export function StepItem({ step }: { step: Step }) {
 
     setLoading(true);
 
-    try {
-      const { doc, result } = await testPipeline({
-        pipeline: state.pipeline,
-        step,
-        docId: id,
-      });
+    // try {
+    const { doc, result } = await testPipeline({
+      pipeline: state.pipeline,
+      step,
+      docId: id,
+    });
 
-      state.setPipeline({
-        ...state.pipeline,
-        documents: state.pipeline.documents.map((d) => {
-          if (d.id === doc?.id) {
-            return doc;
-          }
-          return d;
-        }),
-      });
+    state.setPipeline({
+      ...state.pipeline,
+      documents: state.pipeline.documents.map((d) => {
+        if (d.id === doc?.id) {
+          return doc;
+        }
+        return d;
+      }),
+    });
 
-      setResult(result ?? '');
-    } catch (err) {
-      setResult((err as Error).message);
-    }
+    setResult(result ?? '');
+    // } catch (err) {
+    //   setResult((err as Error).message);
+    // }
 
     setLoading(false);
   };

@@ -1,5 +1,6 @@
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import { executeOnLLM } from '../llm/llm';
+import { runWithWebLLM } from '../webllm/webllm';
 
 export const runPromptFromMessages = async ({
   messages,
@@ -34,6 +35,7 @@ export const runPrompt = async ({
     messages.push({ role: 'system', content: system.trim() });
   }
   messages.push({ role: 'user', content: user.trim() });
+  return runWithWebLLM({ messages });
   // run on LLM
-  return runPromptFromMessages({ messages, args });
+  // return runPromptFromMessages({ messages, args });
 };
