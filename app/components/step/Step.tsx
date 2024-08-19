@@ -1,5 +1,6 @@
 import { Step, TestResult, useStore } from '@/app/store/store';
 import { BeakerIcon } from '@heroicons/react/16/solid';
+import { ArrowDownIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 import Markdown from 'react-markdown';
 import { Badge } from '../catalyst/badge';
@@ -47,7 +48,10 @@ export function StepItem({ step }: { step: Step }) {
     const system = step.prompt!;
 
     if (step.type === 'llm') {
-      if (prevResult && prevResult.result?.length === 0) {
+      if (
+        prevResult &&
+        (!prevResult.result || prevResult.result.length === 0)
+      ) {
         setResult(`No need to run based on previous result.`);
         setLoading(false);
         return;
@@ -81,7 +85,7 @@ export function StepItem({ step }: { step: Step }) {
 
       setResult(res.result ?? '');
     } else {
-      const code = system.replace(/^```(.+?)\n/g, '').replace(/```$/g, '');
+      const code = step.code!.replace(/^```(.+?)\n/g, '').replace(/```$/g, '');
       const mod = await loadModule(code);
 
       const singleInput = usePrevResult ? prevResult?.result : doc?.content;
@@ -119,6 +123,7 @@ export function StepItem({ step }: { step: Step }) {
     <div className="flex flex-col">
       <Divider soft className="my-2" />
       <div className="flex items-center gap-2">
+        <ArrowDownIcon className="w-4 h-4 opacity-30" />
         <Button plain onClick={() => setIsOpen(true)}>
           {step.name}
         </Button>
