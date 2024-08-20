@@ -1,7 +1,7 @@
 'use client';
 
 import { pipelineAtom } from '@/app/store/store';
-import { runPrompt } from '@/src/engine/runPrompt';
+import { generatePipeline } from '@/src/pipeline/generate';
 import { PuzzlePieceIcon } from '@heroicons/react/16/solid';
 import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
@@ -16,7 +16,6 @@ import {
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Textarea } from '../catalyst/textarea';
 import { Spinner } from '../Spinner';
-import system from './pipeline.txt';
 
 export default function PlanPipeline() {
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
@@ -33,11 +32,11 @@ export default function PlanPipeline() {
     setLoading(true);
 
     // generate plan from LLM
-    const plan = await runPrompt({ system, user: description });
+    const plan = await generatePipeline({ description });
 
     setPipeline({
       ...pipeline,
-      pipelinePlan: plan.result ?? '',
+      pipelinePlan: plan ?? '',
     });
     setLoading(false);
     setIsOpen(false);
