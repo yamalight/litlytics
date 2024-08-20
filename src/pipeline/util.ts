@@ -6,6 +6,7 @@ export function pipelineToNodesAndEdges(pipeline: Pipeline) {
   const nodes = pipeline.steps.map((s) => ({
     id: s.id,
     position: s.position,
+    type: s.type === 'source' ? 'source' : 'step',
     data: s,
   })) as Node<Step>[];
   const edges = pipeline.steps

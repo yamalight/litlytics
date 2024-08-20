@@ -10,12 +10,15 @@ import {
   useEdgesState,
   useNodesState,
 } from '@xyflow/react';
-
 import '@xyflow/react/dist/style.css';
 import { useCallback, useEffect, useMemo } from 'react';
+import { SourceNode } from './SourceNode';
 import { StepNode } from './StepNode';
 
-const nodeTypes = { default: StepNode };
+const nodeTypes = {
+  step: StepNode,
+  source: SourceNode,
+};
 
 export default function PipelineFlow({ pipeline }: { pipeline: Pipeline }) {
   const { nodes: initialNodes, edges: initialEdges } = useMemo(
