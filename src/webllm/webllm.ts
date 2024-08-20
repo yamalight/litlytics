@@ -5,7 +5,8 @@ import {
 } from 'openai/resources/index.mjs';
 
 // model
-const selectedModel = 'Llama-3.1-8B-Instruct-q4f32_1-MLC';
+// const selectedModel = 'Llama-3.1-8B-Instruct-q4f32_1-MLC'; // ~4.9 GB
+const selectedModel = 'Phi-3-mini-4k-instruct-q4f32_1-MLC'; // ~2.1 GB
 
 // create engine
 const engine = new MLCEngine();

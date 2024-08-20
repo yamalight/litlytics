@@ -1,6 +1,7 @@
-import { useStore } from '@/app/store/store';
+import { pipelineAtom } from '@/app/store/store';
 import { runPromptFromMessages } from '@/src/engine/runPrompt';
 import { XMarkIcon } from '@heroicons/react/16/solid';
+import { useAtom } from 'jotai';
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import { useState } from 'react';
 import Markdown from 'react-markdown';
@@ -20,7 +21,7 @@ export function Pipeline({ hide }: { hide: () => void }) {
   const [refine, setRefine] = useState(
     `Let's remove frequency count step and add a new code step after Step 1 to filter out positive reviews.`
   );
-  const state = useStore((state) => state);
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const doRefine = async () => {
     if (!refine?.length) {
@@ -31,8 +32,8 @@ export function Pipeline({ hide }: { hide: () => void }) {
 
     const messages: ChatCompletionMessageParam[] = [
       { role: 'system', content: system.trim() },
-      { role: 'user', content: state.pipeline.pipelineDescription!.trim() },
-      { role: 'assistant', content: state.pipeline.pipelinePlan!.trim() },
+      { role: 'user', content: pipeline.pipelineDescription!.trim() },
+      { role: 'assistant', content: pipeline.pipelinePlan!.trim() },
       { role: 'user', content: refine.trim() },
     ];
 
@@ -40,8 +41,8 @@ export function Pipeline({ hide }: { hide: () => void }) {
     const plan = await runPromptFromMessages({ messages });
 
     // save
-    state.setPipeline({
-      ...state.pipeline,
+    setPipeline({
+      ...pipeline,
       pipelinePlan: plan.result ?? '',
     });
     setLoading(false);
@@ -59,7 +60,7 @@ export function Pipeline({ hide }: { hide: () => void }) {
       </SidebarHeader>
 
       <SidebarBody>
-        <Markdown>{state.pipeline.pipelinePlan}</Markdown>
+        <Markdown>{pipeline.pipelinePlan}</Markdown>
       </SidebarBody>
       <SidebarFooter>
         <div className="flex gap-1">

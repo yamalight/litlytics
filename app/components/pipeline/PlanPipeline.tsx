@@ -1,9 +1,10 @@
 'use client';
 
+import { pipelineAtom } from '@/app/store/store';
 import { runPrompt } from '@/src/engine/runPrompt';
 import { PuzzlePieceIcon } from '@heroicons/react/16/solid';
+import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
-import { useStore } from '../../store/store';
 import { Button } from '../catalyst/button';
 import {
   Dialog,
@@ -21,7 +22,7 @@ export default function PlanPipeline() {
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const state = useStore((state) => state);
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const runPlan = async () => {
     const description = contentInputRef.current?.value;
@@ -34,8 +35,8 @@ export default function PlanPipeline() {
     // generate plan from LLM
     const plan = await runPrompt({ system, user: description });
 
-    state.setPipeline({
-      ...state.pipeline,
+    setPipeline({
+      ...pipeline,
       pipelinePlan: plan.result ?? '',
     });
     setLoading(false);

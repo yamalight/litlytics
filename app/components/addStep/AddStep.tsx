@@ -1,10 +1,11 @@
 'use client';
 
-import { runPrompt } from '@/src/engine/runPrompt';
-import { Step, StepInput } from '@/src/step/Step';
+import { pipelineAtom } from '@/app/store/store';
+import { generateStep } from '@/src/step/generate';
+import { StepInput } from '@/src/step/Step';
 import { PlusIcon } from '@heroicons/react/16/solid';
+import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
-import { useStore } from '../../store/store';
 import { Button } from '../catalyst/button';
 import {
   Dialog,
@@ -18,8 +19,6 @@ import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
 import { Textarea } from '../catalyst/textarea';
 import { Spinner } from '../Spinner';
-import codeSystem from './code-step.txt';
-import llmSystem from './llm-step.txt';
 
 export default function AddStep() {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -28,7 +27,7 @@ export default function AddStep() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState<StepInput>('doc');
-  const state = useStore((state) => state);
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const createStep = async () => {
     const name = nameInputRef.current?.value;
@@ -38,32 +37,18 @@ export default function AddStep() {
     }
 
     setLoading(true);
-
-    // create user prompt
-    const user = `Step name: ${name}
-Step description: ${description}`;
-
-    // determine system prompt based on step type
-    const system = type === 'llm' ? llmSystem : codeSystem;
-
-    // generate plan from LLM
-    const step = await runPrompt({ system, user });
-
-    const newStep: Step = {
-      id: String(state.pipeline.steps.length),
+    const newStep = await generateStep({
+      id: String(pipeline.steps.length),
       name,
       description,
-      type,
       input,
-      code: type === 'code' ? step.result ?? '' : '',
-      prompt: type === 'llm' ? step.result ?? '' : '',
-    };
-    console.log(newStep);
+      type,
+    });
 
     // add
-    state.setPipeline({
-      ...state.pipeline,
-      steps: state.pipeline.steps.concat(newStep),
+    setPipeline({
+      ...pipeline,
+      steps: pipeline.steps.concat(newStep),
     });
     setIsOpen(false);
     setLoading(false);

@@ -6,7 +6,8 @@ import {
   ShieldCheckIcon,
   UserCircleIcon,
 } from '@heroicons/react/16/solid';
-import { useStore } from '../store/store';
+import { useAtom } from 'jotai';
+import { pipelineAtom } from '../store/store';
 import {
   DropdownDivider,
   DropdownItem,
@@ -65,7 +66,7 @@ export function ApplicationLayout({
   children: React.ReactNode;
   showAssist: () => void;
 }) {
-  const state = useStore((s) => s);
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   return (
     <SidebarLayout
@@ -85,13 +86,13 @@ export function ApplicationLayout({
             <SidebarSection>
               <SidebarItem>
                 <ClipboardIcon />
-                <SidebarLabel>{state.pipeline.name}</SidebarLabel>
+                <SidebarLabel>{pipeline.name}</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
 
             <SidebarSection className="max-lg:hidden">
               <SidebarHeading>Documents</SidebarHeading>
-              {state.pipeline.documents.map((doc) => (
+              {pipeline.documents.map((doc) => (
                 <DocItem doc={doc} key={doc.id} />
               ))}
               <AddTestDoc />
@@ -99,8 +100,8 @@ export function ApplicationLayout({
           </SidebarBody>
 
           <SidebarFooter className="max-lg:hidden">
-            {!Boolean(state.pipeline.pipelinePlan?.length) && <PlanPipeline />}
-            {Boolean(state.pipeline.pipelinePlan?.length) && (
+            {!Boolean(pipeline.pipelinePlan?.length) && <PlanPipeline />}
+            {Boolean(pipeline.pipelinePlan?.length) && (
               <SidebarItem onClick={showAssist}>
                 <QuestionMarkCircleIcon />
                 <SidebarLabel>Show assist</SidebarLabel>

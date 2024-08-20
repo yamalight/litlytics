@@ -15,13 +15,13 @@
     "@xyflow/react": "^12.1.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.24",
+    "jotai": "^2.9.3",
     "next": "14.2.5",
     "openai": "^4.55.1",
     "p-retry": "^6.2.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-markdown": "^9.0.1",
-    "zustand": "^4.5.4"
+    "react-markdown": "^9.0.1"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.14",

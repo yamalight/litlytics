@@ -1,8 +1,9 @@
 'use client';
 
 import { DocumentIcon } from '@heroicons/react/16/solid';
+import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
-import { useStore } from '../../store/store';
+import { pipelineAtom } from '../../store/store';
 import { Button } from '../catalyst/button';
 import {
   Dialog,
@@ -19,17 +20,20 @@ export default function AddTestDoc() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const state = useStore((state) => state);
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const addDoc = () => {
     const content = contentInputRef.current?.value;
     const name = nameInputRef.current?.value;
     if (content?.length && name?.length) {
-      state.addTestDoc({
-        id: String(parseInt(state.testDocs.at(-1)?.id ?? '-1') + 1),
-        name,
-        content,
-        processingResults: [],
+      setPipeline({
+        ...pipeline,
+        documents: pipeline.documents.concat({
+          id: String(parseInt(pipeline.documents.at(-1)?.id ?? '-1') + 1),
+          name,
+          content,
+          processingResults: [],
+        }),
       });
       setIsOpen(false);
     }

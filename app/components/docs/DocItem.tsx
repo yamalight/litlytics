@@ -1,4 +1,4 @@
-import { Doc } from '@/app/store/store';
+import { Doc } from '@/src/doc/Document';
 import { useState } from 'react';
 import { Button } from '../catalyst/button';
 import {

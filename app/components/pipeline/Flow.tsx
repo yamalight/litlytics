@@ -37,7 +37,7 @@ export default function PipelineFlow({ pipeline }: { pipeline: Pipeline }) {
   }, [pipeline, setNodes, setEdges]);
 
   return (
-    <div className="w-[70vw] h-[90vh]">
+    <div className="w-[100vw] h-[100vh]">
       <ReactFlow
         nodes={nodes}
         edges={edges}

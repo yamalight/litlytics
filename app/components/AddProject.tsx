@@ -1,7 +1,8 @@
 'use client';
 
+import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
-import { useStore } from '../store/store';
+import { pipelineAtom } from '../store/store';
 import { Button } from './catalyst/button';
 import {
   Dialog,
@@ -16,7 +17,7 @@ import { Input } from './catalyst/input';
 export default function AddProject() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const state = useStore((state) => state);
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>Create new project</Button>
@@ -46,8 +47,8 @@ export default function AddProject() {
             onClick={() => {
               const name = nameInputRef.current?.value;
               if (name?.length) {
-                state.setPipeline({
-                  ...state.pipeline,
+                setPipeline({
+                  ...pipeline,
                   name,
                 });
                 setIsOpen(false);
