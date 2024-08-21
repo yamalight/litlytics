@@ -1,3 +1,4 @@
+import { Doc } from '../doc/Document';
 import { Step } from '../step/Step';
 
 export interface Pipeline {
@@ -5,4 +6,5 @@ export interface Pipeline {
   pipelineDescription?: string;
   pipelinePlan?: string;
   steps: Step[];
+  testDocs: Doc[];
 }

@@ -1,5 +1,5 @@
 import { CompletionUsage } from 'openai/resources/completions.mjs';
-import { Doc } from '../doc/Document';
+import { SourceType } from './Source';
 
 export interface StepResult {
   stepId: string;
@@ -7,21 +7,34 @@ export interface StepResult {
   usage?: CompletionUsage;
 }
 
-export type StepType = 'source' | 'code' | 'llm';
+// step types
+export type SourceStepType = 'source';
+export type ProcessingStepTypes = 'code' | 'llm';
+export type StepTypes = SourceStepType | ProcessingStepTypes;
 
 // whether step input is full document, previous processing result or all docs
 export type StepInput = 'doc' | 'result' | 'aggregate';
 
-export interface Step extends Record<string, unknown> {
+export interface BaseStep extends Record<string, unknown> {
   id: string;
   name: string;
   description: string;
-  type: StepType;
+  type: StepTypes;
+  position: { x: number; y: number };
+  connectsTo: string[];
+}
+
+export interface SourceStep extends BaseStep {
+  type: SourceStepType;
+  sourceType: SourceType;
+  config: any;
+}
+
+export interface ProcessingStep extends BaseStep {
+  type: ProcessingStepTypes;
   input?: StepInput;
   prompt?: string;
   code?: string;
-  position: { x: number; y: number };
-  connectsTo: string[];
-  documents?: Doc[];
-  getDocuments?: () => Promise<Doc[]>;
 }
+
+export type Step = SourceStep | ProcessingStep;

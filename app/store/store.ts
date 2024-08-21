@@ -12,40 +12,31 @@ export const pipelineAtom = atom<Pipeline>({
 4) **LLM Step - Summarize Findings**: Use a language model to summarize the most frequent complaints identified in the previous step, providing a clear overview of the key issues customers are facing with the product.`,
   pipelineDescription:
     'I need to analyze a set of product reviews to get a list of common complaints.',
-  // pipeline steps
-  steps: [
+  testDocs: [
     {
       id: '0',
-      name: 'Plain text source',
-      description: 'Simple plain text source',
-      type: 'source',
-      position: { x: 0, y: 0 },
-      connectsTo: ['1'],
-      documents: [
-        {
-          id: '0',
-          name: 'Positive',
-          content: `I was late to the party, only picking this up a couple of weeks ago, after apparently 90 percent of the player base had left. What I've stumbled across is a vibrant community of like-minded gamers, largely absent of toxicity that plagues other gaming communities.
+      name: 'Positive',
+      content: `I was late to the party, only picking this up a couple of weeks ago, after apparently 90 percent of the player base had left. What I've stumbled across is a vibrant community of like-minded gamers, largely absent of toxicity that plagues other gaming communities.
 
 As for the game itself, it's everything I could hope for. The graphics are fantastic, the gun play is extremely rewarding and the game play loop leaves me wanting for very little.
 
 You can tell that the devs have poured their hearts into this.`,
-          processingResults: [],
-        },
-        {
-          id: '1',
-          name: 'Negative',
-          content: `Devs hate the idea you might have fun. Most recently, they put out an all flamethrower DLC, which was exciting. The flamethrower already in the game was one of my favorite weapons. In preparation for the DLC, they nerfed fire damage into the ground so it can't kill armored enemies or crowds (the 2 things it was good at vs a regular MG).
+      processingResults: [],
+    },
+    {
+      id: '1',
+      name: 'Negative',
+      content: `Devs hate the idea you might have fun. Most recently, they put out an all flamethrower DLC, which was exciting. The flamethrower already in the game was one of my favorite weapons. In preparation for the DLC, they nerfed fire damage into the ground so it can't kill armored enemies or crowds (the 2 things it was good at vs a regular MG).
 
 I haaaaaate this balance philosophy. If you want to shake up the meta, give players new options. Don't find the one thing people are already having fun with, take it away, and task them with finding a new way to have fun. This is like the 4th time they've done this since I bought the game, and I'm beginning to think my new way of having fun this time should be uninstalling this game and playing something else.
 
 "It feels like every time someone finds something fun, the fun is removed" -Johan Pilestedt, CCO of Arrowhead`,
-          processingResults: [],
-        },
-        {
-          id: '2',
-          name: 'Negative 2',
-          content: `I want to enjoy this more, but I don't really like how onerous just the act of getting ready to play this game feels.
+      processingResults: [],
+    },
+    {
+      id: '2',
+      name: 'Negative 2',
+      content: `I want to enjoy this more, but I don't really like how onerous just the act of getting ready to play this game feels.
 
 Almost all of my public random quickplay matches involved sweaty people getting ass mad for whatever reason, killing everyone and leaving the samples behind. Can't even report them if they preemptively block you either. Great fun!!! So I just don't feel like jumping in without a premade group of friends which has its own scheduling problems.
 
@@ -58,9 +49,61 @@ T'was really fun when folks were around to play it until the slog of the same fe
 It's a good solid game otherwise. Movement feels good, if limiting when compared to say, Darktide. Gunplay is solid when you actually get to use something other than a special weapon. But even then the trash mobs soak up so much regular ammo and the specials just ignore regular primary ammo
 
 All in all, "eh". Sony's blockade of countries pretty much ended any further support I was inclined to give as well. `,
-          processingResults: [],
-        },
-      ],
+      processingResults: [],
+    },
+  ],
+  // pipeline steps
+  steps: [
+    {
+      id: '0',
+      name: 'Plain text source',
+      description: 'Simple plain text source',
+      type: 'source',
+      position: { x: 0, y: 0 },
+      connectsTo: ['1'],
+      sourceType: 'plain',
+      config: {
+        documents: [
+          {
+            id: '0',
+            name: 'Positive',
+            content: `I was late to the party, only picking this up a couple of weeks ago, after apparently 90 percent of the player base had left. What I've stumbled across is a vibrant community of like-minded gamers, largely absent of toxicity that plagues other gaming communities.
+
+As for the game itself, it's everything I could hope for. The graphics are fantastic, the gun play is extremely rewarding and the game play loop leaves me wanting for very little.
+
+You can tell that the devs have poured their hearts into this.`,
+            processingResults: [],
+          },
+          {
+            id: '1',
+            name: 'Negative',
+            content: `Devs hate the idea you might have fun. Most recently, they put out an all flamethrower DLC, which was exciting. The flamethrower already in the game was one of my favorite weapons. In preparation for the DLC, they nerfed fire damage into the ground so it can't kill armored enemies or crowds (the 2 things it was good at vs a regular MG).
+
+I haaaaaate this balance philosophy. If you want to shake up the meta, give players new options. Don't find the one thing people are already having fun with, take it away, and task them with finding a new way to have fun. This is like the 4th time they've done this since I bought the game, and I'm beginning to think my new way of having fun this time should be uninstalling this game and playing something else.
+
+"It feels like every time someone finds something fun, the fun is removed" -Johan Pilestedt, CCO of Arrowhead`,
+            processingResults: [],
+          },
+          {
+            id: '2',
+            name: 'Negative 2',
+            content: `I want to enjoy this more, but I don't really like how onerous just the act of getting ready to play this game feels.
+
+Almost all of my public random quickplay matches involved sweaty people getting ass mad for whatever reason, killing everyone and leaving the samples behind. Can't even report them if they preemptively block you either. Great fun!!! So I just don't feel like jumping in without a premade group of friends which has its own scheduling problems.
+
+I don't know what loadout to run other than just being the autocannon mule. Everything I've unlocked is either not very effective the vast majority of the time, or is just gross meta shotgun requirements. I've never even piloted one of the mechs because it just feels like a wasteful liability more than a fun tool. maybe it's a product of playing on 7s almost exclusively once I got the autocannon unlocked. I don't really know.
+
+Sometimes the map generation just hands you a completely unwinnable generation (Three eye towers clustered around a jammer on a raid map? Cool. That's really Fun and Balanced.) Other times it just feels like a 45m jogging simulator because ammo economy is so poor that you're better off sneaking than dealing with endless reinforcement waves. Fire damage instantly killing you is super duper fun as well. What's the point of completely sealed armor anyway.
+
+T'was really fun when folks were around to play it until the slog of the same feeling maps and conditions stopped being fun to deal with. Totally fun to only be able to fight in dense fog for each bot map. Or dealing with earthquakes that instantly sap all stamina for some reason when fighting bugs.
+
+It's a good solid game otherwise. Movement feels good, if limiting when compared to say, Darktide. Gunplay is solid when you actually get to use something other than a special weapon. But even then the trash mobs soak up so much regular ammo and the specials just ignore regular primary ammo
+
+All in all, "eh". Sony's blockade of countries pretty much ended any further support I was inclined to give as well. `,
+            processingResults: [],
+          },
+        ],
+      },
     },
     {
       id: '1',
