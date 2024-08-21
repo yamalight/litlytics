@@ -73,13 +73,13 @@ export function ApplicationLayout({
       navbar={
         <Navbar>
           <NavbarSpacer />
-          <NavbarSection>Convolitics</NavbarSection>
+          <NavbarSection>LitLytics</NavbarSection>
         </Navbar>
       }
       sidebar={
         <Sidebar>
           <SidebarHeader>
-            <SidebarLabel>Convolitics</SidebarLabel>
+            <SidebarLabel>LitLytics</SidebarLabel>
           </SidebarHeader>
 
           <SidebarBody>
