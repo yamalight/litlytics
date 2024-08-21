@@ -12,8 +12,8 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useCallback, useEffect, useMemo } from 'react';
-import { SourceNode } from './SourceNode';
-import { StepNode } from './StepNode';
+import { SourceNode } from './nodes/SourceNode';
+import { StepNode } from './nodes/StepNode';
 
 const nodeTypes = {
   step: StepNode,

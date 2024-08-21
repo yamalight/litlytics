@@ -1,7 +1,7 @@
+import { Button } from '@/app/components/catalyst/button';
 import { Step } from '@/src/step/Step';
-import { Handle, Position } from '@xyflow/react';
-import { Button } from '../catalyst/button';
 import { CogIcon } from '@heroicons/react/24/solid';
+import { Handle, Position } from '@xyflow/react';
 
 export function StepNode({ data }: { data: Step }) {
   return (

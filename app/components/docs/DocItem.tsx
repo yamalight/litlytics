@@ -1,6 +1,10 @@
+import { pipelineAtom } from '@/app/store/store';
 import { Doc } from '@/src/doc/Document';
-import { useState } from 'react';
+import { PencilIcon } from '@heroicons/react/24/solid';
+import { useAtom } from 'jotai';
+import { useMemo, useState } from 'react';
 import { Button } from '../catalyst/button';
+import { Checkbox } from '../catalyst/checkbox';
 import {
   Dialog,
   DialogActions,
@@ -8,15 +12,43 @@ import {
   DialogDescription,
   DialogTitle,
 } from '../catalyst/dialog';
-import { SidebarItem } from '../catalyst/sidebar';
 
 export function DocItem({ doc }: { doc: Doc }) {
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
+  const testDocs = useMemo(() => pipeline.testDocs, [pipeline]);
+  const inTest = useMemo(
+    () => testDocs.find((d) => d.id === doc.id) !== undefined,
+    [doc, testDocs]
+  );
+
+  const toggleTest = () => {
+    if (inTest) {
+      const newTestDocs = testDocs.filter((d) => d.id !== doc.id);
+      setPipeline({
+        ...pipeline,
+        testDocs: newTestDocs,
+      });
+    } else {
+      setPipeline({
+        ...pipeline,
+        testDocs: pipeline.testDocs.concat(doc),
+      });
+    }
+  };
 
   return (
     <>
-      <SidebarItem onClick={() => setIsOpen(true)}>{doc.name}</SidebarItem>
-      <Dialog size="3xl" open={isOpen} onClose={setIsOpen}>
+      <div className="flex items-center justify-between gap-2">
+        <span>{doc.name}</span>
+        <div className="flex items-center gap-1">
+          <Checkbox checked={inTest} onClick={toggleTest} /> Test
+          <Button plain onClick={() => setIsOpen(true)} className="ml-4">
+            <PencilIcon />
+          </Button>
+        </div>
+      </div>
+      <Dialog size="3xl" open={isOpen} onClose={setIsOpen} topClassName="z-30">
         <DialogTitle>Document view</DialogTitle>
         <DialogDescription>{doc.name}</DialogDescription>
         <DialogBody className="w-full">

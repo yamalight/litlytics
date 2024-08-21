@@ -26,9 +26,9 @@ import {
   SidebarSection,
 } from './catalyst/sidebar';
 import { SidebarLayout } from './catalyst/sidebar-layout';
-import AddTestDoc from './docs/AddTestDoc';
 import { DocItem } from './docs/DocItem';
 import PlanPipeline from './pipeline/PlanPipeline';
+import AddTestDoc from './pipeline/source/plain/AddDoc';
 
 function AccountDropdownMenu({
   anchor,

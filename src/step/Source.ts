@@ -1,5 +1,8 @@
 export class SourceTypes {
-  static PLAIN = 'plain';
+  static PLAIN = 'plain' as const;
 }
 
-export type SourceType = (typeof SourceTypes)[keyof typeof SourceTypes];
+type SourceTypeList = (typeof SourceTypes)[keyof typeof SourceTypes];
+
+// Ensure SourceType is recognized as a string
+export type SourceType = Extract<SourceTypeList, string>;

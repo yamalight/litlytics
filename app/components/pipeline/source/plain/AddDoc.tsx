@@ -1,22 +1,24 @@
 'use client';
 
-import { DocumentIcon } from '@heroicons/react/16/solid';
-import { useAtom } from 'jotai';
-import { useRef, useState } from 'react';
-import { pipelineAtom } from '../../store/store';
-import { Button } from '../catalyst/button';
+import { Button } from '@/app/components/catalyst/button';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from '../catalyst/dialog';
-import { Field, FieldGroup, Label } from '../catalyst/fieldset';
-import { Input } from '../catalyst/input';
-import { Textarea } from '../catalyst/textarea';
+} from '@/app/components/catalyst/dialog';
+import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
+import { Input } from '@/app/components/catalyst/input';
+import { Textarea } from '@/app/components/catalyst/textarea';
+import { pipelineAtom } from '@/app/store/store';
+import { SourceStep } from '@/src/step/Step';
+import { DocumentIcon } from '@heroicons/react/16/solid';
+import { useAtom } from 'jotai';
+import { useRef, useState } from 'react';
+import { PlainSourceConfig } from '../types';
 
-export default function AddTestDoc() {
+export default function AddDoc({ data }: { data: SourceStep }) {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -26,14 +28,22 @@ export default function AddTestDoc() {
     const content = contentInputRef.current?.value;
     const name = nameInputRef.current?.value;
     if (content?.length && name?.length) {
+      const newConfig = structuredClone(data.config) as PlainSourceConfig;
+      if (!newConfig.documents) {
+        newConfig.documents = [];
+      }
+      newConfig.documents.push({
+        id: String(newConfig.documents?.length ?? '0' + 1),
+        name,
+        content,
+        processingResults: [],
+      });
       setPipeline({
         ...pipeline,
-        documents: pipeline.documents.concat({
-          id: String(parseInt(pipeline.documents.at(-1)?.id ?? '-1') + 1),
-          name,
-          content,
-          processingResults: [],
-        }),
+        steps: pipeline.steps.map((s) => ({
+          ...s,
+          config: newConfig,
+        })),
       });
       setIsOpen(false);
     }
@@ -45,7 +55,7 @@ export default function AddTestDoc() {
         <DocumentIcon className="w-4 h-4" />
         Add document
       </Button>
-      <Dialog open={isOpen} onClose={setIsOpen}>
+      <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-40">
         <DialogTitle>Add document</DialogTitle>
         <DialogDescription>Add new test document to project</DialogDescription>
         <DialogBody>
