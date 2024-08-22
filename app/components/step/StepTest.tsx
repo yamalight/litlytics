@@ -66,33 +66,40 @@ export function StepTest({ data }: { data: ProcessingStep }) {
         <DialogTitle>Test step</DialogTitle>
         <DialogDescription>
           Test step {data.name} with a document.
-          {data.input === 'aggregate' && (
+          {data.input === 'aggregate-docs' && (
             <>
               <br />
               Running on all docs.
             </>
           )}
+          {data.input === 'aggregate-results' && (
+            <>
+              <br />
+              Running on all results.
+            </>
+          )}
         </DialogDescription>
         <DialogBody>
-          {data.input !== 'aggregate' && (
-            <FieldGroup>
-              <Field>
-                <Label>Document to test</Label>
-                <Select
-                  aria-label="Document"
-                  name="document"
-                  value={testDocId}
-                  onChange={(e) => setTestDocId(e.target.value)}
-                >
-                  {pipeline.testDocs.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-            </FieldGroup>
-          )}
+          {data.input !== 'aggregate-docs' &&
+            data.input !== 'aggregate-results' && (
+              <FieldGroup>
+                <Field>
+                  <Label>Document to test</Label>
+                  <Select
+                    aria-label="Document"
+                    name="document"
+                    value={testDocId}
+                    onChange={(e) => setTestDocId(e.target.value)}
+                  >
+                    {pipeline.testDocs.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
+              </FieldGroup>
+            )}
 
           <div className="prose prose-sm dark:prose-invert mt-2 px-2">
             <Markdown>

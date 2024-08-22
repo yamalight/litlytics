@@ -145,7 +145,7 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
       name: 'Summarize common complaints',
       description: 'Summarize the most frequent complaints in given documents.',
       type: 'llm',
-      input: 'aggregate',
+      input: 'aggregate-results',
       prompt:
         'Please analyze the provided text document and identify the most common complaints mentioned. Summarize these complaints, highlighting the key themes and issues that appear most frequently.',
       position: { x: 0, y: 290 },

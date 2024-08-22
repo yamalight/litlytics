@@ -13,7 +13,11 @@ export type ProcessingStepTypes = 'code' | 'llm';
 export type StepTypes = SourceStepType | ProcessingStepTypes;
 
 // whether step input is full document, previous processing result or all docs
-export type StepInput = 'doc' | 'result' | 'aggregate';
+export type StepInput =
+  | 'doc'
+  | 'result'
+  | 'aggregate-docs'
+  | 'aggregate-results';
 
 export interface BaseStep extends Record<string, unknown> {
   id: string;

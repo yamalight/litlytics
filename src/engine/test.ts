@@ -13,7 +13,11 @@ export async function testPipelineStep({
   docId: string;
 }) {
   const doc = pipeline.testDocs.find((d) => d.id === docId);
-  if (!doc && step.input !== 'aggregate') {
+  if (
+    !doc &&
+    step.input !== 'aggregate-docs' &&
+    step.input !== 'aggregate-results'
+  ) {
     throw new Error('Pipeline test execution error: doc not found!');
   }
 
@@ -23,21 +27,28 @@ export async function testPipelineStep({
 
     // assemble input
     let input = '';
+    const prevStep = pipeline.steps.find((s) => s.connectsTo.includes(step.id));
     switch (step.input) {
       case 'doc':
         input = doc?.content ?? '';
         break;
       case 'result':
-        const prevStep = pipeline.steps.find((s) =>
-          s.connectsTo.includes(step.id)
-        );
         input =
-          doc?.processingResults.find((s) => s.stepId !== prevStep?.id)
+          doc?.processingResults.find((s) => s.stepId === prevStep?.id)
             ?.result ?? '';
         break;
-      case 'aggregate':
+      case 'aggregate-docs':
         input =
           pipeline.testDocs.map((d) => d.content)?.join('\n------\n') ?? '';
+      case 'aggregate-results':
+        input =
+          pipeline.testDocs
+            .map(
+              (d) =>
+                d?.processingResults.find((s) => s.stepId === prevStep?.id)
+                  ?.result ?? ''
+            )
+            ?.join('\n------\n') ?? '';
     }
 
     console.log(input);
@@ -68,20 +79,25 @@ export async function testPipelineStep({
   const mod = await loadModule(code);
 
   let input: string | string[] = '';
+  const prevStep = pipeline.steps.find((s) => s.connectsTo.includes(step.id));
   switch (step.input) {
     case 'doc':
       input = doc?.content ?? '';
       break;
     case 'result':
-      const prevStep = pipeline.steps.find((s) =>
-        s.connectsTo.includes(step.id)
-      );
       input =
-        doc?.processingResults.find((s) => s.stepId !== prevStep?.id)?.result ??
+        doc?.processingResults.find((s) => s.stepId === prevStep?.id)?.result ??
         '';
       break;
-    case 'aggregate':
+    case 'aggregate-docs':
       input = pipeline.testDocs.map((d) => d.content);
+      break;
+    case 'aggregate-results':
+      input = pipeline.testDocs.map(
+        (d) =>
+          d?.processingResults.find((s) => s.stepId === prevStep?.id)?.result ??
+          ''
+      );
       break;
   }
   console.log({ input });
@@ -97,7 +113,7 @@ export async function testPipelineStep({
     // or insert new one of not
     doc?.processingResults.push({
       stepId: step.id,
-      result: res.result!,
+      result: res,
     });
   }
   console.log(doc);
