@@ -1,7 +1,8 @@
 import { runPrompt } from '../engine/runPrompt';
-import { Step, StepInput, StepType } from './Step';
+import { ProcessingStep, ProcessingStepTypes, StepInput } from './Step';
 import codeSystem from './prompts/code-step.txt';
 import llmSystem from './prompts/llm-step.txt';
+import { cleanResult } from './util';
 
 export const generateStep = async ({
   id,
@@ -14,7 +15,7 @@ export const generateStep = async ({
   name: string;
   description: string;
   input: StepInput;
-  type: StepType;
+  type: ProcessingStepTypes;
 }) => {
   if (!name?.length || !description?.length) {
     throw new Error('Step must have a name and a description!');
@@ -30,14 +31,16 @@ Step description: ${description}`;
   // generate plan from LLM
   const step = await runPrompt({ system, user });
 
-  const newStep: Step = {
+  const result = cleanResult(step.result, type);
+
+  const newStep: ProcessingStep = {
     id,
     name,
     description,
     type,
     input,
-    code: type === 'code' ? step.result ?? '' : '',
-    prompt: type === 'llm' ? step.result ?? '' : '',
+    code: type === 'code' ? result : '',
+    prompt: type === 'llm' ? result : '',
     position: { x: 0, y: 0 },
     connectsTo: [],
   };

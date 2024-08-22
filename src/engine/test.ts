@@ -1,18 +1,18 @@
 import { loadModule } from '../code/loadModule';
 import { Pipeline } from '../pipeline/Pipeline';
-import { Step } from '../step/Step';
+import { ProcessingStep } from '../step/Step';
 import { runPrompt } from './runPrompt';
 
-export async function testPipeline({
+export async function testPipelineStep({
   pipeline,
   step,
   docId,
 }: {
   pipeline: Pipeline;
-  step: Step;
+  step: ProcessingStep;
   docId: string;
 }) {
-  const doc = pipeline.documents.find((d) => d.id === docId);
+  const doc = pipeline.testDocs.find((d) => d.id === docId);
   if (!doc && step.input !== 'aggregate') {
     throw new Error('Pipeline test execution error: doc not found!');
   }
@@ -28,13 +28,16 @@ export async function testPipeline({
         input = doc?.content ?? '';
         break;
       case 'result':
+        const prevStep = pipeline.steps.find((s) =>
+          s.connectsTo.includes(step.id)
+        );
         input =
-          doc?.processingResults.filter((s) => s.stepId !== step.id).at(-1)
+          doc?.processingResults.find((s) => s.stepId !== prevStep?.id)
             ?.result ?? '';
         break;
       case 'aggregate':
         input =
-          pipeline.documents.map((d) => d.content)?.join('\n------\n') ?? '';
+          pipeline.testDocs.map((d) => d.content)?.join('\n------\n') ?? '';
     }
 
     console.log(input);
@@ -57,7 +60,7 @@ export async function testPipeline({
       });
     }
     console.log(doc);
-    return { doc, result: res.result };
+    return doc;
   }
 
   // code execution
@@ -70,16 +73,20 @@ export async function testPipeline({
       input = doc?.content ?? '';
       break;
     case 'result':
+      const prevStep = pipeline.steps.find((s) =>
+        s.connectsTo.includes(step.id)
+      );
       input =
-        doc?.processingResults.filter((s) => s.stepId !== step.id).at(-1)
-          ?.result ?? '';
+        doc?.processingResults.find((s) => s.stepId !== prevStep?.id)?.result ??
+        '';
       break;
     case 'aggregate':
-      input = pipeline.documents.map((d) => d.content);
+      input = pipeline.testDocs.map((d) => d.content);
       break;
   }
-  console.log(input);
+  console.log({ input });
   const res = await mod(input);
+  console.log({ res });
   // replace existing result if present
   const existingResult = doc?.processingResults.find(
     (r) => r.stepId === step.id
@@ -94,5 +101,5 @@ export async function testPipeline({
     });
   }
   console.log(doc);
-  return { doc, result: `Function result: ${res}` };
+  return doc;
 }
