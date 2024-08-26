@@ -1,5 +1,5 @@
 import { CompletionUsage } from 'openai/resources/completions.mjs';
-import { SourceType } from './Source';
+import { SourceType } from '../source/Source';
 
 export interface StepResult {
   stepId: string;

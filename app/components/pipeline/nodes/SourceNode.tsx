@@ -10,17 +10,17 @@ import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
 import { Input } from '@/app/components/catalyst/input';
 import { Select } from '@/app/components/catalyst/select';
 import { pipelineAtom } from '@/app/store/store';
-import { SourceType, SourceTypes } from '@/src/step/Source';
+import { SourceType, SourceTypes } from '@/src/source/Source';
 import { SourceStep } from '@/src/step/Step';
 import { CogIcon } from '@heroicons/react/24/solid';
 import { Handle, Position } from '@xyflow/react';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { PlainSource } from '../source/plain/Plain';
+import { BasicSource } from '../source/plain/Plain';
 import { SourceRender } from '../source/types';
 
 const SOURCE_RENDERERS: Partial<Record<SourceType, SourceRender>> = {
-  [SourceTypes.PLAIN]: PlainSource,
+  [SourceTypes.BASIC]: BasicSource,
 };
 
 export function SourceNode({ data }: { data: SourceStep }) {
@@ -84,8 +84,11 @@ export function SourceNode({ data }: { data: SourceStep }) {
                 onChange={(e) => updateNode(e, 'sourceType')}
               >
                 {Object.keys(SourceTypes).map((type) => (
-                  <option key={type} value={type}>
-                    {type}
+                  <option
+                    key={type}
+                    value={SourceTypes[type as keyof SourceTypes]}
+                  >
+                    {SourceTypes[type as keyof SourceTypes]}
                   </option>
                 ))}
               </Select>

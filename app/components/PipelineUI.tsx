@@ -1,13 +1,18 @@
+import { runPipeline } from '@/src/engine/runPipeline';
 import { DocumentIcon } from '@heroicons/react/24/outline';
 import {
   ArrowDownTrayIcon,
   ArrowRightEndOnRectangleIcon,
   Bars3Icon,
+  CircleStackIcon,
   Cog8ToothIcon,
   FolderIcon,
+  PlayIcon,
   QuestionMarkCircleIcon,
   SparklesIcon,
 } from '@heroicons/react/24/solid';
+import { useAtom } from 'jotai';
+import { pipelineAtom } from '../store/store';
 import { Button } from './catalyst/button';
 import {
   Dropdown,
@@ -35,6 +40,14 @@ function MenuHolder({
 }
 
 export function PipelineUI() {
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
+
+  const doRunPipeline = async () => {
+    const newPipeline = await runPipeline(pipeline);
+    console.log(newPipeline);
+    setPipeline(newPipeline);
+  };
+
   return (
     <div className="fixed pointer-events-none my-6 px-4 z-10 h-screen w-screen bg-transparent">
       <div className="flex justify-between w-full h-fit">
@@ -83,6 +96,20 @@ export function PipelineUI() {
               className="h-5 w-5"
             />
           </Button>
+
+          <div className="w-1" />
+
+          <Button title="Run pipeline" onClick={doRunPipeline}>
+            <PlayIcon aria-hidden="true" className="h-5 w-5" />
+          </Button>
+
+          {pipeline.results ? (
+            <Button title="View results">
+              <CircleStackIcon aria-hidden="true" className="h-5 w-5" />
+            </Button>
+          ) : (
+            <></>
+          )}
         </MenuHolder>
 
         <MenuHolder className="p-0 m-1.5">

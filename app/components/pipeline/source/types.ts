@@ -4,6 +4,6 @@ import { ReactElement } from 'react';
 
 export type SourceRender = ({ data }: { data: SourceStep }) => ReactElement;
 
-export type PlainSourceConfig = {
+export type BasicSourceConfig = {
   documents?: Doc[];
 };

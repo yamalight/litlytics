@@ -7,4 +7,5 @@ export interface Pipeline {
   pipelinePlan?: string;
   steps: Step[];
   testDocs: Doc[];
+  results?: Doc[] | Doc;
 }

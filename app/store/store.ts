@@ -61,7 +61,7 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
       type: 'source',
       position: { x: 0, y: 0 },
       connectsTo: ['1'],
-      sourceType: 'plain',
+      sourceType: 'basic',
       config: {
         documents: [
           {
@@ -152,6 +152,23 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
       connectsTo: [],
     },
   ],
+  results: {
+    id: '124ba2cc-2930-4ecc-a0f2-bc59215acee0',
+    name: 'Aggregate result',
+    content: '',
+    processingResults: [
+      {
+        stepId: '4',
+        result:
+          "Based on the analysis of the provided text, several common complaints emerge, highlighting key themes and issues that players are experiencing:\n\n1. **Gameplay Balance Issues**: \n   - Players are frustrated with the nerfing of fire damage, which has rendered it ineffective against armored enemies and in crowd control situations. This suggests a broader concern about the game's balance philosophy, where fun elements are being removed rather than new options being introduced.\n\n2. **Toxic Player Behavior**:\n   - There is a significant complaint regarding the prevalence of toxic players in public matches. Players report experiences with individuals who disrupt gameplay, such as killing teammates and leaving behind samples, which diminishes the enjoyment of the game. Additionally, the inability to report these players exacerbates the issue.\n\n3. **Frustration with Game Mechanics**:\n   - Many players express dissatisfaction with various mechanics, including the difficulty in finding effective loadouts and the perception that piloting mechs is more of a liability than an enjoyable aspect of gameplay. This indicates a need for better balancing and more engaging options within the game.\n\n4. **Map Design and Generation**:\n   - Complaints about map generation leading to unwinnable scenarios and repetitive, unengaging environments are prevalent. Players feel that poorly designed maps diminish the overall experience and enjoyment of the game.\n\n5. **Resource Management Issues**:\n   - Players are frustrated with the ammo economy, which forces them into sneaky playstyles instead of engaging in combat. The consumption of regular ammo by trash mobs is also noted as a significant point of frustration.\n\n6. **Overall Player Experience**:\n   - The overall experience of preparing to play the game is described as onerous, leading some players to consider uninstalling the game altogether due to accumulated frustration. This reflects a broader sentiment of dissatisfaction with the game's current state.\n\n7. **Impact of External Factors**:\n   - Lastly, there is mention of external issues, such as Sony's blockade of certain countries, which has negatively impacted support for the game. This adds another layer of frustration for players who may feel abandoned or unsupported.\n\nIn summary, the key themes of complaints include gameplay balance issues, toxic player behavior, frustrations with game mechanics and resource management, poor map design, and external factors affecting player support. These issues collectively contribute to a declining player experience and dissatisfaction with the game.",
+        usage: {
+          prompt_tokens: 309,
+          completion_tokens: 470,
+          total_tokens: 779,
+        },
+      },
+    ],
+  },
 });
 
 /*

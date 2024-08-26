@@ -10,7 +10,7 @@ import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
 import { Select } from '@/app/components/catalyst/select';
 import { Spinner } from '@/app/components/Spinner';
 import { pipelineAtom } from '@/app/store/store';
-import { testPipelineStep } from '@/src/engine/test';
+import { testPipelineStep } from '@/src/engine/testStep';
 import { ProcessingStep } from '@/src/step/Step';
 import { BeakerIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';

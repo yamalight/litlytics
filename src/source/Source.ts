@@ -1,5 +1,5 @@
 export class SourceTypes {
-  static PLAIN = 'plain' as const;
+  static BASIC = 'basic' as const;
 }
 
 type SourceTypeList = (typeof SourceTypes)[keyof typeof SourceTypes];
