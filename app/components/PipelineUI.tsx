@@ -4,7 +4,6 @@ import {
   ArrowDownTrayIcon,
   ArrowRightEndOnRectangleIcon,
   Bars3Icon,
-  CircleStackIcon,
   Cog8ToothIcon,
   FolderIcon,
   PlayIcon,
@@ -22,6 +21,7 @@ import {
   DropdownLabel,
   DropdownMenu,
 } from './catalyst/dropdown';
+import { ViewResults } from './pipeline/result/ViewResult';
 
 function MenuHolder({
   className,
@@ -45,7 +45,7 @@ export function PipelineUI() {
   const doRunPipeline = async () => {
     const newPipeline = await runPipeline(pipeline);
     console.log(newPipeline);
-    setPipeline(newPipeline);
+    setPipeline(structuredClone(newPipeline));
   };
 
   return (
@@ -103,13 +103,7 @@ export function PipelineUI() {
             <PlayIcon aria-hidden="true" className="h-5 w-5" />
           </Button>
 
-          {pipeline.results ? (
-            <Button title="View results">
-              <CircleStackIcon aria-hidden="true" className="h-5 w-5" />
-            </Button>
-          ) : (
-            <></>
-          )}
+          <ViewResults />
         </MenuHolder>
 
         <MenuHolder className="p-0 m-1.5">
