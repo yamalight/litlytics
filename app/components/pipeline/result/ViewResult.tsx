@@ -16,13 +16,13 @@ export function ViewResults() {
   const [isOpen, setIsOpen] = useState(false);
   const pipeline = useAtomValue(pipelineAtom);
 
-  if (!pipeline.results) {
-    return <></>;
-  }
-
   return (
     <>
-      <Button title="View results" onClick={() => setIsOpen(true)}>
+      <Button
+        title="View results"
+        onClick={() => setIsOpen(true)}
+        disabled={!pipeline.results}
+      >
         <CircleStackIcon aria-hidden="true" className="h-5 w-5" />
       </Button>
 
@@ -30,7 +30,7 @@ export function ViewResults() {
         <DialogTitle>View results</DialogTitle>
         <DialogDescription>Pipeline results</DialogDescription>
         <DialogBody>
-          <RenderResults results={pipeline.results} />
+          <RenderResults results={pipeline.results!} />
         </DialogBody>
         <DialogActions>
           <Button plain onClick={() => setIsOpen(false)}>
