@@ -2,11 +2,9 @@ import { runPipeline } from '@/src/engine/runPipeline';
 import {
   ArrowDownTrayIcon,
   Bars3Icon,
-  Cog8ToothIcon,
   FolderIcon,
   PlayIcon,
   QuestionMarkCircleIcon,
-  SparklesIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { pipelineAtom } from '../store/store';
@@ -14,11 +12,11 @@ import { Button } from './catalyst/button';
 import {
   Dropdown,
   DropdownButton,
-  DropdownDivider,
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
 } from './catalyst/dropdown';
+import GeneratePipeline from './pipeline/GeneratePipeline';
 import { ViewResults } from './pipeline/result/ViewResult';
 import { AddSource } from './pipeline/source/AddSource';
 import AddStep from './step/AddStep';
@@ -70,20 +68,18 @@ export function PipelineUI() {
                 <DropdownLabel>Save pipeline</DropdownLabel>
               </DropdownItem>
 
-              <DropdownDivider />
+              {/* <DropdownDivider />
 
               <DropdownItem>
                 <Cog8ToothIcon />
                 <DropdownLabel>Settings</DropdownLabel>
-              </DropdownItem>
+              </DropdownItem> */}
             </DropdownMenu>
           </Dropdown>
         </MenuHolder>
 
         <MenuHolder>
-          <Button title="Generate pipeline">
-            <SparklesIcon aria-hidden="true" className="h-5 w-5" />
-          </Button>
+          <GeneratePipeline />
 
           <div className="w-1" />
 

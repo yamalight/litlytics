@@ -1,4 +1,5 @@
 import { CompletionUsage } from 'openai/resources/completions.mjs';
+import { z } from 'zod';
 import { SourceType } from '../source/Source';
 
 export interface StepResult {
@@ -32,6 +33,28 @@ export interface BaseStep extends Record<string, unknown> {
   position: { x: number; y: number };
   connectsTo: string[];
 }
+// zod definition for llm schema / generation
+export const BaseStepZod = z.object({
+  // base schema
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  type: z.enum(['source', 'code', 'llm']),
+  position: z.object({
+    x: z.number(),
+    y: z.number(),
+  }),
+  connectsTo: z.array(z.string()),
+  // source
+  sourceType: z.optional(z.literal('basic')),
+  config: z.optional(z.object({})),
+  // processing
+  input: z.optional(
+    z.enum(['doc', 'result', 'aggregate-docs', 'aggregate-results'])
+  ),
+  prompt: z.optional(z.string()),
+  code: z.optional(z.string()),
+});
 
 export interface SourceStep extends BaseStep {
   type: SourceStepType;

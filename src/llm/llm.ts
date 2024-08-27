@@ -6,6 +6,12 @@ import type {
   ChatCompletionTool,
 } from 'openai/resources/chat/completions';
 import type { ChatCompletionMessageParam } from 'openai/resources/index';
+import {
+  ChatCompletionCreateParamsNonStreaming,
+  ResponseFormatJSONObject,
+  ResponseFormatJSONSchema,
+  ResponseFormatText,
+} from 'openai/src/resources/index.js';
 import pRetry from 'p-retry';
 import { defaultModelArgs, defaultModelName } from './config';
 
@@ -98,6 +104,40 @@ async function executeOnLLMToolsBase({
 }
 
 /**
+ * Executes LLM prompt with tools and returns all results
+ */
+async function executeOnLLMJSONBase({
+  messages,
+  modelName,
+  modelArgs,
+  response_format,
+}: {
+  messages: ChatCompletionMessageParam[];
+  modelName?: string | null;
+  modelArgs?: Partial<ChatCompletionCreateParamsNonStreaming>;
+  response_format:
+    | ResponseFormatText
+    | ResponseFormatJSONObject
+    | ResponseFormatJSONSchema;
+}) {
+  const chatCompletion = await openai.beta.chat.completions.parse({
+    ...defaultModelArgs,
+    ...modelArgs,
+    model: modelName ?? defaultModelName,
+    messages,
+    response_format,
+  });
+  const answers = chatCompletion.choices;
+  const usage = chatCompletion.usage;
+  if (process.env.NODE_ENV != 'production' && process.env.NODE_ENV != 'test') {
+    console.log('\n\n');
+    console.log(modelName ?? defaultModelName, messages, answers);
+    console.log('\n\n');
+  }
+  return { answers, usage };
+}
+
+/**
  * Executes LLM prompt and returns a single result
  */
 async function executeOnLLMSingleBase({
@@ -178,4 +218,31 @@ export async function executeOnLLMMulti({
     retries: 3,
     shouldRetry: () => true, // always retry
   });
+}
+
+/**
+ * Executes LLM prompt with tools and returns a single result
+ */
+export async function executeOnLLMWithJSON({
+  messages,
+  modelName,
+  modelArgs,
+  response_format,
+}: {
+  messages: ChatCompletionMessageParam[];
+  modelName?: string | null;
+  modelArgs?: Partial<ChatCompletionCreateParamsNonStreaming>;
+  response_format:
+    | ResponseFormatText
+    | ResponseFormatJSONObject
+    | ResponseFormatJSONSchema;
+}) {
+  return pRetry(
+    () =>
+      executeOnLLMJSONBase({ messages, modelName, modelArgs, response_format }),
+    {
+      retries: 3,
+      shouldRetry: () => true, // always retry
+    }
+  );
 }

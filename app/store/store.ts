@@ -3,15 +3,23 @@ import { atom } from 'jotai';
 
 export const pipelineAtom = atom<Pipeline>({
   name: 'test',
-  pipelinePlan: `1) **LLM Step - Sentiment Analysis**: Use a language model to analyze the sentiment of each product review, categorizing them into positive, negative, and neutral sentiments. This will help in filtering out the reviews that are primarily negative, which are likely to contain complaints.
+  pipelinePlan: `Here’s the revised pipeline with the removal of step 4 and the addition of a filtering step:
 
-2) **LLM Step - Extract Complaints**: Pass the negative reviews to a language model to extract specific complaints or issues mentioned in the text. This step focuses on identifying phrases or sentences that indicate dissatisfaction.
+1) **Source Step**  
+   This step will provide the product reviews as input to the pipeline.
 
-3) **Code Step - Frequency Count**: Implement a JavaScript function that takes the extracted complaints and counts the frequency of each unique complaint. This will allow you to determine which complaints are most common across the reviews.
+2) **LLM Step - Identify Negative Reviews**  
+   This step will analyze each review and identify those classified as negative based on sentiment analysis. It will return only the negative reviews.
 
-4) **LLM Step - Summarize Findings**: Use a language model to summarize the most frequent complaints identified in the previous step, providing a clear overview of the key issues customers are facing with the product.`,
-  pipelineDescription:
-    'I need to analyze a set of product reviews to get a list of common complaints.',
+3) **Code Step - Filter Out Positive Reviews**  
+   This step will filter out any reviews that are not negative, ensuring that only negative reviews proceed to the next step.
+
+4) **LLM Step - Extract Complaints**  
+   This step will take the negative reviews as input and extract specific complaints mentioned within those reviews. It will return a list of complaints for each negative review.
+
+5) **LLM Step - Summarize Complaints**  
+   This step will take the extracted complaints and generate a summary that encapsulates the main issues raised by customers in their negative reviews.`,
+  pipelineDescription: `I have a list of product reviews. I want to extract list of complaints from negative reviews. At the end, I want to get a summary of all complaints people have.`,
   testDocs: [
     {
       id: '0',
@@ -114,7 +122,7 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
       prompt:
         'Analyze the sentiment of the provided product review and determine whether it contains complaints. Please return only the overall sentiment of the document.',
       input: 'doc',
-      position: { x: 0, y: 60 },
+      position: { x: 0, y: 80 },
       connectsTo: ['2'],
     },
     {
@@ -125,7 +133,7 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
       type: 'code',
       code: "export default function extractOverallDocumentSentiment(inputString) {\n    const negativeSentimentKeywords = ['bad', 'terrible', 'awful', 'horrible', 'negative', 'poor', 'disappointing', 'sad', 'angry', 'frustrating'];\n    \n    const lowerCaseInput = inputString.toLowerCase();\n    \n    for (let keyword of negativeSentimentKeywords) {\n        if (lowerCaseInput.includes(keyword)) {\n            return 'Negative';\n        }\n    }\n    \n    return '';\n}",
       input: 'result',
-      position: { x: 0, y: 130 },
+      position: { x: 0, y: 160 },
       connectsTo: ['3'],
     },
     {
@@ -137,7 +145,7 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
       input: 'doc',
       prompt:
         'Please analyze the provided product review and extract only the negative feedback. Return a list containing the identified negative points mentioned by the reviewer.',
-      position: { x: 0, y: 210 },
+      position: { x: 0, y: 240 },
       connectsTo: ['4'],
     },
     {
@@ -148,7 +156,7 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
       input: 'aggregate-results',
       prompt:
         'Please analyze the provided text document and identify the most common complaints mentioned. Summarize these complaints, highlighting the key themes and issues that appear most frequently.',
-      position: { x: 0, y: 290 },
+      position: { x: 0, y: 320 },
       connectsTo: [],
     },
   ],
