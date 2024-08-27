@@ -2,8 +2,8 @@
 
 import { pipelineAtom } from '@/app/store/store';
 import { generateStep } from '@/src/step/generate';
-import { StepInput } from '@/src/step/Step';
-import { PlusIcon } from '@heroicons/react/16/solid';
+import { ProcessingStepTypes, StepInput, StepInputs } from '@/src/step/Step';
+import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
 import { Button } from '../catalyst/button';
@@ -20,10 +20,17 @@ import { Select } from '../catalyst/select';
 import { Textarea } from '../catalyst/textarea';
 import { Spinner } from '../Spinner';
 
+const stepInputLabels = {
+  doc: 'Document',
+  result: 'Previous step result',
+  'aggregate-docs': 'All documents',
+  'aggregate-results': 'All previous results',
+};
+
 export default function AddStep() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
-  const [type, setType] = useState<'llm' | 'code'>('llm');
+  const [type, setType] = useState<ProcessingStepTypes>('llm');
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState<StepInput>('doc');
@@ -55,11 +62,12 @@ export default function AddStep() {
   };
 
   return (
-    <div className="flex w-full mt-4">
-      <Button className="w-full" onClick={() => setIsOpen(true)}>
-        <PlusIcon className="w-4 h-4" /> Add processing step
+    <>
+      <Button title="Add step" onClick={() => setIsOpen(true)}>
+        <ArrowRightEndOnRectangleIcon className="h-5 w-5" />
       </Button>
-      <Dialog open={isOpen} onClose={setIsOpen}>
+
+      <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
         <DialogTitle>Add processing step</DialogTitle>
         <DialogDescription>
           Add new processing step to project
@@ -72,7 +80,7 @@ export default function AddStep() {
                 aria-label="Step type"
                 name="type"
                 value={type}
-                onChange={(e) => setType(e.target.value as 'llm' | 'code')}
+                onChange={(e) => setType(e.target.value as ProcessingStepTypes)}
               >
                 <option value="llm">LLM</option>
                 <option value="code">Code</option>
@@ -103,9 +111,11 @@ export default function AddStep() {
                 value={input}
                 onChange={(e) => setInput(e.target.value as StepInput)}
               >
-                <option value="doc">Document</option>
-                <option value="result">Previous step result</option>
-                <option value="aggregate">All documents</option>
+                {Object.keys(StepInputs).map((key) => (
+                  <option key={key} value={StepInputs[key as keyof StepInputs]}>
+                    {stepInputLabels[StepInputs[key as keyof StepInputs]]}
+                  </option>
+                ))}
               </Select>
             </Field>
           </FieldGroup>
@@ -122,6 +132,6 @@ export default function AddStep() {
           <Button onClick={createStep}>Create</Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }

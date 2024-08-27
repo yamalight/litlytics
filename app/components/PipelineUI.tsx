@@ -1,7 +1,6 @@
 import { runPipeline } from '@/src/engine/runPipeline';
 import {
   ArrowDownTrayIcon,
-  ArrowRightEndOnRectangleIcon,
   Bars3Icon,
   Cog8ToothIcon,
   FolderIcon,
@@ -22,6 +21,7 @@ import {
 } from './catalyst/dropdown';
 import { ViewResults } from './pipeline/result/ViewResult';
 import { AddSource } from './pipeline/source/AddSource';
+import AddStep from './step/AddStep';
 
 function MenuHolder({
   className,
@@ -88,12 +88,7 @@ export function PipelineUI() {
           <div className="w-1" />
 
           <AddSource />
-          <Button title="Add step">
-            <ArrowRightEndOnRectangleIcon
-              aria-hidden="true"
-              className="h-5 w-5"
-            />
-          </Button>
+          <AddStep />
 
           <div className="w-1" />
 
