@@ -11,11 +11,12 @@ import { Input } from '@/app/components/catalyst/input';
 import { Select } from '@/app/components/catalyst/select';
 import { pipelineAtom } from '@/app/store/store';
 import { SourceType, SourceTypes } from '@/src/source/Source';
-import { SourceStep } from '@/src/step/Step';
+import { SourceStep, Step } from '@/src/step/Step';
 import { CogIcon } from '@heroicons/react/24/solid';
 import { Handle, Position } from '@xyflow/react';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
+import { Textarea } from '../../catalyst/textarea';
 import { BasicSource } from '../source/plain/Plain';
 import { SourceRender } from '../source/types';
 
@@ -30,8 +31,8 @@ export function SourceNode({ data }: { data: SourceStep }) {
   const Render = useMemo(() => SOURCE_RENDERERS[data.sourceType], [data]);
 
   const updateNode = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    prop: string
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+    prop: keyof Step
   ) => {
     const newVal = e.target.value;
     const newData = structuredClone(data);
@@ -69,11 +70,20 @@ export function SourceNode({ data }: { data: SourceStep }) {
             <Field>
               <Label>Source name</Label>
               <Input
-                name="content"
+                name="name"
                 placeholder="Source name"
                 autoFocus
                 value={data.name}
                 onChange={(e) => updateNode(e, 'name')}
+              />
+            </Field>
+            <Field>
+              <Label>Source description</Label>
+              <Textarea
+                name="description"
+                placeholder="Source description"
+                value={data.description}
+                onChange={(e) => updateNode(e, 'description')}
               />
             </Field>
             <Field>

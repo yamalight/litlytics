@@ -42,8 +42,8 @@ export function DocItem({ doc }: { doc: Doc }) {
       <div className="flex items-center justify-between gap-2">
         <span>{doc.name}</span>
         <div className="flex items-center gap-1">
-          <Checkbox checked={inTest} onClick={toggleTest} /> Test
-          <Button plain onClick={() => setIsOpen(true)} className="ml-4">
+          <Checkbox checked={inTest} onClick={toggleTest} /> Use as test
+          <Button plain onClick={() => setIsOpen(true)} className="ml-6">
             <PencilIcon />
           </Button>
         </div>

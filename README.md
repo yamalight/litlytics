@@ -1,9 +1,8 @@
 ToDo:
 
-- [ ] Generate pipeline
-- [ ] Edit source step
 - [ ] Edit LLM step
 - [ ] Edit code step
+- [ ] Generate pipeline
 - [ ] Save pipeline
 - [ ] Open pipeline
 - [ ] Help
