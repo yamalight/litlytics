@@ -1,6 +1,5 @@
 ToDo:
 
-- [ ] Edit LLM step
 - [ ] Edit code step
 - [ ] Generate pipeline
 - [ ] Save pipeline
