@@ -12,6 +12,7 @@
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "@mlc-ai/web-llm": "^0.2.61",
+    "@monaco-editor/react": "^4.6.0",
     "@xyflow/react": "^12.1.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.24",

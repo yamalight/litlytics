@@ -29,14 +29,16 @@ export async function runCodeStep({
         '';
       break;
     case 'aggregate-docs':
-      input = allDocs.map((d) => d.content);
+      input = allDocs.map((d) => d.content)?.filter((r) => r?.length > 0);
       break;
     case 'aggregate-results':
-      input = allDocs.map(
-        (d) =>
-          d?.processingResults.find((s) => s.stepId === prevStep?.id)?.result ??
-          ''
-      );
+      input = allDocs
+        .map(
+          (d) =>
+            d?.processingResults.find((s) => s.stepId === prevStep?.id)
+              ?.result ?? ''
+        )
+        ?.filter((r) => r?.length > 0);
       break;
   }
   console.log({ input });

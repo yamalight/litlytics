@@ -42,15 +42,33 @@ export function StepTest({ data }: { data: ProcessingStep }) {
       docId: testDocId,
     });
 
-    setPipeline({
-      ...pipeline,
-      testDocs: pipeline.testDocs.map((d) => {
-        if (d.id === doc?.id) {
-          return doc;
-        }
-        return d;
-      }),
-    });
+    if (!doc) {
+      // update result manually with no execution
+      setPipeline({
+        ...pipeline,
+        testDocs: pipeline.testDocs.map((d) => {
+          if (d.id === testDocId) {
+            d.processingResults.push({
+              result: undefined,
+              stepId: data.id,
+            });
+            return d;
+          }
+          return d;
+        }),
+      });
+    } else {
+      // update test doc results
+      setPipeline({
+        ...pipeline,
+        testDocs: pipeline.testDocs.map((d) => {
+          if (d.id === doc?.id) {
+            return doc;
+          }
+          return d;
+        }),
+      });
+    }
 
     setLoading(false);
   };
@@ -62,7 +80,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
       </Button>
 
       {/* Test step */}
-      <Dialog open={isTestOpen} onClose={setTestOpen}>
+      <Dialog open={isTestOpen} onClose={setTestOpen} topClassName="z-20">
         <DialogTitle>Test step</DialogTitle>
         <DialogDescription>
           Test step {data.name} with a document.

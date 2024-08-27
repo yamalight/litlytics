@@ -14,6 +14,7 @@ import { ChangeEvent, useState } from 'react';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
 import { Textarea } from '../catalyst/textarea';
+import { CodeEditor } from './CodeEditor';
 
 export function StepEdit({ data }: { data: ProcessingStep }) {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
@@ -39,6 +40,26 @@ export function StepEdit({ data }: { data: ProcessingStep }) {
     });
   };
 
+  const updateCode = (newCode?: string) => {
+    if (!newCode) {
+      return;
+    }
+
+    const newData = structuredClone(data);
+    newData.code = newCode;
+
+    const newSteps = pipeline.steps.map((s) => {
+      if (s.id === newData.id) {
+        return newData;
+      }
+      return s;
+    });
+    setPipeline({
+      ...pipeline,
+      steps: newSteps,
+    });
+  };
+
   return (
     <>
       <Button className="h-4 w-4" onClick={() => setIsOpen(true)}>
@@ -46,7 +67,7 @@ export function StepEdit({ data }: { data: ProcessingStep }) {
       </Button>
 
       {/* Edit step */}
-      <Dialog size="3xl" open={isOpen} onClose={setIsOpen}>
+      <Dialog size="3xl" open={isOpen} onClose={setIsOpen} topClassName="z-20">
         <DialogTitle>Step: {data.name}</DialogTitle>
         <DialogDescription>Config for {data.name}.</DialogDescription>
         <DialogBody className="w-full">
@@ -82,7 +103,12 @@ export function StepEdit({ data }: { data: ProcessingStep }) {
                 />
               </Field>
             ) : (
-              <>{data.code}</>
+              <Field>
+                <Label>Step code</Label>
+                <div className="h-[60vh] min-h-[60vh]">
+                  <CodeEditor code={data.code} onChange={updateCode} />
+                </div>
+              </Field>
             )}
           </FieldGroup>
         </DialogBody>

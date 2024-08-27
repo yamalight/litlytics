@@ -3,7 +3,7 @@ import { SourceType } from '../source/Source';
 
 export interface StepResult {
   stepId: string;
-  result: string;
+  result?: string;
   usage?: CompletionUsage;
 }
 

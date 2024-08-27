@@ -40,7 +40,11 @@ export async function runLLMStep({
       input = prevResult ?? '';
       break;
     case 'aggregate-docs':
-      input = allDocs.map((d) => d.content)?.join('\n------\n') ?? '';
+      input =
+        allDocs
+          .map((d) => d.content)
+          ?.filter((r) => r?.length > 0)
+          ?.join('\n------\n') ?? '';
       break;
     case 'aggregate-results':
       input =
@@ -50,6 +54,7 @@ export async function runLLMStep({
               d?.processingResults.find((s) => s.stepId === prevStep?.id)
                 ?.result ?? ''
           )
+          ?.filter((r) => r?.length > 0)
           ?.join('\n------\n') ?? '';
       break;
   }

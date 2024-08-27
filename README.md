@@ -1,6 +1,5 @@
 ToDo:
 
-- [ ] Edit code step
 - [ ] Generate pipeline
 - [ ] Save pipeline
 - [ ] Open pipeline
