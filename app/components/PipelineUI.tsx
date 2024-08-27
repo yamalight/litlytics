@@ -1,5 +1,4 @@
 import { runPipeline } from '@/src/engine/runPipeline';
-import { DocumentIcon } from '@heroicons/react/24/outline';
 import {
   ArrowDownTrayIcon,
   ArrowRightEndOnRectangleIcon,
@@ -22,6 +21,7 @@ import {
   DropdownMenu,
 } from './catalyst/dropdown';
 import { ViewResults } from './pipeline/result/ViewResult';
+import { AddSource } from './pipeline/source/AddSource';
 
 function MenuHolder({
   className,
@@ -87,9 +87,7 @@ export function PipelineUI() {
 
           <div className="w-1" />
 
-          <Button title="Add source">
-            <DocumentIcon aria-hidden="true" className="h-5 w-5" />
-          </Button>
+          <AddSource />
           <Button title="Add step">
             <ArrowRightEndOnRectangleIcon
               aria-hidden="true"

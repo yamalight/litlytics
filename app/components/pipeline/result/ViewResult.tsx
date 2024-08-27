@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from '@/app/components/catalyst/dialog';
 import { pipelineAtom } from '@/app/store/store';
-import { CircleStackIcon } from '@heroicons/react/24/solid';
+import { DocumentCheckIcon } from '@heroicons/react/24/solid';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { RenderResults } from './Results';
@@ -23,7 +23,7 @@ export function ViewResults() {
         onClick={() => setIsOpen(true)}
         disabled={!pipeline.results}
       >
-        <CircleStackIcon aria-hidden="true" className="h-5 w-5" />
+        <DocumentCheckIcon aria-hidden="true" className="h-5 w-5" />
       </Button>
 
       <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
