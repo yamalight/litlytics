@@ -33,6 +33,16 @@ export default function PipelineFlow() {
   );
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const fitViewOptions = useMemo(() => {
+    return {
+      padding: 0.4,
+      includeHiddenNodes: false,
+      minZoom: 0.1,
+      maxZoom: 2,
+      duration: 200,
+      nodes,
+    };
+  }, [nodes]);
 
   const onConnect = useCallback(
     (params: Connection) => {
@@ -145,6 +155,7 @@ export default function PipelineFlow() {
         onConnect={onConnect}
         colorMode={'dark'}
         nodeTypes={nodeTypes}
+        fitViewOptions={fitViewOptions}
         fitView
       >
         <Controls showZoom={false} />
