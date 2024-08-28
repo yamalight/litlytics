@@ -1,6 +1,20 @@
 import { Pipeline } from '@/src/pipeline/Pipeline';
 import { atom } from 'jotai';
 
+export const emptyPipeline: Pipeline = {
+  // project setup
+  name: '',
+  // test docs
+  testDocs: [],
+  // pipeline plan
+  pipelinePlan: '',
+  pipelineDescription: '',
+  // pipeline steps
+  steps: [],
+  // results
+  results: undefined,
+};
+
 export const pipelineAtom = atom<Pipeline>({
   name: 'test',
   pipelinePlan: `Step name: Source Reviews  

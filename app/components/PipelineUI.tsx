@@ -5,13 +5,22 @@ import {
   FolderIcon,
   PlayIcon,
   QuestionMarkCircleIcon,
+  TrashIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
-import { pipelineAtom } from '../store/store';
+import { useState } from 'react';
+import { emptyPipeline, pipelineAtom } from '../store/store';
 import { Button } from './catalyst/button';
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogTitle,
+} from './catalyst/dialog';
 import {
   Dropdown,
   DropdownButton,
+  DropdownDivider,
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
@@ -39,6 +48,12 @@ function MenuHolder({
 
 export function PipelineUI() {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const resetPipeline = () => {
+    setPipeline(structuredClone(emptyPipeline));
+    setIsOpen(false);
+  };
 
   const doRunPipeline = async () => {
     const newPipeline = await runPipeline(pipeline);
@@ -62,6 +77,13 @@ export function PipelineUI() {
               className="min-w-80 lg:min-w-64"
               anchor="bottom start"
             >
+              <DropdownItem onClick={() => setIsOpen(true)}>
+                <TrashIcon aria-hidden="true" className="h-5 w-5" />
+                <DropdownLabel>Reset pipeline</DropdownLabel>
+              </DropdownItem>
+
+              <DropdownDivider />
+
               <DropdownItem>
                 <FolderIcon aria-hidden="true" className="h-5 w-5" />
                 <DropdownLabel>Open pipeline</DropdownLabel>
@@ -105,6 +127,22 @@ export function PipelineUI() {
           </Button>
         </MenuHolder>
       </div>
+
+      <Dialog size="3xl" open={isOpen} onClose={setIsOpen} topClassName="z-20">
+        <DialogTitle>Reset pipeline?</DialogTitle>
+        <DialogBody className="w-full">
+          Are you sure you want to reset the pipeline? This will delete all
+          current steps and docs.
+        </DialogBody>
+        <DialogActions className="flex justify-between">
+          <Button color="red" onClick={resetPipeline}>
+            Yes, reset
+          </Button>
+          <Button plain onClick={() => setIsOpen(false)}>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
