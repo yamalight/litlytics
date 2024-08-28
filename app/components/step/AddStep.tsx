@@ -19,13 +19,7 @@ import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
 import { Textarea } from '../catalyst/textarea';
 import { Spinner } from '../Spinner';
-
-const stepInputLabels = {
-  doc: 'Document',
-  result: 'Previous step result',
-  'aggregate-docs': 'All documents',
-  'aggregate-results': 'All previous results',
-};
+import { stepInputLabels } from './util';
 
 export default function AddStep() {
   const nameInputRef = useRef<HTMLInputElement>(null);

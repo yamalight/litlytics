@@ -7,14 +7,16 @@ import {
   DialogTitle,
 } from '@/app/components/catalyst/dialog';
 import { pipelineAtom } from '@/app/store/store';
-import { ProcessingStep } from '@/src/step/Step';
+import { ProcessingStep, StepInputs } from '@/src/step/Step';
 import { CogIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useState } from 'react';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
+import { Select } from '../catalyst/select';
 import { Textarea } from '../catalyst/textarea';
 import { CodeEditor } from './CodeEditor';
+import { stepInputLabels } from './util';
 
 export function StepEdit({ data }: { data: ProcessingStep }) {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
@@ -90,6 +92,31 @@ export function StepEdit({ data }: { data: ProcessingStep }) {
                 value={data.description}
                 onChange={(e) => updateNode(e, 'description')}
               />
+            </Field>
+            <Field>
+              <Label>Step type</Label>
+              <Select
+                name="step-type"
+                value={data.type}
+                onChange={(e) => updateNode(e, 'type')}
+              >
+                <option value="llm">LLM</option>
+                <option value="code">Code</option>
+              </Select>
+            </Field>
+            <Field>
+              <Label>Step input</Label>
+              <Select
+                name="step-input"
+                value={data.input}
+                onChange={(e) => updateNode(e, 'input')}
+              >
+                {Object.keys(StepInputs).map((key) => (
+                  <option key={key} value={StepInputs[key as keyof StepInputs]}>
+                    {stepInputLabels[StepInputs[key as keyof StepInputs]]}
+                  </option>
+                ))}
+              </Select>
             </Field>
             {data.type === 'llm' ? (
               <Field>
