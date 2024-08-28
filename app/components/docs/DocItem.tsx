@@ -2,7 +2,7 @@ import { pipelineAtom } from '@/app/store/store';
 import { Doc } from '@/src/doc/Document';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
-import { useMemo, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { Button } from '../catalyst/button';
 import { Checkbox } from '../catalyst/checkbox';
 import {
@@ -12,8 +12,17 @@ import {
   DialogDescription,
   DialogTitle,
 } from '../catalyst/dialog';
+import { Field, FieldGroup, Label } from '../catalyst/fieldset';
+import { Input } from '../catalyst/input';
+import { Textarea } from '../catalyst/textarea';
 
-export function DocItem({ doc }: { doc: Doc }) {
+export function DocItem({
+  doc,
+  updateDoc,
+}: {
+  doc: Doc;
+  updateDoc: (doc: Doc) => void;
+}) {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
   const testDocs = useMemo(() => pipeline.testDocs, [pipeline]);
@@ -37,6 +46,16 @@ export function DocItem({ doc }: { doc: Doc }) {
     }
   };
 
+  const updateDocProp = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+    prop: Exclude<keyof Doc, 'processingResults'>
+  ) => {
+    const newVal = e.target.value;
+    const newDoc = structuredClone(doc);
+    newDoc[prop] = newVal;
+    updateDoc(newDoc);
+  };
+
   return (
     <>
       <div className="flex items-center justify-between gap-2">
@@ -52,9 +71,27 @@ export function DocItem({ doc }: { doc: Doc }) {
         <DialogTitle>Document view</DialogTitle>
         <DialogDescription>{doc.name}</DialogDescription>
         <DialogBody className="w-full">
-          <div className="prose prose-sm dark:prose-invert w-full max-w-full">
-            <pre className="whitespace-pre-wrap w-full">{doc.content}</pre>
-          </div>
+          <FieldGroup>
+            <Field>
+              <Label>Step name</Label>
+              <Input
+                name="name"
+                placeholder="Doc name"
+                autoFocus
+                value={doc.name}
+                onChange={(e) => updateDocProp(e, 'name')}
+              />
+            </Field>
+            <Field>
+              <Label>Step description</Label>
+              <Textarea
+                name="description"
+                placeholder="Doc content"
+                value={doc.content}
+                onChange={(e) => updateDocProp(e, 'content')}
+              />
+            </Field>
+          </FieldGroup>
         </DialogBody>
         <DialogActions>
           <Button plain onClick={() => setIsOpen(false)}>
