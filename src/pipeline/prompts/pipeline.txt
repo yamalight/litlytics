@@ -26,4 +26,13 @@ Describe a pipeline you think would best fit user's request. Include a list of s
 Don't write suggested prompts for steps.
 Don't summarize the pipeline at the end.
 
-Think about your answer step-by-step.
+Return list of steps in following format:
+Step name: name here
+Step type: source/llm/code
+Step description: description here
+---
+...
+---
+Step name: name here
+Step type: source/llm/code
+Step description: description here

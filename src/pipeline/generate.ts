@@ -12,5 +12,11 @@ export const generatePipeline = async ({
 
   // generate plan from LLM
   const plan = await runPrompt({ system, user: description });
-  return plan.result;
+  const plannedSteps = plan.result;
+
+  const steps = plannedSteps
+    ?.split('---')
+    .map((s) => s.trim())
+    .join('\n\n---\n\n');
+  return steps;
 };

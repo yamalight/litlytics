@@ -1,6 +1,8 @@
 ToDo:
 
-- [ ] Generate pipeline
+- [ ] Edit basic documents
+- [ ] Extend step edit to include all fields
+- [ ] Parallel step execution
 - [ ] Save pipeline
 - [ ] Open pipeline
 - [ ] Help

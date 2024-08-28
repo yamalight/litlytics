@@ -3,22 +3,29 @@ import { atom } from 'jotai';
 
 export const pipelineAtom = atom<Pipeline>({
   name: 'test',
-  pipelinePlan: `Here’s the revised pipeline with the removal of step 4 and the addition of a filtering step:
+  pipelinePlan: `Step name: Source Reviews  
+Step type: source  
+Step description: This step retrieves the list of product reviews to be processed in the pipeline.  
 
-1) **Source Step**  
-   This step will provide the product reviews as input to the pipeline.
+---  
+Step name: Detect Sentiment  
+Step type: llm  
+Step description: This step uses a language model to analyze each review and determine its sentiment, classifying them as positive, negative, or neutral.  
 
-2) **LLM Step - Identify Negative Reviews**  
-   This step will analyze each review and identify those classified as negative based on sentiment analysis. It will return only the negative reviews.
+---  
+Step name: Filter Negative Reviews  
+Step type: code  
+Step description: This step filters the reviews to retain only those that are classified as negative based on the results from the sentiment detection step.  
 
-3) **Code Step - Filter Out Positive Reviews**  
-   This step will filter out any reviews that are not negative, ensuring that only negative reviews proceed to the next step.
+---  
+Step name: Extract Complaints  
+Step type: llm  
+Step description: This step utilizes a language model to extract specific complaints from the negative reviews, identifying key issues mentioned by customers.  
 
-4) **LLM Step - Extract Complaints**  
-   This step will take the negative reviews as input and extract specific complaints mentioned within those reviews. It will return a list of complaints for each negative review.
-
-5) **LLM Step - Summarize Complaints**  
-   This step will take the extracted complaints and generate a summary that encapsulates the main issues raised by customers in their negative reviews.`,
+---  
+Step name: Compile Complaints  
+Step type: llm  
+Step description: This step summarizes the extracted complaints into a concise list, highlighting the most common issues raised by customers across the negative reviews.`,
   pipelineDescription: `I have a list of product reviews. I want to extract list of complaints from negative reviews. At the end, I want to get a summary of all complaints people have.`,
   testDocs: [
     {

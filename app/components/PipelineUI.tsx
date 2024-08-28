@@ -46,6 +46,10 @@ export function PipelineUI() {
     setPipeline(structuredClone(newPipeline));
   };
 
+  const savePipeline = () => {
+    console.log(pipeline);
+  };
+
   return (
     <div className="fixed pointer-events-none my-6 px-4 z-10 h-screen w-screen bg-transparent">
       <div className="flex justify-between w-full h-fit">
@@ -63,7 +67,7 @@ export function PipelineUI() {
                 <DropdownLabel>Open pipeline</DropdownLabel>
               </DropdownItem>
 
-              <DropdownItem>
+              <DropdownItem onClick={savePipeline}>
                 <ArrowDownTrayIcon aria-hidden="true" className="h-5 w-5" />
                 <DropdownLabel>Save pipeline</DropdownLabel>
               </DropdownItem>

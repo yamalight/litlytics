@@ -1,7 +1,6 @@
 import { pipelineAtom } from '@/app/store/store';
 import { pipelineFromText } from '@/src/pipeline/fromText';
 import { refinePipeline } from '@/src/pipeline/refine';
-import { Step } from '@/src/step/Step';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import Markdown from 'react-markdown';
@@ -44,54 +43,19 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
 
     // generate plan from LLM
     setStatus('Generating pipeline');
-    // TODO: simple text->pipeline doesn't work
-    // we need to split it into multiple phases
-    // phase 1: description -> steps list
-    // phase 2: step -> step JSON
-    // phase 3: pipeline from new steps
-    const plan = await pipelineFromText(pipeline.pipelinePlan);
-    const data = plan.answers.at(0)?.message.parsed as unknown as {
-      steps: Step[];
-    };
-    const newPipeline = data.steps.map((step) => {
-      if (step.type === 'source') {
-        delete step.input;
-        delete step.prompt;
-        delete step.code;
-      } else {
-        delete step.sourceType;
-        delete step.config;
-      }
-      return step;
-    });
-    console.log(newPipeline);
-
-    /* setStatus('Generating steps');
-    for (const step of newPipeline) {
-      if (step.type === 'source') {
-        continue;
-      }
-      console.log('gen step', step);
-      const newStep = await generateStep({
-        id: step.id,
-        name: step.name,
-        description: step.description,
-        input: step.input as StepInput,
-        type: step.type as ProcessingStepTypes,
-      });
-      console.log('new step', newStep);
-    } */
+    const newSteps = await pipelineFromText(pipeline.pipelinePlan);
 
     // save
-    // setPipeline({
-    //   ...pipeline,
-    // });
+    setPipeline({
+      ...pipeline,
+      steps: newSteps,
+    });
     setLoading(false);
     setStatus('');
   };
 
   return (
-    <div className="w-full h-full p-4 prose prose-sm dark:prose-invert ">
+    <div className="w-full h-full p-4 prose prose-sm prose-no-nr dark:prose-invert ">
       <div className="flex w-full items-center justify-between">
         <h1 className="m-0">Suggested pipeline:</h1>
       </div>
