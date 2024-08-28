@@ -1,7 +1,6 @@
 ToDo:
 
 - [ ] Parallel step execution
-- [ ] Save pipeline
 - [ ] Open pipeline
 - [ ] Help
 

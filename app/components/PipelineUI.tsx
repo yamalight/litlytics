@@ -62,7 +62,20 @@ export function PipelineUI() {
   };
 
   const savePipeline = () => {
-    console.log(pipeline);
+    // Convert the object to a JSON string
+    const jsonString = JSON.stringify(pipeline, null, 2);
+    // Create a Blob from the JSON string
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    // Create a temporary URL for the Blob
+    const url = URL.createObjectURL(blob);
+    // Create a temporary anchor element
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${pipeline.name ?? 'pipeline'}.json`;
+    // Programmatically click the anchor to trigger the download
+    a.click();
+    // Clean up: revoke the object URL
+    URL.revokeObjectURL(url);
   };
 
   return (
