@@ -1,15 +1,22 @@
 import { Doc } from '@/src/doc/Document';
+import React from 'react';
 import Markdown from 'react-markdown';
 
 export function RenderResults({ results }: { results: Doc[] | Doc }) {
   if (Array.isArray(results)) {
     return (
       <>
-        <div className="prose prose-sm dark:prose-invert w-full max-w-full divide-y divide-solid divide-neutral-500/50">
+        <div className="prose prose-sm dark:prose-invert w-full max-w-full">
           {results.map((res) => (
             <div key={res.id} className="mb-4">
               <h1>Doc: {res.name}</h1>
-              <Markdown>{res.processingResults.at(-1)?.result}</Markdown>
+              <div className="divide-y divide-neutral-600/50">
+                {res.processingResults.map((r) => (
+                  <div key={r.stepId}>
+                    <Markdown>{r?.result}</Markdown>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -17,12 +24,14 @@ export function RenderResults({ results }: { results: Doc[] | Doc }) {
     );
   }
 
-  const result = results.processingResults.at(0);
+  const result = results.processingResults;
 
   return (
     <>
       <div className="prose prose-sm dark:prose-invert w-full max-w-full">
-        <Markdown>{result?.result}</Markdown>
+        {result.map((r) => (
+          <Markdown key={r.stepId}>{r?.result}</Markdown>
+        ))}
       </div>
     </>
   );

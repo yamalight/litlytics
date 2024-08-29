@@ -1,6 +1,5 @@
 ToDo:
 
-- [ ] Parallel step execution
 - [ ] Help
 
 Future ideas:
@@ -8,5 +7,6 @@ Future ideas:
 - Show time estimate
 - Show cost estimate
 - Batch executor
+- True parallel execution
 - In-browser LLM
 - Open source?

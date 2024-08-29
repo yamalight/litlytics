@@ -20,7 +20,7 @@ export async function runPipeline(pipeline: Pipeline) {
   console.log(source);
 
   // get all documents from the source
-  let finalResult: Doc[] | Doc | undefined = undefined;
+  let finalResult: Doc[] | undefined = undefined;
   let docs: Doc[] = [];
   switch (source.sourceType) {
     case SourceTypes.BASIC:
@@ -30,51 +30,61 @@ export async function runPipeline(pipeline: Pipeline) {
       throw new Error('Unknown source type! Cannot get documents');
   }
 
-  let stepId = source.connectsTo.at(0);
-  let step: ProcessingStep | undefined = pipeline.steps.find(
-    (s) => s.id === stepId
-  ) as ProcessingStep | undefined;
-  while (step !== undefined) {
-    // process docs using current step
-    // if it's a basic doc/result step - process all docs with it
-    if (step.input === 'doc' || step.input === 'result') {
-      const newDocs = await Promise.all(
-        docs.map((doc) =>
-          runStep({
-            step: step!,
-            allSteps: pipeline.steps,
-            doc,
-            allDocs: docs,
-          })
-        )
-      );
-      docs = newDocs.filter((d) => d !== undefined);
-      finalResult = docs;
-      // if it's an aggregate step - only run it once
-    } else if (
-      step.input === 'aggregate-docs' ||
-      step.input === 'aggregate-results'
-    ) {
-      let aggregateResult: Doc = {
-        id: self.crypto.randomUUID(),
-        name: 'Aggregate result',
-        content: '',
-        processingResults: [],
-      };
-      aggregateResult = (await runStep({
-        step: step!,
-        allSteps: pipeline.steps,
-        doc: aggregateResult,
-        allDocs: docs,
-      })) as Doc;
-      docs.push(aggregateResult);
-      finalResult = aggregateResult;
+  // get all connections to source
+  let stepIds = source.connectsTo;
+  // find all connected steps
+  let nextSteps: ProcessingStep[] = pipeline.steps.filter((s) =>
+    stepIds.includes(s.id)
+  ) as ProcessingStep[];
+  // while there are follow-up steps - continue;
+  while (nextSteps.length > 0) {
+    // reset final results as we are now working with new steps
+    finalResult = [];
+
+    for (const nextStep of nextSteps) {
+      // process docs using current step
+      // if it's a basic doc/result step - process all docs with it
+      if (nextStep.input === 'doc' || nextStep.input === 'result') {
+        await Promise.all(
+          docs.map((doc) =>
+            runStep({
+              step: nextStep,
+              allSteps: pipeline.steps,
+              doc,
+              allDocs: docs,
+            })
+          )
+        );
+        docs = docs.filter((d) => d !== undefined);
+        finalResult = finalResult.concat(
+          docs.filter((d) => !finalResult?.find((doc) => doc.id === d.id))
+        );
+        // if it's an aggregate step - only run it once
+      } else if (
+        nextStep.input === 'aggregate-docs' ||
+        nextStep.input === 'aggregate-results'
+      ) {
+        let aggregateResult: Doc = {
+          id: self.crypto.randomUUID(),
+          name: 'Aggregate result',
+          content: '',
+          processingResults: [],
+        };
+        aggregateResult = (await runStep({
+          step: nextStep!,
+          allSteps: pipeline.steps,
+          doc: aggregateResult,
+          allDocs: docs,
+        })) as Doc;
+        docs.push(aggregateResult);
+        finalResult.push(aggregateResult);
+      }
     }
     // get next step and continue
-    stepId = step.connectsTo.at(0);
-    step = pipeline.steps.find((s) => s.id === stepId) as
-      | ProcessingStep
-      | undefined;
+    stepIds = nextSteps.map((s) => s.connectsTo).flat();
+    nextSteps = pipeline.steps.filter((s) =>
+      stepIds.includes(s.id)
+    ) as ProcessingStep[];
   }
 
   console.log(docs);
