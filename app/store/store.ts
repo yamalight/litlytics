@@ -15,7 +15,13 @@ export const emptyPipeline: Pipeline = {
   results: undefined,
 };
 
-export const pipelineAtom = atomWithStorage<Pipeline>('litlytics.pipeline', {
+export const pipelineAtom = atomWithStorage<Pipeline>(
+  'litlytics.pipeline',
+  emptyPipeline
+);
+
+/*
+const testPipeline = {
   name: 'test',
   pipelinePlan: `Step name: Source Reviews  
 Step type: source  
@@ -198,9 +204,8 @@ All in all, "eh". Sony's blockade of countries pretty much ended any further sup
       },
     ],
   },
-});
+};
 
-/*
 export const pipelineAtom = atom<Pipeline>({
   // project setup
   name: '',
