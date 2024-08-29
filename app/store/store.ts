@@ -1,5 +1,5 @@
 import { Pipeline } from '@/src/pipeline/Pipeline';
-import { atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 
 export const emptyPipeline: Pipeline = {
   // project setup
@@ -15,7 +15,7 @@ export const emptyPipeline: Pipeline = {
   results: undefined,
 };
 
-export const pipelineAtom = atom<Pipeline>({
+export const pipelineAtom = atomWithStorage<Pipeline>('litlytics.pipeline', {
   name: 'test',
   pipelinePlan: `Step name: Source Reviews  
 Step type: source  
