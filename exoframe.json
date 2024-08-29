@@ -3,5 +3,6 @@
   "domain": "ll-demo.codezen.dev",
   "env": {
     "OPENAI_API_KEY": "@litlytics-openai-key"
-  }
+  },
+  "basicAuth": "litlytics:$apr1$Lbi97n3I$CIEG5Vr3uvC1w6gPAx0LL1"
 }
