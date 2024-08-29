@@ -1,4 +1,5 @@
 import { runPipeline } from '@/src/engine/runPipeline';
+import { Pipeline } from '@/src/pipeline/Pipeline';
 import {
   ArrowDownTrayIcon,
   Bars3Icon,
@@ -8,7 +9,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { emptyPipeline, pipelineAtom } from '../store/store';
 import { Button } from './catalyst/button';
 import {
@@ -47,6 +48,7 @@ function MenuHolder({
 }
 
 export function PipelineUI() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -78,6 +80,22 @@ export function PipelineUI() {
     URL.revokeObjectURL(url);
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const json = JSON.parse(e.target?.result as string) as Pipeline;
+          setPipeline(json);
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
   return (
     <div className="fixed pointer-events-none my-6 px-4 z-10 h-screen w-screen bg-transparent">
       <div className="flex justify-between w-full h-fit">
@@ -97,7 +115,7 @@ export function PipelineUI() {
 
               <DropdownDivider />
 
-              <DropdownItem>
+              <DropdownItem onClick={() => fileInputRef.current?.click()}>
                 <FolderIcon aria-hidden="true" className="h-5 w-5" />
                 <DropdownLabel>Open pipeline</DropdownLabel>
               </DropdownItem>
@@ -156,6 +174,14 @@ export function PipelineUI() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept=".json"
+        className="hidden"
+      />
     </div>
   );
 }
