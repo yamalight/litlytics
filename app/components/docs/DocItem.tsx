@@ -73,7 +73,7 @@ export function DocItem({
         <DialogBody className="w-full">
           <FieldGroup>
             <Field>
-              <Label>Step name</Label>
+              <Label>Document name</Label>
               <Input
                 name="name"
                 placeholder="Doc name"
@@ -83,7 +83,7 @@ export function DocItem({
               />
             </Field>
             <Field>
-              <Label>Step description</Label>
+              <Label>Document content</Label>
               <Textarea
                 name="description"
                 placeholder="Doc content"
