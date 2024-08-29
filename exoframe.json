@@ -1,0 +1,7 @@
+{
+  "name": "litlytics",
+  "domain": "ll-demo.codezen.dev",
+  "env": {
+    "OPENAI_API_KEY": "@litlytics-openai-key"
+  }
+}

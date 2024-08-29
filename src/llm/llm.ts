@@ -3,15 +3,15 @@ import type {
   ChatCompletion,
   ChatCompletionCreateParams,
   ChatCompletionCreateParamsBase,
+  ChatCompletionCreateParamsNonStreaming,
   ChatCompletionTool,
 } from 'openai/resources/chat/completions';
-import type { ChatCompletionMessageParam } from 'openai/resources/index';
-import {
-  ChatCompletionCreateParamsNonStreaming,
+import type {
+  ChatCompletionMessageParam,
   ResponseFormatJSONObject,
   ResponseFormatJSONSchema,
   ResponseFormatText,
-} from 'openai/src/resources/index.js';
+} from 'openai/resources/index';
 import pRetry from 'p-retry';
 import { defaultModelArgs, defaultModelName } from './config';
 

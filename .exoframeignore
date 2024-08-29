@@ -1,0 +1,7 @@
+.env.local
+.git
+.next
+app
+node_modules
+public
+src
