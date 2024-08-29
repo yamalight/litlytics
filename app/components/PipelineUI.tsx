@@ -5,12 +5,11 @@ import {
   Bars3Icon,
   FolderIcon,
   PlayIcon,
-  QuestionMarkCircleIcon,
   TrashIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
-import { emptyPipeline, pipelineAtom } from '../store/store';
+import { emptyPipeline, isRunningAtom, pipelineAtom } from '../store/store';
 import { Button } from './catalyst/button';
 import {
   Dialog,
@@ -26,9 +25,11 @@ import {
   DropdownLabel,
   DropdownMenu,
 } from './catalyst/dropdown';
+import { Help } from './Help';
 import GeneratePipeline from './pipeline/GeneratePipeline';
 import { ViewResults } from './pipeline/result/ViewResult';
 import { AddSource } from './pipeline/source/AddSource';
+import { Spinner } from './Spinner';
 import AddStep from './step/AddStep';
 
 function MenuHolder({
@@ -50,6 +51,7 @@ function MenuHolder({
 export function PipelineUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
+  const [isRunning, setIsRunning] = useAtom(isRunningAtom);
   const [isOpen, setIsOpen] = useState(false);
 
   const resetPipeline = () => {
@@ -58,9 +60,11 @@ export function PipelineUI() {
   };
 
   const doRunPipeline = async () => {
+    setIsRunning(true);
     const newPipeline = await runPipeline(pipeline);
     console.log(newPipeline);
     setPipeline(structuredClone(newPipeline));
+    setIsRunning(false);
   };
 
   const savePipeline = () => {
@@ -145,17 +149,23 @@ export function PipelineUI() {
 
           <div className="w-1" />
 
-          <Button title="Run pipeline" onClick={doRunPipeline}>
-            <PlayIcon aria-hidden="true" className="h-5 w-5" />
+          <Button
+            title="Run pipeline"
+            onClick={doRunPipeline}
+            disabled={isRunning}
+          >
+            {isRunning ? (
+              <Spinner className="h-3 w-3 border-2" />
+            ) : (
+              <PlayIcon aria-hidden="true" className="h-5 w-5" />
+            )}
           </Button>
 
           <ViewResults />
         </MenuHolder>
 
         <MenuHolder className="p-0 m-1.5">
-          <Button title="Help">
-            <QuestionMarkCircleIcon aria-hidden="true" className="h-5 w-5" />
-          </Button>
+          <Help />
         </MenuHolder>
       </div>
 

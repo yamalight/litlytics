@@ -1,12 +1,13 @@
 import { Button } from '@/app/components/catalyst/button';
-import { pipelineAtom } from '@/app/store/store';
+import { isRunningAtom, pipelineAtom } from '@/app/store/store';
 import { SourceTypes } from '@/src/source/Source';
 import { SourceStep } from '@/src/step/Step';
 import { DocumentIcon } from '@heroicons/react/24/outline';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 
 export function AddSource() {
+  const isRunning = useAtomValue(isRunningAtom);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const hasSource = useMemo(
@@ -38,7 +39,11 @@ export function AddSource() {
 
   return (
     <>
-      <Button title="Add source" disabled={hasSource} onClick={addSource}>
+      <Button
+        title="Add source"
+        disabled={hasSource || isRunning}
+        onClick={addSource}
+      >
         <DocumentIcon aria-hidden="true" className="h-5 w-5" />
       </Button>
     </>

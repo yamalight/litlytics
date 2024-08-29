@@ -1,4 +1,5 @@
 import { Pipeline } from '@/src/pipeline/Pipeline';
+import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
 export const emptyPipeline: Pipeline = {
@@ -14,6 +15,8 @@ export const emptyPipeline: Pipeline = {
   // results
   results: undefined,
 };
+
+export const isRunningAtom = atom<boolean>(false);
 
 export const pipelineAtom = atomWithStorage<Pipeline>(
   'litlytics.pipeline',

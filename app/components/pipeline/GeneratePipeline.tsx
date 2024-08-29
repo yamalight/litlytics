@@ -1,8 +1,8 @@
-import { pipelineAtom } from '@/app/store/store';
+import { isRunningAtom, pipelineAtom } from '@/app/store/store';
 import { generatePipeline } from '@/src/pipeline/generate';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SparklesIcon } from '@heroicons/react/24/solid';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useRef, useState } from 'react';
 import { Button } from '../catalyst/button';
 import {
@@ -18,6 +18,7 @@ import { Spinner } from '../Spinner';
 import { RefinePipeline } from './RefinePipeline';
 
 export default function GeneratePipeline() {
+  const isRunning = useAtomValue(isRunningAtom);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +47,11 @@ export default function GeneratePipeline() {
 
   return (
     <>
-      <Button title="Generate pipeline" onClick={() => setIsOpen(true)}>
+      <Button
+        title="Generate pipeline"
+        onClick={() => setIsOpen(true)}
+        disabled={isRunning}
+      >
         <SparklesIcon aria-hidden="true" className="h-5 w-5" />
       </Button>
 

@@ -1,10 +1,10 @@
 'use client';
 
-import { pipelineAtom } from '@/app/store/store';
+import { isRunningAtom, pipelineAtom } from '@/app/store/store';
 import { generateStep } from '@/src/step/generate';
 import { ProcessingStepTypes, StepInput, StepInputs } from '@/src/step/Step';
 import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/solid';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useRef, useState } from 'react';
 import { Button } from '../catalyst/button';
 import {
@@ -22,6 +22,7 @@ import { Spinner } from '../Spinner';
 import { stepInputLabels } from './util';
 
 export default function AddStep() {
+  const isRunning = useAtomValue(isRunningAtom);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [type, setType] = useState<ProcessingStepTypes>('llm');
@@ -57,7 +58,11 @@ export default function AddStep() {
 
   return (
     <>
-      <Button title="Add step" onClick={() => setIsOpen(true)}>
+      <Button
+        title="Add step"
+        onClick={() => setIsOpen(true)}
+        disabled={isRunning}
+      >
         <ArrowRightEndOnRectangleIcon className="h-5 w-5" />
       </Button>
 

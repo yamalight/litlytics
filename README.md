@@ -1,7 +1,5 @@
 ToDo:
 
-- [ ] Help
-
 Future ideas:
 
 - Show time estimate
