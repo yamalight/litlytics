@@ -11,9 +11,7 @@ import { Spinner } from '../Spinner';
 export function RefinePipeline({ hide }: { hide: () => void }) {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
-  const [refine, setRefine] = useState(
-    `Let's remove frequency count step and add a new code step after Step 1 to filter out positive reviews.`
-  );
+  const [refine, setRefine] = useState(``);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const doRefine = async () => {
