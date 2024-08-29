@@ -14,7 +14,7 @@ import { testPipelineStep } from '@/src/engine/testStep';
 import { ProcessingStep } from '@/src/step/Step';
 import { BeakerIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Markdown from 'react-markdown';
 
 export function StepTest({ data }: { data: ProcessingStep }) {
@@ -27,6 +27,11 @@ export function StepTest({ data }: { data: ProcessingStep }) {
       .find((d) => d.id === testDocId)
       ?.processingResults.find((r) => r.stepId === data.id);
   }, [pipeline.testDocs, testDocId, data]);
+
+  // update first test doc on docs changes
+  useEffect(() => {
+    setTestDocId(pipeline.testDocs.at(0)?.id ?? '');
+  }, [pipeline.testDocs]);
 
   const testStep = async () => {
     if (!Boolean(testDocId.length)) {
