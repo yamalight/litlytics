@@ -6,8 +6,6 @@
 
 ## UI simplification:
 
-- [ ] Adding new step should connect it to (1) current step, (2) next step
-
 - [ ] Rewrite pipeline execution logic for new input/output nodes
 
 - [ ] Simplify step editing UI

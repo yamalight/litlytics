@@ -98,7 +98,7 @@ export function StepNode({ data }: { data: ProcessingStep }) {
         currentStep={data}
         size={data.expanded ? 'xs' : 'collapsed'}
       >
-        <NodeHeader>
+        <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">
             <Button
               icon

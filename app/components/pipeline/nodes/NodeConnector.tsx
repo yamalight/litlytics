@@ -66,6 +66,9 @@ export function NodeConnector({
     });
 
     if (currentStep?.type === 'source') {
+      // connect new step to next node
+      const nextNodeId = pipeline.source.connectsTo.at(0) ?? pipeline.output.id;
+      newStep.connectsTo = [nextNodeId];
       // add
       setPipeline({
         ...pipeline,
@@ -76,6 +79,12 @@ export function NodeConnector({
         steps: pipeline.steps.concat(newStep),
       });
     } else {
+      // connect new step to next node
+      const nextNodeId =
+        pipeline.steps
+          .find((s) => s.id === currentStep?.id)
+          ?.connectsTo.at(0) ?? pipeline.output.id;
+      newStep.connectsTo = [nextNodeId];
       // add
       setPipeline({
         ...pipeline,
@@ -111,7 +120,9 @@ export function NodeConnector({
             // icon colors,
             '![--btn-icon:theme(colors.sky.500)] !dark:[--btn-icon:theme(colors.sky.500)] !dark:data-[active]:[--btn-icon:theme(colors.sky.400)] !dark:data-[hover]:[--btn-icon:theme(colors.sky.400)]',
             // rounded border
-            'border border-sky-400 rounded-3xl'
+            'border !border-sky-400 rounded-3xl',
+            // margins
+            'mb-1 mt-1'
           )}
           onClick={() => setIsOpen(true)}
         >

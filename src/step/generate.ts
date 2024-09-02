@@ -42,6 +42,7 @@ Step description: ${description}`;
     code: type === 'code' ? result : undefined,
     prompt: type === 'llm' ? result : undefined,
     connectsTo: [],
+    expanded: true,
   };
   console.log(newStep);
 

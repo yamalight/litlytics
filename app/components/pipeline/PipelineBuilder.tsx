@@ -21,9 +21,11 @@ export function PipelineBuilder() {
       )}
     >
       <SourceNode />
-      {pipeline.steps.map((step) => (
-        <StepNode data={step} key={step.id} />
-      ))}
+      {pipeline.steps
+        .sort((a, b) => (a.connectsTo.includes(b.id) ? -1 : 1))
+        .map((step) => (
+          <StepNode data={step} key={step.id} />
+        ))}
       <OutputNode />
     </div>
   );
