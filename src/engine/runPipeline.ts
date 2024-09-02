@@ -1,7 +1,8 @@
 import { Doc } from '../doc/Document';
 import { Pipeline } from '../pipeline/Pipeline';
-import { getBasicSourceDocuments } from '../source/basic';
+import { getDocsListSourceDocuments } from '../source/docsList';
 import { SourceTypes } from '../source/Source';
+import { getTextSourceDocuments } from '../source/textSource';
 import { runStep } from './runStep';
 
 export async function runPipeline(pipeline: Pipeline) {
@@ -16,8 +17,11 @@ export async function runPipeline(pipeline: Pipeline) {
   // get all documents from the source
   let docs: Doc[] = [];
   switch (source.sourceType) {
-    case SourceTypes.BASIC:
-      docs = await getBasicSourceDocuments(source);
+    case SourceTypes.DOCS:
+      docs = await getDocsListSourceDocuments(source);
+      break;
+    case SourceTypes.TEXT:
+      docs = await getTextSourceDocuments(source);
       break;
     default:
       throw new Error('Unknown source type! Cannot get documents');

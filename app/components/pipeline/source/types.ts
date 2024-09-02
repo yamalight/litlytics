@@ -4,6 +4,10 @@ import { ReactElement } from 'react';
 
 export type SourceRender = ({ data }: { data: SourceStep }) => ReactElement;
 
-export type BasicSourceConfig = {
+export type DocsListSourceConfig = {
   documents?: Doc[];
+};
+
+export type TextSourceConfig = {
+  document?: Doc;
 };

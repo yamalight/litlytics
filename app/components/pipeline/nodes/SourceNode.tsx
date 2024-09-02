@@ -26,12 +26,15 @@ import {
 } from '../../catalyst/dialog';
 import { Field, FieldGroup, Label } from '../../catalyst/fieldset';
 import { Select } from '../../catalyst/select';
-import { BasicSource } from '../source/plain/Plain';
+import { DocsListSource } from '../source/docs/DocsList';
+import { TextSource } from '../source/text/TextSource';
 import { SourceRender } from '../source/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 const SOURCE_RENDERERS: Partial<Record<SourceType, SourceRender>> = {
-  [SourceTypes.BASIC]: BasicSource,
+  [SourceTypes.DOCS]: DocsListSource,
+  [SourceTypes.TEXT]: TextSource,
+  // [SourceTypes.FILES]: DocsListSource,
 };
 
 export function SourceNode() {

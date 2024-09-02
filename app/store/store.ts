@@ -17,7 +17,7 @@ export const emptyPipeline: Pipeline = {
     name: 'Source',
     description: 'Primary source',
     type: 'source',
-    sourceType: 'basic',
+    sourceType: 'text',
     config: {},
     connectsTo: [],
     expanded: true,

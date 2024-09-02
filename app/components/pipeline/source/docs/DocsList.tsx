@@ -3,13 +3,13 @@ import { Doc } from '@/src/doc/Document';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { DocItem } from '../../../docs/DocItem';
-import { BasicSourceConfig } from '../types';
+import { DocsListSourceConfig } from '../types';
 import AddDoc from './AddDoc';
 
-export function BasicSource() {
+export function DocsListSource() {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const config = useMemo(
-    () => pipeline.source.config as BasicSourceConfig,
+    () => pipeline.source.config as DocsListSourceConfig,
     [pipeline]
   );
 

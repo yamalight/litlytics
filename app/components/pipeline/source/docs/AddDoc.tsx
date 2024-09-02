@@ -16,7 +16,7 @@ import { SourceStep } from '@/src/step/Step';
 import { DocumentIcon } from '@heroicons/react/16/solid';
 import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
-import { BasicSourceConfig } from '../types';
+import { DocsListSourceConfig } from '../types';
 
 export default function AddDoc({ data }: { data: SourceStep }) {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -28,7 +28,7 @@ export default function AddDoc({ data }: { data: SourceStep }) {
     const content = contentInputRef.current?.value;
     const name = nameInputRef.current?.value;
     if (content?.length && name?.length) {
-      const newConfig = structuredClone(data.config) as BasicSourceConfig;
+      const newConfig = structuredClone(data.config) as DocsListSourceConfig;
       if (!newConfig.documents) {
         newConfig.documents = [];
       }

@@ -8,8 +8,7 @@
 
 - [ ] Simplify step editing UI
 
-- [ ] Add new input -> simple textarea / list of docs / file picker
-- [ ] Add new output -> simple text render
+- [ ] Add new input -> file picker
 
 # Planned
 
