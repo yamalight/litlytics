@@ -1,5 +1,4 @@
 import { Doc } from '@/src/doc/Document';
-import React from 'react';
 import Markdown from 'react-markdown';
 
 export function RenderResults({ results }: { results: Doc[] | Doc }) {

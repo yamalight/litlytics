@@ -1,29 +1,41 @@
 import { Doc } from '../../doc/Document';
-import { ProcessingStep, Step } from '../../step/Step';
+import { BaseStep, ProcessingStep, SourceStep } from '../../step/Step';
 import { runPrompt } from '../runPrompt';
 
 export async function runLLMStep({
   step,
+  source,
   allSteps,
   doc,
   allDocs,
 }: {
   step: ProcessingStep;
-  allSteps: Step[];
+  source: SourceStep;
+  allSteps: ProcessingStep[];
   doc: Doc;
   allDocs: Doc[];
 }) {
   const system = step.prompt!;
+  console.log({ step, source, allSteps, doc, allDocs });
 
   // get previous step and previous result
-  const prevStep = allSteps.find((s) => s.connectsTo.includes(step.id));
+  const prevStep: SourceStep | ProcessingStep | undefined =
+    allSteps.find((s) => s.connectsTo.includes(step.id)) ??
+    source.connectsTo.includes(step.id)
+      ? source
+      : undefined;
+  if (!prevStep) {
+    console.log('No prev step:', step, allSteps, source);
+    throw new Error('Previous step not found!');
+  }
+
   const prevResult = doc?.processingResults.find(
     (s) => s.stepId === prevStep?.id
   )?.result;
 
   // filter doc out if previous step was code and it returned nothing
   if (
-    prevStep?.type === 'code' &&
+    (prevStep as BaseStep).type === 'code' &&
     (prevResult === undefined || prevResult.length === 0)
   ) {
     return;

@@ -25,6 +25,7 @@ export async function testPipelineStep({
   if (step.type === 'llm') {
     return runLLMStep({
       step,
+      source: pipeline.source,
       allSteps: pipeline.steps,
       doc: doc!,
       allDocs: pipeline.testDocs,
@@ -33,6 +34,7 @@ export async function testPipelineStep({
 
   return runCodeStep({
     step,
+    source: pipeline.source,
     allSteps: pipeline.steps,
     doc: doc!,
     allDocs: pipeline.testDocs,

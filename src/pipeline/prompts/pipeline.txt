@@ -10,12 +10,10 @@ LitLytics pipeline steps use one of the following inputs:
 - all previous results
 
 Pipelines might have following steps:
-1) Source step
-  Source step provides source documents to the pipeline.
-2) LLM Step
+1) LLM Step
   LLM step passes input to LLM with given prompt and returns the result.
   Prompt can be defined by user.
-3) Code Step
+2) Code Step
   Code step passes input to javascript function and returns the results.
   Return value is either a string, or `undefined` (those documents are filtered out from the pipeline).
   Javascript function can be defined by user.
@@ -28,11 +26,11 @@ Don't summarize the pipeline at the end.
 
 Return list of steps in following format:
 Step name: name here
-Step type: source/llm/code
+Step type: llm/code
 Step description: description here
 ---
 ...
 ---
 Step name: name here
-Step type: source/llm/code
+Step type: llm/code
 Step description: description here

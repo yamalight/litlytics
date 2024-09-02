@@ -1,23 +1,26 @@
 import { Doc } from '../doc/Document';
-import { ProcessingStep, Step } from '../step/Step';
+import { ProcessingStep, SourceStep } from '../step/Step';
 import { runCodeStep } from './step/runCodeStep';
 import { runLLMStep } from './step/runLLMStep';
 
 export async function runStep({
   step,
+  source,
   allSteps,
   doc,
   allDocs,
 }: {
   step: ProcessingStep;
-  allSteps: Step[];
+  source: SourceStep;
+  allSteps: ProcessingStep[];
   doc: Doc;
   allDocs: Doc[];
 }) {
+  console.log({ step, source, allSteps, doc, allDocs });
   // llm execution
   if (step.type === 'llm') {
-    return runLLMStep({ step, allSteps, doc, allDocs });
+    return runLLMStep({ step, source, allSteps, doc, allDocs });
   }
 
-  return runCodeStep({ step, allSteps, doc, allDocs });
+  return runCodeStep({ step, source, allSteps, doc, allDocs });
 }

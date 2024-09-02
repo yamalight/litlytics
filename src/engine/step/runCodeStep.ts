@@ -1,15 +1,17 @@
 import { loadModule } from '../../code/loadModule';
 import { Doc } from '../../doc/Document';
-import { ProcessingStep, Step } from '../../step/Step';
+import { ProcessingStep, SourceStep } from '../../step/Step';
 
 export async function runCodeStep({
   step,
+  source,
   allSteps,
   doc,
   allDocs,
 }: {
   step: ProcessingStep;
-  allSteps: Step[];
+  source: SourceStep;
+  allSteps: ProcessingStep[];
   doc: Doc;
   allDocs: Doc[];
 }) {
@@ -18,7 +20,15 @@ export async function runCodeStep({
   const mod = await loadModule(code);
 
   let input: string | string[] = '';
-  const prevStep = allSteps.find((s) => s.connectsTo.includes(step.id));
+  const prevStep: SourceStep | ProcessingStep | undefined =
+    allSteps.find((s) => s.connectsTo.includes(step.id)) ??
+    source.connectsTo.includes(step.id)
+      ? source
+      : undefined;
+  if (!prevStep) {
+    console.log('No prev step:', step, allSteps, source);
+    throw new Error('Previous step not found!');
+  }
   switch (step.input) {
     case 'doc':
       input = doc?.content ?? '';

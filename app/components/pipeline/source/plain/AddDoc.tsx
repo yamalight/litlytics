@@ -72,6 +72,7 @@ export default function AddDoc({ data }: { data: SourceStep }) {
             <Field>
               <Label>Document content</Label>
               <Textarea
+                rows={5}
                 name="content"
                 placeholder="Document content"
                 autoFocus

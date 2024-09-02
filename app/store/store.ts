@@ -35,8 +35,6 @@ export const emptyPipeline: Pipeline = {
   },
   // pipeline steps
   steps: [],
-  // results
-  results: undefined,
 };
 
 export const isRunningAtom = atom<boolean>(false);

@@ -1,4 +1,3 @@
-import { runPipeline } from '@/src/engine/runPipeline';
 import { Pipeline } from '@/src/pipeline/Pipeline';
 import {
   ArrowDownTrayIcon,
@@ -10,12 +9,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
 import { useRef, useState } from 'react';
-import {
-  emptyPipeline,
-  isRunningAtom,
-  pipelineAtom,
-  pipelineUndoAtom,
-} from '../store/store';
+import { emptyPipeline, pipelineAtom, pipelineUndoAtom } from '../store/store';
 import { Button } from './catalyst/button';
 import {
   Dialog,
@@ -51,21 +45,12 @@ function MenuHolder({
 export function PipelineUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const [isRunning, setIsRunning] = useAtom(isRunningAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
 
   const resetPipeline = () => {
     setPipeline(structuredClone(emptyPipeline));
     setIsOpen(false);
-  };
-
-  const doRunPipeline = async () => {
-    setIsRunning(true);
-    const newPipeline = await runPipeline(pipeline);
-    console.log(newPipeline);
-    setPipeline(structuredClone(newPipeline));
-    setIsRunning(false);
   };
 
   const savePipeline = () => {

@@ -6,8 +6,6 @@
 
 ## UI simplification:
 
-- [ ] Rewrite pipeline execution logic for new input/output nodes
-
 - [ ] Simplify step editing UI
 
 - [ ] Add new input -> simple textarea / list of docs / file picker

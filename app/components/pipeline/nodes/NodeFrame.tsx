@@ -43,10 +43,11 @@ export function NodeContent({
 }
 
 const sizes = {
-  lg: 'h-52',
-  sm: 'h-32',
-  xs: 'h-24',
-  collapsed: 'h-9',
+  xl: 'w-[32rem] h-96',
+  lg: 'w-96 h-52',
+  sm: 'w-96 h-32',
+  xs: 'w-96 h-24',
+  collapsed: 'w-96 h-9',
 };
 
 export function NodeFrame({
@@ -68,7 +69,7 @@ export function NodeFrame({
         className={clsx(
           className,
           // sizing
-          `flex flex-col w-96 ${sizes[size]}`,
+          `flex flex-col ${sizes[size]}`,
           // padding
           'pb-2',
           // border

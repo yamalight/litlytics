@@ -4,7 +4,8 @@ import {
   DropdownItem,
   DropdownMenu,
 } from '@/app/components/catalyst/dropdown';
-import { pipelineAtom } from '@/app/store/store';
+import { isRunningAtom, pipelineAtom } from '@/app/store/store';
+import { runPipeline } from '@/src/engine/runPipeline';
 import { OutputType, OutputTypes } from '@/src/output/Output';
 import { OutputStep } from '@/src/step/Step';
 import {
@@ -12,6 +13,7 @@ import {
   ChevronRightIcon,
   CogIcon,
   EllipsisHorizontalIcon,
+  PlayIcon,
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
@@ -26,6 +28,7 @@ import {
 } from '../../catalyst/dialog';
 import { Field, FieldGroup, Label } from '../../catalyst/fieldset';
 import { Select } from '../../catalyst/select';
+import { Spinner } from '../../Spinner';
 import { BasicOutput } from '../output/basic/Basic';
 import { OutputRender } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
@@ -37,6 +40,7 @@ const OUTPUT_RENDERERS: Partial<Record<OutputType, OutputRender>> = {
 export function OutputNode() {
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
+  const [isRunning, setIsRunning] = useAtom(isRunningAtom);
 
   const data = useMemo(() => pipeline.output, [pipeline]);
   const Render = useMemo(() => {
@@ -64,6 +68,14 @@ export function OutputNode() {
     updateNodeByKey(newVal, prop);
   };
 
+  const doRunPipeline = async () => {
+    setIsRunning(true);
+    const newPipeline = await runPipeline(pipeline);
+    console.log(newPipeline);
+    setPipeline(structuredClone(newPipeline));
+    setIsRunning(false);
+  };
+
   if (!data) {
     return <></>;
   }
@@ -71,7 +83,9 @@ export function OutputNode() {
   return (
     <>
       {/* Output node render */}
-      <NodeFrame size={data.expanded ? 'lg' : 'collapsed'}>
+      <NodeFrame
+        size={data.expanded ? (data.config.results ? 'xl' : 'lg') : 'collapsed'}
+      >
         <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">
             <Button
@@ -82,6 +96,18 @@ export function OutputNode() {
               {data.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
             </Button>
             <RectangleStackIcon className="w-4 h-4" /> Output
+            <Button
+              plain
+              title="Run pipeline"
+              onClick={doRunPipeline}
+              disabled={isRunning}
+            >
+              {isRunning ? (
+                <Spinner className="h-3 w-3 border-2" />
+              ) : (
+                <PlayIcon aria-hidden="true" className="h-5 w-5" />
+              )}
+            </Button>
           </div>
           <div className="flex items-center">
             <Dropdown>
@@ -97,12 +123,8 @@ export function OutputNode() {
           </div>
         </NodeHeader>
         {data.expanded ? (
-          <NodeContent>
-            {Render && (
-              <div className="mt-2">
-                <Render data={data} />
-              </div>
-            )}
+          <NodeContent className="h-[calc(100%-2rem)]">
+            {Render && <Render data={data} />}
           </NodeContent>
         ) : (
           <></>

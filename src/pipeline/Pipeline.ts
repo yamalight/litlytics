@@ -9,5 +9,4 @@ export interface Pipeline {
   output: OutputStep;
   steps: ProcessingStep[];
   testDocs: Doc[];
-  results?: Doc[] | Doc;
 }

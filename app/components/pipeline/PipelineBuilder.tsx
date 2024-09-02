@@ -13,7 +13,7 @@ export function PipelineBuilder() {
     <div
       className={clsx(
         // size
-        'w-screen h-screen p-6 overflow-auto',
+        'w-screen h-screen p-6 pt-24 overflow-auto',
         // content positioning
         'flex flex-col items-center justify-center',
         // bg dots
