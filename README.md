@@ -1,7 +1,22 @@
-ToDo:
+# ToDo
 
-- True parallel execution (allow merging nodes)
+## Editing:
+
 - Allow adding steps manually (tabs in new step modal?)
-- Remove all button from top bar, persist input / output + double-click to add step
-- Do we need output node?
-- Tutorial / intro / welcome screen with explanation
+
+## UI simplification:
+
+- [ ] Adding new step should connect it to (1) current step, (2) next step
+
+- [ ] Rewrite pipeline execution logic for new input/output nodes
+
+- [ ] Simplify step editing UI
+
+- [ ] Add new input -> simple textarea / list of docs / file picker
+- [ ] Add new output -> simple text render
+
+# Planned
+
+## Logic:
+
+- Parallel execution (allow merging nodes)

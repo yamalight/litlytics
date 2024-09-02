@@ -1,4 +1,5 @@
 import { CompletionUsage } from 'openai/resources/completions.mjs';
+import { OutputType } from '../output/Output';
 import { SourceType } from '../source/Source';
 
 export interface StepResult {
@@ -10,7 +11,8 @@ export interface StepResult {
 // step types
 export type SourceStepType = 'source';
 export type ProcessingStepTypes = 'code' | 'llm';
-export type StepTypes = SourceStepType | ProcessingStepTypes;
+export type OutputStepTypes = 'output';
+export type StepTypes = SourceStepType | ProcessingStepTypes | OutputStepTypes;
 
 // whether step input is full document, previous processing result or all docs
 export class StepInputs {
@@ -29,8 +31,8 @@ export interface BaseStep extends Record<string, unknown> {
   name: string;
   description: string;
   type: StepTypes;
-  position: { x: number; y: number };
   connectsTo: string[];
+  expanded?: boolean;
 }
 
 export interface SourceStep extends BaseStep {
@@ -46,4 +48,8 @@ export interface ProcessingStep extends BaseStep {
   code?: string;
 }
 
-export type Step = SourceStep | ProcessingStep;
+export interface OutputStep extends BaseStep {
+  type: OutputStepTypes;
+  outputType: OutputType;
+  config: any;
+}

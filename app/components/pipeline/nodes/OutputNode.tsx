@@ -5,8 +5,8 @@ import {
   DropdownMenu,
 } from '@/app/components/catalyst/dropdown';
 import { pipelineAtom } from '@/app/store/store';
-import { SourceType, SourceTypes } from '@/src/source/Source';
-import { SourceStep } from '@/src/step/Step';
+import { OutputType, OutputTypes } from '@/src/output/Output';
+import { OutputStep } from '@/src/step/Step';
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -26,39 +26,39 @@ import {
 } from '../../catalyst/dialog';
 import { Field, FieldGroup, Label } from '../../catalyst/fieldset';
 import { Select } from '../../catalyst/select';
-import { BasicSource } from '../source/plain/Plain';
-import { SourceRender } from '../source/types';
+import { BasicOutput } from '../output/basic/Basic';
+import { OutputRender } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
-const SOURCE_RENDERERS: Partial<Record<SourceType, SourceRender>> = {
-  [SourceTypes.BASIC]: BasicSource,
+const OUTPUT_RENDERERS: Partial<Record<OutputType, OutputRender>> = {
+  [OutputTypes.BASIC]: BasicOutput,
 };
 
-export function SourceNode() {
+export function OutputNode() {
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
-  const data = useMemo(() => pipeline.source, [pipeline]);
+  const data = useMemo(() => pipeline.output, [pipeline]);
   const Render = useMemo(() => {
     if (!data) {
       return;
     }
-    return SOURCE_RENDERERS[data.sourceType];
+    return OUTPUT_RENDERERS[data.outputType];
   }, [data]);
 
-  const updateNodeByKey = (newVal: any, prop: keyof SourceStep) => {
+  const updateNodeByKey = (newVal: any, prop: keyof OutputStep) => {
     const newData = structuredClone(data!);
     newData[prop] = newVal;
 
     setPipeline({
       ...pipeline,
-      source: newData,
+      output: newData,
     });
   };
 
   const updateNode = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-    prop: keyof SourceStep
+    prop: keyof OutputStep
   ) => {
     const newVal = e.target.value;
     updateNodeByKey(newVal, prop);
@@ -70,12 +70,8 @@ export function SourceNode() {
 
   return (
     <>
-      {/* Source node render */}
-      <NodeFrame
-        hasConnector
-        currentStep={data}
-        size={data.expanded ? 'lg' : 'collapsed'}
-      >
+      {/* Output node render */}
+      <NodeFrame size={data.expanded ? 'lg' : 'collapsed'}>
         <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">
             <Button
@@ -85,7 +81,7 @@ export function SourceNode() {
             >
               {data.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
             </Button>
-            <RectangleStackIcon className="w-4 h-4" /> Source
+            <RectangleStackIcon className="w-4 h-4" /> Output
           </div>
           <div className="flex items-center">
             <Dropdown>
@@ -101,35 +97,39 @@ export function SourceNode() {
           </div>
         </NodeHeader>
         {data.expanded ? (
-          <NodeContent className="h-[calc(100%-2rem)]">
-            {Render && <Render data={data} />}
+          <NodeContent>
+            {Render && (
+              <div className="mt-2">
+                <Render data={data} />
+              </div>
+            )}
           </NodeContent>
         ) : (
           <></>
         )}
       </NodeFrame>
 
-      {/* Source config */}
+      {/* Output config */}
       <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
         <DialogTitle>Configure {data.name}</DialogTitle>
         <DialogDescription>
-          Configure parameters for source node: {data.name}
+          Configure parameters for output node: {data.name}
         </DialogDescription>
         <DialogBody>
           <FieldGroup>
             <Field>
-              <Label>Source type</Label>
+              <Label>Output type</Label>
               <Select
-                name="step-input"
-                value={data.sourceType as string}
-                onChange={(e) => updateNode(e, 'sourceType')}
+                name="output-type"
+                value={data.outputType as string}
+                onChange={(e) => updateNode(e, 'outputType')}
               >
-                {Object.keys(SourceTypes).map((type) => (
+                {Object.keys(OutputTypes).map((type) => (
                   <option
                     key={type}
-                    value={SourceTypes[type as keyof SourceTypes]}
+                    value={OutputTypes[type as keyof OutputTypes]}
                   >
-                    {SourceTypes[type as keyof SourceTypes]}
+                    {OutputTypes[type as keyof OutputTypes]}
                   </option>
                 ))}
               </Select>

@@ -1,7 +1,7 @@
-import * as Headless from '@headlessui/react'
-import clsx from 'clsx'
-import React, { forwardRef } from 'react'
-import { Link } from './link'
+import * as Headless from '@headlessui/react';
+import clsx from 'clsx';
+import React, { forwardRef } from 'react';
+import { Link } from './link';
 
 const styles = {
   base: [
@@ -55,6 +55,12 @@ const styles = {
     'dark:text-white dark:data-[active]:bg-white/10 dark:data-[hover]:bg-white/10',
     // Icon
     '[--btn-icon:theme(colors.zinc.500)] data-[active]:[--btn-icon:theme(colors.zinc.700)] data-[hover]:[--btn-icon:theme(colors.zinc.700)] dark:[--btn-icon:theme(colors.zinc.500)] dark:data-[active]:[--btn-icon:theme(colors.zinc.400)] dark:data-[hover]:[--btn-icon:theme(colors.zinc.400)]',
+  ],
+  icon: [
+    // remove extra margin / padding
+    '!p-0 mb-1 mt-1',
+    // icon size
+    '[&>[data-slot=icon]]:sm:my-0 [&>[data-slot=icon]]:my-0 [&>[data-slot=icon]]:mx-0',
   ],
   colors: {
     'dark/zinc': [
@@ -156,37 +162,57 @@ const styles = {
       '[--btn-icon:theme(colors.rose.300)] data-[active]:[--btn-icon:theme(colors.rose.200)] data-[hover]:[--btn-icon:theme(colors.rose.200)]',
     ],
   },
-}
+};
 
 type ButtonProps = (
-  | { color?: keyof typeof styles.colors; outline?: never; plain?: never }
-  | { color?: never; outline: true; plain?: never }
-  | { color?: never; outline?: never; plain: true }
+  | {
+      color?: keyof typeof styles.colors;
+      outline?: never;
+      plain?: never;
+      icon?: never;
+    }
+  | { color?: never; outline: true; plain?: never; icon?: never }
+  | { color?: never; outline?: never; plain: true; icon?: never }
+  | { color?: never; outline?: never; plain?: never; icon: true }
 ) & { className?: string; children: React.ReactNode } & (
     | Omit<Headless.ButtonProps, 'className'>
     | Omit<React.ComponentPropsWithoutRef<typeof Link>, 'className'>
-  )
+  );
 
 export const Button = forwardRef(function Button(
-  { color, outline, plain, className, children, ...props }: ButtonProps,
+  { color, outline, plain, icon, className, children, ...props }: ButtonProps,
   ref: React.ForwardedRef<HTMLElement>
 ) {
   let classes = clsx(
     className,
     styles.base,
-    outline ? styles.outline : plain ? styles.plain : clsx(styles.solid, styles.colors[color ?? 'dark/zinc'])
-  )
+    outline
+      ? styles.outline
+      : plain
+      ? styles.plain
+      : icon
+      ? clsx(styles.icon, styles.plain)
+      : clsx(styles.solid, styles.colors[color ?? 'dark/zinc'])
+  );
 
   return 'href' in props ? (
-    <Link {...props} className={classes} ref={ref as React.ForwardedRef<HTMLAnchorElement>}>
+    <Link
+      {...props}
+      className={classes}
+      ref={ref as React.ForwardedRef<HTMLAnchorElement>}
+    >
       <TouchTarget>{children}</TouchTarget>
     </Link>
   ) : (
-    <Headless.Button {...props} className={clsx(classes, 'cursor-default')} ref={ref}>
+    <Headless.Button
+      {...props}
+      className={clsx(classes, 'cursor-default')}
+      ref={ref}
+    >
       <TouchTarget>{children}</TouchTarget>
     </Headless.Button>
-  )
-})
+  );
+});
 
 /**
  * Expand the hit area to at least 44×44px on touch devices
@@ -200,5 +226,5 @@ export function TouchTarget({ children }: { children: React.ReactNode }) {
       />
       {children}
     </>
-  )
+  );
 }

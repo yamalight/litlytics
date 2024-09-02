@@ -40,10 +40,10 @@ export default function AddDoc({ data }: { data: SourceStep }) {
       });
       setPipeline({
         ...pipeline,
-        steps: pipeline.steps.map((s) => ({
-          ...s,
+        source: {
+          ...pipeline.source,
           config: newConfig,
-        })),
+        },
       });
       setIsOpen(false);
     }

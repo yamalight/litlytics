@@ -2,14 +2,20 @@ import { runPipeline } from '@/src/engine/runPipeline';
 import { Pipeline } from '@/src/pipeline/Pipeline';
 import {
   ArrowDownTrayIcon,
+  ArrowUturnLeftIcon,
+  ArrowUturnRightIcon,
   Bars3Icon,
   FolderIcon,
-  PlayIcon,
   TrashIcon,
 } from '@heroicons/react/24/solid';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useRef, useState } from 'react';
-import { emptyPipeline, isRunningAtom, pipelineAtom } from '../store/store';
+import {
+  emptyPipeline,
+  isRunningAtom,
+  pipelineAtom,
+  pipelineUndoAtom,
+} from '../store/store';
 import { Button } from './catalyst/button';
 import {
   Dialog,
@@ -25,12 +31,6 @@ import {
   DropdownLabel,
   DropdownMenu,
 } from './catalyst/dropdown';
-import { Help } from './Help';
-import GeneratePipeline from './pipeline/GeneratePipeline';
-import { ViewResults } from './pipeline/result/ViewResult';
-import { AddSource } from './pipeline/source/AddSource';
-import { Spinner } from './Spinner';
-import AddStep from './step/AddStep';
 
 function MenuHolder({
   className,
@@ -41,7 +41,7 @@ function MenuHolder({
 }) {
   return (
     <div
-      className={`w-fit h-fit bg-white dark:bg-neutral-800 p-1.5 gap-1.5 isolate inline-flex rounded-lg shadow-sm pointer-events-auto ${className}`}
+      className={`w-fit h-fit bg-transparent p-1.5 gap-1.5 isolate inline-flex rounded-lg shadow-sm pointer-events-auto ${className}`}
     >
       {children}
     </div>
@@ -52,6 +52,7 @@ export function PipelineUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isRunning, setIsRunning] = useAtom(isRunningAtom);
+  const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
 
   const resetPipeline = () => {
@@ -103,7 +104,7 @@ export function PipelineUI() {
   return (
     <div className="fixed pointer-events-none my-6 px-4 z-10 h-screen w-screen bg-transparent">
       <div className="flex justify-between w-full h-fit">
-        <MenuHolder className="p-0 m-1.5">
+        <MenuHolder>
           <Dropdown>
             <DropdownButton>
               <Bars3Icon />
@@ -129,6 +130,26 @@ export function PipelineUI() {
                 <DropdownLabel>Save pipeline</DropdownLabel>
               </DropdownItem>
 
+              <DropdownDivider />
+
+              <DropdownItem
+                onClick={undo}
+                disabled={!canUndo}
+                className="disabled:opacity-30"
+              >
+                <ArrowUturnLeftIcon aria-hidden="true" className="h-5 w-5" />
+                <DropdownLabel>Undo</DropdownLabel>
+              </DropdownItem>
+
+              <DropdownItem
+                onClick={redo}
+                disabled={!canRedo}
+                className="disabled:opacity-30"
+              >
+                <ArrowUturnRightIcon aria-hidden="true" className="h-5 w-5" />
+                <DropdownLabel>Redo</DropdownLabel>
+              </DropdownItem>
+
               {/* <DropdownDivider />
 
               <DropdownItem>
@@ -137,35 +158,6 @@ export function PipelineUI() {
               </DropdownItem> */}
             </DropdownMenu>
           </Dropdown>
-        </MenuHolder>
-
-        <MenuHolder>
-          <GeneratePipeline />
-
-          <div className="w-1" />
-
-          <AddSource />
-          <AddStep />
-
-          <div className="w-1" />
-
-          <Button
-            title="Run pipeline"
-            onClick={doRunPipeline}
-            disabled={isRunning}
-          >
-            {isRunning ? (
-              <Spinner className="h-3 w-3 border-2" />
-            ) : (
-              <PlayIcon aria-hidden="true" className="h-5 w-5" />
-            )}
-          </Button>
-
-          <ViewResults />
-        </MenuHolder>
-
-        <MenuHolder className="p-0 m-1.5">
-          <Help />
         </MenuHolder>
       </div>
 

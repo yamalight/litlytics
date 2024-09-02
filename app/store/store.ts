@@ -1,6 +1,7 @@
 import { Pipeline } from '@/src/pipeline/Pipeline';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
+import { atomWithUndo } from './atomWithUndo';
 
 export const emptyPipeline: Pipeline = {
   // project setup
@@ -10,6 +11,28 @@ export const emptyPipeline: Pipeline = {
   // pipeline plan
   pipelinePlan: '',
   pipelineDescription: '',
+  // pipeline source
+  source: {
+    id: 'source_0',
+    name: 'Source',
+    description: 'Primary source',
+    type: 'source',
+    sourceType: 'basic',
+    config: {},
+    connectsTo: [],
+    expanded: true,
+  },
+  // pipeline output
+  output: {
+    id: 'output_0',
+    name: 'Output',
+    description: 'Primary output',
+    type: 'output',
+    outputType: 'basic',
+    config: {},
+    connectsTo: [],
+    expanded: true,
+  },
   // pipeline steps
   steps: [],
   // results
@@ -22,6 +45,7 @@ export const pipelineAtom = atomWithStorage<Pipeline>(
   'litlytics.pipeline',
   emptyPipeline
 );
+export const pipelineUndoAtom = atomWithUndo(pipelineAtom, 5);
 
 /*
 const testPipeline = {

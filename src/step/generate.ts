@@ -39,9 +39,8 @@ Step description: ${description}`;
     description,
     type,
     input,
-    code: type === 'code' ? result : '',
-    prompt: type === 'llm' ? result : '',
-    position: { x: 0, y: 0 },
+    code: type === 'code' ? result : undefined,
+    prompt: type === 'llm' ? result : undefined,
     connectsTo: [],
   };
   console.log(newStep);

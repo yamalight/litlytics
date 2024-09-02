@@ -30,8 +30,11 @@ export function StepTest({ data }: { data: ProcessingStep }) {
 
   // update first test doc on docs changes
   useEffect(() => {
+    if (pipeline.testDocs.find((d) => d.id === testDocId)) {
+      return;
+    }
     setTestDocId(pipeline.testDocs.at(0)?.id ?? '');
-  }, [pipeline.testDocs]);
+  }, [pipeline.testDocs, testDocId]);
 
   const testStep = async () => {
     if (!Boolean(testDocId.length)) {
@@ -80,8 +83,8 @@ export function StepTest({ data }: { data: ProcessingStep }) {
 
   return (
     <>
-      <Button className="h-4 w-4" onClick={() => setTestOpen(true)}>
-        <BeakerIcon className="w-4 h-4" />
+      <Button plain onClick={() => setTestOpen(true)}>
+        <BeakerIcon className="w-4 h-4" /> Test
       </Button>
 
       {/* Test step */}
