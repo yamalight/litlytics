@@ -55,7 +55,7 @@ export function TextSource() {
         <Textarea
           rows={5}
           name="content"
-          placeholder="Doc content"
+          placeholder="Input text"
           value={config.document?.content ?? ''}
           onChange={(e) => updateDocProp(e, 'content')}
         />
