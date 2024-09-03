@@ -21,9 +21,7 @@ export async function runLLMStep({
   // get previous step and previous result
   const prevStep: SourceStep | ProcessingStep | undefined =
     allSteps.find((s) => s.connectsTo.includes(step.id)) ??
-    source.connectsTo.includes(step.id)
-      ? source
-      : undefined;
+    (source.connectsTo.includes(step.id) ? source : undefined);
   if (!prevStep) {
     console.log('No prev step:', step, allSteps, source);
     throw new Error('Previous step not found!');
@@ -71,7 +69,10 @@ export async function runLLMStep({
       break;
   }
 
-  console.log(input);
+  if (!input.length) {
+    throw new Error('No input for step!');
+  }
+
   const user = input;
   const res = await runPrompt({ system, user });
   // replace existing result if present

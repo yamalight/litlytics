@@ -22,9 +22,7 @@ export async function runCodeStep({
   let input: string | string[] = '';
   const prevStep: SourceStep | ProcessingStep | undefined =
     allSteps.find((s) => s.connectsTo.includes(step.id)) ??
-    source.connectsTo.includes(step.id)
-      ? source
-      : undefined;
+    (source.connectsTo.includes(step.id) ? source : undefined);
   if (!prevStep) {
     console.log('No prev step:', step, allSteps, source);
     throw new Error('Previous step not found!');
