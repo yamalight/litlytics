@@ -43,9 +43,18 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
     setStatus('Generating pipeline');
     const newSteps = await pipelineFromText(pipeline.pipelinePlan);
 
+    // assign output to last step
+    newSteps.at(-1)!.connectsTo = [pipeline.output.id];
+
     // save
     setPipeline({
       ...pipeline,
+      // assign input to first step
+      source: {
+        ...pipeline.source,
+        connectsTo: [newSteps.at(0)!.id],
+      },
+      // assign steps
       steps: newSteps,
     });
     setLoading(false);
