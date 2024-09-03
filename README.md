@@ -4,10 +4,6 @@
 
 - Allow adding steps manually (tabs in new step modal?)
 
-## UI simplification:
-
-- [ ] Simplify step editing UI
-
 # Planned
 
 ## Logic:

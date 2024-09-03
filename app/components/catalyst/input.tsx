@@ -1,8 +1,10 @@
-import * as Headless from '@headlessui/react'
-import clsx from 'clsx'
-import React, { forwardRef } from 'react'
+import * as Headless from '@headlessui/react';
+import clsx from 'clsx';
+import React, { forwardRef } from 'react';
 
-export function InputGroup({ children }: React.ComponentPropsWithoutRef<'span'>) {
+export function InputGroup({
+  children,
+}: React.ComponentPropsWithoutRef<'span'>) {
   return (
     <span
       data-slot="control"
@@ -16,19 +18,29 @@ export function InputGroup({ children }: React.ComponentPropsWithoutRef<'span'>)
     >
       {children}
     </span>
-  )
+  );
 }
 
-const dateTypes = ['date', 'datetime-local', 'month', 'time', 'week']
-type DateType = (typeof dateTypes)[number]
+const dateTypes = ['date', 'datetime-local', 'month', 'time', 'week'];
+type DateType = (typeof dateTypes)[number];
 
 export const Input = forwardRef(function Input(
   {
+    wrapperClassName,
     className,
     ...props
   }: {
-    className?: string
-    type?: 'email' | 'number' | 'password' | 'search' | 'tel' | 'text' | 'url' | DateType
+    wrapperClassName?: string;
+    className?: string;
+    type?:
+      | 'email'
+      | 'number'
+      | 'password'
+      | 'search'
+      | 'tel'
+      | 'text'
+      | 'url'
+      | DateType;
   } & Omit<Headless.InputProps, 'className'>,
   ref: React.ForwardedRef<HTMLInputElement>
 ) {
@@ -36,7 +48,7 @@ export const Input = forwardRef(function Input(
     <span
       data-slot="control"
       className={clsx([
-        className,
+        wrapperClassName,
         // Basic layout
         'relative block w-full',
         // Background color + shadow applied to inset pseudo element, so shadow blends with border in light mode
@@ -55,6 +67,7 @@ export const Input = forwardRef(function Input(
         ref={ref}
         {...props}
         className={clsx([
+          className,
           // Date classes
           props.type &&
             dateTypes.includes(props.type) && [
@@ -90,5 +103,5 @@ export const Input = forwardRef(function Input(
         ])}
       />
     </span>
-  )
-})
+  );
+});

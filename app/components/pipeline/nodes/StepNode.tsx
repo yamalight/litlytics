@@ -6,9 +6,9 @@ import {
   ChevronRightIcon,
   CodeBracketIcon,
   CogIcon,
-  EllipsisHorizontalIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useState } from 'react';
 import { Button } from '../../catalyst/button';
@@ -19,15 +19,9 @@ import {
   DialogDescription,
   DialogTitle,
 } from '../../catalyst/dialog';
-import {
-  Dropdown,
-  DropdownButton,
-  DropdownDivider,
-  DropdownItem,
-  DropdownMenu,
-} from '../../catalyst/dropdown';
 import { Field, FieldGroup, Label } from '../../catalyst/fieldset';
 import { Input } from '../../catalyst/input';
+import { RadioH, RadioHGroup, RadioHLabel } from '../../catalyst/radiogroup';
 import { Select } from '../../catalyst/select';
 import { Textarea } from '../../catalyst/textarea';
 import { CodeEditor } from '../../step/CodeEditor';
@@ -96,7 +90,8 @@ export function StepNode({ data }: { data: ProcessingStep }) {
       <NodeFrame
         hasConnector
         currentStep={data}
-        size={data.expanded ? 'xs' : 'collapsed'}
+        size={data.expanded ? 'sm' : 'collapsed'}
+        className="pb-1"
       >
         <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">
@@ -112,30 +107,70 @@ export function StepNode({ data }: { data: ProcessingStep }) {
             ) : (
               <CodeBracketIcon className="w-4 h-4" />
             )}{' '}
-            {data.name}
+            <Input
+              value={data.name}
+              onChange={(e) => updateNode(e, 'name')}
+              className={clsx(
+                'bg-transparent dark:bg-transparent',
+                'border-none'
+              )}
+            />
           </div>
           <div className="flex items-center">
-            <Dropdown>
-              <DropdownButton plain>
-                <EllipsisHorizontalIcon />
-              </DropdownButton>
-              <DropdownMenu>
-                <DropdownItem onClick={() => setIsOpen(true)}>
-                  <CogIcon /> Configure
-                </DropdownItem>
-
-                <DropdownDivider />
-
-                <DropdownItem onClick={() => deleteStep()}>
-                  <XMarkIcon /> Delete
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <Button plain onClick={() => deleteStep()} title="Delete step">
+              <XMarkIcon />
+            </Button>
           </div>
         </NodeHeader>
         {data.expanded ? (
-          <NodeContent>
-            <StepTest data={data} />
+          <NodeContent className="flex-col pb-0 mt-1 gap-3">
+            <div className="flex justify-between gap-3">
+              <Field className="flex items-baseline justify-start gap-2 [&>[data-slot=label]+[data-slot=control]]:mt-0">
+                <Label className="w-10">Input:</Label>
+                <Select
+                  name="step-input"
+                  value={data.input}
+                  onChange={(e) => updateNode(e, 'input')}
+                >
+                  {Object.keys(StepInputs).map((key) => (
+                    <option
+                      key={key}
+                      value={StepInputs[key as keyof StepInputs]}
+                    >
+                      {stepInputLabels[StepInputs[key as keyof StepInputs]]}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+
+              <RadioH className="mx-2">
+                <RadioHGroup
+                  options={[
+                    {
+                      value: 'llm',
+                      label: 'LLM',
+                    },
+                    {
+                      value: 'code',
+                      label: 'Code',
+                    },
+                  ]}
+                  value={data.type}
+                  onChange={(newVal) => updateNodeByKey(newVal, 'type')}
+                />
+              </RadioH>
+            </div>
+
+            <div className="flex flex-1 items-end justify-between">
+              <StepTest data={data} />
+              <Button
+                plain
+                onClick={() => setIsOpen(true)}
+                title="Configure step"
+              >
+                <CogIcon />
+              </Button>
+            </div>
           </NodeContent>
         ) : (
           <></>
@@ -149,16 +184,6 @@ export function StepNode({ data }: { data: ProcessingStep }) {
         <DialogBody className="w-full">
           <FieldGroup>
             <Field>
-              <Label>Step name</Label>
-              <Input
-                name="name"
-                placeholder="Step name"
-                autoFocus
-                value={data.name}
-                onChange={(e) => updateNode(e, 'name')}
-              />
-            </Field>
-            <Field>
               <Label>Step description</Label>
               <Textarea
                 name="description"
@@ -166,31 +191,6 @@ export function StepNode({ data }: { data: ProcessingStep }) {
                 value={data.description}
                 onChange={(e) => updateNode(e, 'description')}
               />
-            </Field>
-            <Field>
-              <Label>Step type</Label>
-              <Select
-                name="step-type"
-                value={data.type}
-                onChange={(e) => updateNode(e, 'type')}
-              >
-                <option value="llm">LLM</option>
-                <option value="code">Code</option>
-              </Select>
-            </Field>
-            <Field>
-              <Label>Step input</Label>
-              <Select
-                name="step-input"
-                value={data.input}
-                onChange={(e) => updateNode(e, 'input')}
-              >
-                {Object.keys(StepInputs).map((key) => (
-                  <option key={key} value={StepInputs[key as keyof StepInputs]}>
-                    {stepInputLabels[StepInputs[key as keyof StepInputs]]}
-                  </option>
-                ))}
-              </Select>
             </Field>
             {data.type === 'llm' ? (
               <Field>

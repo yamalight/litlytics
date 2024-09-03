@@ -45,6 +45,7 @@ export function NodeContent({
 const sizes = {
   xl: 'w-[32rem] h-96',
   lg: 'w-96 h-52',
+  base: 'w-96 h-44',
   sm: 'w-96 h-32',
   xs: 'w-96 h-24',
   collapsed: 'w-96 h-9',
