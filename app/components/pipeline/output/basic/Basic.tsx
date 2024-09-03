@@ -9,6 +9,10 @@ export function BasicOutput({ data }: { data: OutputStep }) {
   const pipeline = useAtomValue(pipelineAtom);
   const config = useMemo(() => data.config as BasicOutputConfig, [data]);
   const result = useMemo(() => {
+    if (!config.results) {
+      return;
+    }
+
     let results: StepResult[] = [];
     if (Array.isArray(config.results)) {
       results = config.results.map((r) => r.processingResults).flat();
