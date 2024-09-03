@@ -51,7 +51,7 @@ export default function AddDoc({ data }: { data: SourceStep }) {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>
+      <Button onClick={() => setIsOpen(true)} className="mt-2">
         <DocumentIcon className="w-4 h-4" />
         Add document
       </Button>

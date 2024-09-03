@@ -111,7 +111,7 @@ export function StepNode({ data }: { data: ProcessingStep }) {
               value={data.name}
               onChange={(e) => updateNode(e, 'name')}
               className={clsx(
-                'bg-transparent dark:bg-transparent',
+                '!bg-transparent !dark:bg-transparent',
                 'border-none'
               )}
             />
@@ -123,7 +123,7 @@ export function StepNode({ data }: { data: ProcessingStep }) {
           </div>
         </NodeHeader>
         {data.expanded ? (
-          <NodeContent className="flex-col pb-0 mt-1 gap-3">
+          <NodeContent className="flex-col pb-0 pt-0 mt-0 gap-2">
             <div className="flex justify-between gap-3">
               <Field className="flex items-baseline justify-start gap-2 [&>[data-slot=label]+[data-slot=control]]:mt-0">
                 <Label className="w-10">Input:</Label>
