@@ -7,7 +7,6 @@ import { useRef, useState } from 'react';
 import { Button } from '../catalyst/button';
 import {
   Dialog,
-  DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
@@ -49,10 +48,13 @@ export default function GeneratePipeline() {
     <>
       <Button
         title="Generate pipeline"
+        outline
         onClick={() => setIsOpen(true)}
         disabled={isRunning}
+        className="border-sky-500 dark:border-sky-500"
       >
-        <SparklesIcon aria-hidden="true" className="h-5 w-5" />
+        <SparklesIcon aria-hidden="true" className="h-5 w-5 fill-sky-500" />{' '}
+        Auto-generate
       </Button>
 
       <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
@@ -90,6 +92,11 @@ export default function GeneratePipeline() {
                 </FieldGroup>
                 <div className="flex justify-end">
                   <Button onClick={runPlan} disabled={loading} className="mt-2">
+                    {loading && (
+                      <div className="flex items-center">
+                        <Spinner className="h-5 w-5" />
+                      </div>
+                    )}
                     Plan
                   </Button>
                 </div>
@@ -100,16 +107,6 @@ export default function GeneratePipeline() {
             </TabPanels>
           </TabGroup>
         </DialogBody>
-        <DialogActions>
-          {loading && (
-            <div className="flex flex-1">
-              <Spinner />
-            </div>
-          )}
-          <Button plain onClick={() => setIsOpen(false)} disabled={loading}>
-            Close
-          </Button>
-        </DialogActions>
       </Dialog>
     </>
   );

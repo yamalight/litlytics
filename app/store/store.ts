@@ -41,7 +41,9 @@ export const isRunningAtom = atom<boolean>(false);
 
 export const pipelineAtom = atomWithStorage<Pipeline>(
   'litlytics.pipeline',
-  emptyPipeline
+  emptyPipeline,
+  undefined,
+  { getOnInit: true }
 );
 export const pipelineUndoAtom = atomWithUndo(pipelineAtom, 5);
 

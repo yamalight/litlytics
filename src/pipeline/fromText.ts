@@ -8,7 +8,10 @@ export async function pipelineFromText(description: string) {
   console.log('pipe from text');
   console.log(description);
 
-  const steps = description.split('---').map((s) => s.trim());
+  const steps = description
+    .split('---')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
   console.log(steps);
 
   const resultSteps: ProcessingStep[] = [];

@@ -15,7 +15,7 @@ import { ProcessingStep } from '@/src/step/Step';
 import { BeakerIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
-import Markdown from 'react-markdown';
+import { CustomMarkdown } from '../markdown/Markdown';
 
 export function StepTest({ data }: { data: ProcessingStep }) {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
@@ -128,13 +128,13 @@ export function StepTest({ data }: { data: ProcessingStep }) {
             )}
 
           <div className="prose prose-sm dark:prose-invert mt-2 px-2">
-            <Markdown>
+            <CustomMarkdown>
               {testResult
                 ? testResult.result
                   ? testResult.result
                   : 'No value returned'
                 : 'No test execution'}
-            </Markdown>
+            </CustomMarkdown>
           </div>
         </DialogBody>
         <DialogActions>

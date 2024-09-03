@@ -1,6 +1,6 @@
 import { OutputStep } from '@/src/step/Step';
 import { useMemo } from 'react';
-import { RenderResults } from '../../result/Results';
+import { RenderResults } from '../Results';
 import { BasicOutputConfig } from '../types';
 
 export function BasicOutput({ data }: { data: OutputStep }) {

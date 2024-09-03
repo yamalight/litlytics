@@ -1,5 +1,5 @@
 import { Doc } from '@/src/doc/Document';
-import Markdown from 'react-markdown';
+import { CustomMarkdown } from '../../markdown/Markdown';
 
 export function RenderResults({ results }: { results: Doc[] | Doc }) {
   if (Array.isArray(results)) {
@@ -12,7 +12,7 @@ export function RenderResults({ results }: { results: Doc[] | Doc }) {
               <div className="divide-y divide-neutral-600/50">
                 {res.processingResults.map((r) => (
                   <div key={r.stepId}>
-                    <Markdown>{r?.result}</Markdown>
+                    <CustomMarkdown>{r?.result}</CustomMarkdown>
                   </div>
                 ))}
               </div>
@@ -29,7 +29,7 @@ export function RenderResults({ results }: { results: Doc[] | Doc }) {
     <>
       <div className="prose prose-sm dark:prose-invert w-full max-w-full">
         {result.map((r) => (
-          <Markdown key={r.stepId}>{r?.result}</Markdown>
+          <CustomMarkdown key={r.stepId}>{r?.result}</CustomMarkdown>
         ))}
       </div>
     </>

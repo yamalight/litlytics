@@ -13,9 +13,9 @@ export function PipelineBuilder() {
     <div
       className={clsx(
         // size
-        'w-screen h-screen p-6 pt-24 overflow-auto',
+        'w-screen h-screen p-6 overflow-auto',
         // content positioning
-        'flex flex-col items-center justify-center',
+        'flex flex-col items-center',
         // bg dots
         'bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#4b5563_1px,transparent_1px)] [background-size:32px_32px]'
       )}

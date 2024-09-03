@@ -21,7 +21,9 @@
     "p-retry": "^6.2.0",
     "react": "^18",
     "react-dom": "^18",
-    "react-markdown": "^9.0.1"
+    "react-markdown": "^9.0.1",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.14",

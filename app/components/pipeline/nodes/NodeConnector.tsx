@@ -25,11 +25,14 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
+import GeneratePipeline from '../GeneratePipeline';
 
 export function NodeConnector({
   currentStep,
+  showAuto,
 }: {
   currentStep?: SourceStep | ProcessingStep;
+  showAuto?: boolean;
 }) {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
@@ -130,7 +133,15 @@ export function NodeConnector({
         </Button>
 
         {/* Line down */}
-        <div className="w-px h-4 min-h-4 bg-sky-500 -mt-1 -mb-2"></div>
+        {showAuto ? (
+          <>
+            <div className="w-px h-3 min-h-3 bg-sky-500 -mt-1"></div>
+            <GeneratePipeline />
+            <div className="w-px h-4 min-h-4 bg-sky-500 -mb-2"></div>
+          </>
+        ) : (
+          <div className="w-px h-4 min-h-4 bg-sky-500 -mt-1 -mb-2"></div>
+        )}
 
         {/* Arrow down */}
         <svg

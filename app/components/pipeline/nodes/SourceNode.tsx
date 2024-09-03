@@ -75,7 +75,7 @@ export function SourceNode() {
     <>
       {/* Source node render */}
       <NodeFrame
-        hasConnector
+        hasConnector={pipeline.steps.length > 0 ? true : 'auto'}
         currentStep={data}
         size={data.expanded ? 'lg' : 'collapsed'}
       >

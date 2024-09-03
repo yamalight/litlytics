@@ -60,7 +60,7 @@ export function NodeFrame({
   children: React.ReactNode;
   className?: string;
   size?: keyof typeof sizes;
-  hasConnector?: boolean;
+  hasConnector?: boolean | 'auto';
   currentStep?: SourceStep | ProcessingStep;
 }) {
   return (
@@ -80,7 +80,12 @@ export function NodeFrame({
       >
         {children}
       </div>
-      {hasConnector && <NodeConnector currentStep={currentStep} />}
+      {hasConnector && (
+        <NodeConnector
+          showAuto={hasConnector === 'auto'}
+          currentStep={currentStep}
+        />
+      )}
     </div>
   );
 }

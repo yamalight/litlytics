@@ -9,6 +9,8 @@ LitLytics pipeline steps use one of the following inputs:
 - all documents
 - all previous results
 
+Assume input is always already present.
+
 Pipelines might have following steps:
 1) LLM Step
   LLM step passes input to LLM with given prompt and returns the result.
@@ -21,16 +23,24 @@ LitLytics handles documents and input automatically, so you don't have to think 
 
 Describe a pipeline you think would best fit user's request. Include a list of steps with names and brief step descriptions.
 
+Step inputs are as follows:
+- 'doc' - individual document - should be used if step processes a document (e.g. analyzes a document, extracts info from document, etc) - most commonly used input
+- 'result' - previous step result - should be used if step processes result of previous step (e.g. filters out document, etc)
+- 'aggregate-docs' - all documents combined together - should be used if step processes all documents (e.g. summarizes results, etc)
+- 'aggregate-results' - all previous results combined together - should be used if step processes all results of previous step
+
 Don't write suggested prompts for steps.
 Don't summarize the pipeline at the end.
 
 Return list of steps in following format:
 Step name: name here
 Step type: llm/code
+Step input: doc/result/aggregate-docs/aggregate-results
 Step description: description here
 ---
 ...
 ---
 Step name: name here
 Step type: llm/code
+Step input: doc/result/aggregate-docs/aggregate-results
 Step description: description here

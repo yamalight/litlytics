@@ -3,9 +3,9 @@ import { pipelineFromText } from '@/src/pipeline/fromText';
 import { refinePipeline } from '@/src/pipeline/refine';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
-import Markdown from 'react-markdown';
 import { Button } from '../catalyst/button';
 import { Textarea } from '../catalyst/textarea';
+import { CustomMarkdown } from '../markdown/Markdown';
 import { Spinner } from '../Spinner';
 
 export function RefinePipeline({ hide }: { hide: () => void }) {
@@ -50,6 +50,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
     });
     setLoading(false);
     setStatus('');
+    hide();
   };
 
   return (
@@ -58,7 +59,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
         <h1 className="m-0">Suggested pipeline:</h1>
       </div>
 
-      <Markdown>{pipeline.pipelinePlan}</Markdown>
+      <CustomMarkdown>{pipeline.pipelinePlan}</CustomMarkdown>
       <div className="flex gap-1">
         <Textarea
           rows={2}
