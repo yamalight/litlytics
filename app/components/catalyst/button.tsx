@@ -191,7 +191,7 @@ export const Button = forwardRef(function Button(
   { color, outline, plain, icon, className, children, ...props }: ButtonProps,
   ref: React.ForwardedRef<HTMLElement>
 ) {
-  let classes = icon
+  const classes = icon
     ? clsx(className, styles.icon, styles.plain)
     : clsx(
         className,

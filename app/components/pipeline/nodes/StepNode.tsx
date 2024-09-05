@@ -21,7 +21,7 @@ import {
 } from '../../catalyst/dialog';
 import { Field, FieldGroup, Label } from '../../catalyst/fieldset';
 import { Input } from '../../catalyst/input';
-import { RadioH, RadioHGroup, RadioHLabel } from '../../catalyst/radiogroup';
+import { RadioH, RadioHGroup } from '../../catalyst/radiogroup';
 import { Select } from '../../catalyst/select';
 import { Textarea } from '../../catalyst/textarea';
 import { CodeEditor } from '../../step/CodeEditor';

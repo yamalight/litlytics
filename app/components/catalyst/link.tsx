@@ -1,6 +1,7 @@
-import * as Headless from '@headlessui/react'
-import NextLink, { type LinkProps } from 'next/link'
-import React, { forwardRef } from 'react'
+import * as Headless from '@headlessui/react';
+import React, { forwardRef } from 'react';
+// existing imports
+import { Link as RemixLink, type LinkProps } from '@remix-run/react';
 
 export const Link = forwardRef(function Link(
   props: LinkProps & React.ComponentPropsWithoutRef<'a'>,
@@ -8,7 +9,7 @@ export const Link = forwardRef(function Link(
 ) {
   return (
     <Headless.DataInteractive>
-      <NextLink {...props} ref={ref} />
+      <RemixLink {...props} ref={ref} />
     </Headless.DataInteractive>
-  )
-})
+  );
+});

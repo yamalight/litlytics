@@ -1,9 +1,9 @@
 import { defaultModelArgs } from '@/src/llm/config';
 import { executeOnLLM, executeOnLLMWithJSON } from '@/src/llm/llm';
-import { NextRequest, NextResponse } from 'next/server';
+import type { ActionFunctionArgs } from '@remix-run/node';
+import { json } from '@remix-run/node';
 
-export async function POST(request: NextRequest) {
-  // get prompt
+export const action = async ({ request }: ActionFunctionArgs) => {
   const body = await request.json();
   const { messages, args, response_format } = body;
 
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       response_format,
     });
 
-    return NextResponse.json(response);
+    return json(response);
   }
 
   const response = await executeOnLLM({
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       ...(args ?? {}),
     },
   });
-  return NextResponse.json(response);
-}
+  return json(response);
+};
 
-export const dynamic = 'force-dynamic';
+// existing code

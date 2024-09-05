@@ -1,7 +1,7 @@
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
 import { runPromptFromMessages } from '../engine/runPrompt';
 import { Pipeline } from './Pipeline';
-import system from './prompts/pipeline.txt';
+import system from './prompts/pipeline.txt?raw';
 
 export const refinePipeline = async ({
   refineRequest,

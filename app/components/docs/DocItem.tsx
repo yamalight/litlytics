@@ -1,8 +1,8 @@
-import { pipelineAtom } from '@/app/store/store';
 import { Doc } from '@/src/doc/Document';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
+import { pipelineAtom } from '~/store/store';
 import { Button } from '../catalyst/button';
 import { Checkbox } from '../catalyst/checkbox';
 import {

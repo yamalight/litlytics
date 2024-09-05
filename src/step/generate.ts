@@ -1,7 +1,7 @@
 import { runPrompt } from '../engine/runPrompt';
 import { ProcessingStep, ProcessingStepTypes, StepInput } from './Step';
-import codeSystem from './prompts/code-step.txt';
-import llmSystem from './prompts/llm-step.txt';
+import codeSystem from './prompts/code-step.txt?raw';
+import llmSystem from './prompts/llm-step.txt?raw';
 import { cleanResult } from './util';
 
 export const generateStep = async ({

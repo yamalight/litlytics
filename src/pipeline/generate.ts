@@ -1,5 +1,5 @@
 import { runPrompt } from '../engine/runPrompt';
-import system from './prompts/pipeline.txt';
+import system from './prompts/pipeline.txt?raw';
 
 export const generatePipeline = async ({
   description,

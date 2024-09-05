@@ -189,7 +189,6 @@ export function NodeConnector({
               <Textarea
                 name="content"
                 placeholder="Step description"
-                autoFocus
                 ref={contentInputRef}
               />
             </Field>

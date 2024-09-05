@@ -1,7 +1,7 @@
 import { runPrompt } from '../engine/runPrompt';
 import { ProcessingStep, StepInput } from '../step/Step';
 import { generateStep } from '../step/generate';
-import systemToJSON from './prompts/stepToJSON.txt';
+import systemToJSON from './prompts/stepToJSON.txt?raw';
 import { parseLLMJSON } from './util';
 
 export async function pipelineFromText(description: string) {
