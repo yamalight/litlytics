@@ -1,24 +1,22 @@
-'use client';
-
-import { isRunningAtom, pipelineAtom } from '@/app/store/store';
 import { generateStep } from '@/src/step/generate';
 import { ProcessingStepTypes, StepInput, StepInputs } from '@/src/step/Step';
 import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
 import { useRef, useState } from 'react';
-import { Button } from '../catalyst/button';
+import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from '../catalyst/dialog';
-import { Field, FieldGroup, Label } from '../catalyst/fieldset';
-import { Input } from '../catalyst/input';
-import { Select } from '../catalyst/select';
-import { Textarea } from '../catalyst/textarea';
-import { Spinner } from '../Spinner';
+} from '~/components/catalyst/dialog';
+import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
+import { Input } from '~/components/catalyst/input';
+import { Select } from '~/components/catalyst/select';
+import { Textarea } from '~/components/catalyst/textarea';
+import { Spinner } from '~/components/Spinner';
+import { isRunningAtom, pipelineAtom } from '~/store/store';
 import { stepInputLabels } from './util';
 
 export default function AddStep() {

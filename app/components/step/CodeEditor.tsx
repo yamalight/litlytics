@@ -1,5 +1,6 @@
 import Editor, { useMonaco } from '@monaco-editor/react';
-import { useEffect, useMemo, useRef } from 'react';
+import type { editor } from 'monaco-editor';
+import { MutableRefObject, useEffect, useMemo, useRef } from 'react';
 
 export function CodeEditor({
   code,
@@ -9,7 +10,9 @@ export function CodeEditor({
   onChange: (newCode?: string) => void;
 }) {
   const monaco = useMonaco();
-  const editorRef = useRef<any>(null);
+  const editorRef = useRef<editor.IStandaloneCodeEditor>(
+    null
+  ) as MutableRefObject<editor.IStandaloneCodeEditor>;
 
   const isDarkMode = useMemo(() => {
     if (typeof window === 'undefined') {

@@ -37,7 +37,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
   }, [pipeline.testDocs, testDocId]);
 
   const testStep = async () => {
-    if (!Boolean(testDocId.length)) {
+    if (!testDocId.length) {
       return;
     }
 

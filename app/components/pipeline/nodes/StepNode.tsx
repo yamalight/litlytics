@@ -1,4 +1,3 @@
-import { pipelineAtom } from '@/app/store/store';
 import { ProcessingStep, StepInputs } from '@/src/step/Step';
 import {
   ChatBubbleBottomCenterIcon,
@@ -11,29 +10,33 @@ import {
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useState } from 'react';
-import { Button } from '../../catalyst/button';
+import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from '../../catalyst/dialog';
-import { Field, FieldGroup, Label } from '../../catalyst/fieldset';
-import { Input } from '../../catalyst/input';
-import { RadioH, RadioHGroup } from '../../catalyst/radiogroup';
-import { Select } from '../../catalyst/select';
-import { Textarea } from '../../catalyst/textarea';
-import { CodeEditor } from '../../step/CodeEditor';
-import { StepTest } from '../../step/StepTest';
-import { stepInputLabels } from '../../step/util';
+} from '~/components/catalyst/dialog';
+import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
+import { Input } from '~/components/catalyst/input';
+import { RadioH, RadioHGroup } from '~/components/catalyst/radiogroup';
+import { Select } from '~/components/catalyst/select';
+import { Textarea } from '~/components/catalyst/textarea';
+import { CodeEditor } from '~/components/step/CodeEditor';
+import { StepTest } from '~/components/step/StepTest';
+import { stepInputLabels } from '~/components/step/util';
+import { pipelineAtom } from '~/store/store';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function StepNode({ data }: { data: ProcessingStep }) {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
 
-  const updateNodeByKey = (newVal: any, prop: keyof ProcessingStep) => {
+  const updateNodeByKey = (
+    newVal: string | boolean | undefined,
+    prop: keyof ProcessingStep
+  ) => {
     const newData = structuredClone(data);
     newData[prop] = newVal;
 

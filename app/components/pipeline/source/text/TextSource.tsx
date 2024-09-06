@@ -1,8 +1,8 @@
-import { Textarea } from '@/app/components/catalyst/textarea';
-import { pipelineAtom } from '@/app/store/store';
 import { Doc } from '@/src/doc/Document';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
+import { Textarea } from '~/components/catalyst/textarea';
+import { pipelineAtom } from '~/store/store';
 import { TextSourceConfig } from '../types';
 
 export function TextSource() {
@@ -15,7 +15,7 @@ export function TextSource() {
   const updateDoc = useCallback(
     (doc: Doc) => {
       const newSource = structuredClone(pipeline.source);
-      newSource.config.document = doc;
+      (newSource.config as TextSourceConfig).document = doc;
       setPipeline({
         ...pipeline,
         testDocs: [doc],

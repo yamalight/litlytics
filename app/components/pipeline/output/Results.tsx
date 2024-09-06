@@ -1,5 +1,5 @@
 import { StepResult } from '@/src/step/Step';
-import { CustomMarkdown } from '../../markdown/Markdown';
+import { CustomMarkdown } from '~/components/markdown/Markdown';
 
 export function RenderResults({ result }: { result: StepResult }) {
   return (

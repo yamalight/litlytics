@@ -1,10 +1,3 @@
-import {
-  Dropdown,
-  DropdownButton,
-  DropdownItem,
-  DropdownMenu,
-} from '@/app/components/catalyst/dropdown';
-import { pipelineAtom } from '@/app/store/store';
 import { SourceType, SourceTypes } from '@/src/source/Source';
 import { SourceStep } from '@/src/step/Step';
 import {
@@ -16,16 +9,23 @@ import {
 } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { Button } from '../../catalyst/button';
+import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from '../../catalyst/dialog';
-import { Field, FieldGroup, Label } from '../../catalyst/fieldset';
-import { Select } from '../../catalyst/select';
+} from '~/components/catalyst/dialog';
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownItem,
+  DropdownMenu,
+} from '~/components/catalyst/dropdown';
+import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
+import { Select } from '~/components/catalyst/select';
+import { pipelineAtom } from '~/store/store';
 import { DocsListSource } from '../source/docs/DocsList';
 import { TextSource } from '../source/text/TextSource';
 import { SourceRender } from '../source/types';
@@ -49,7 +49,10 @@ export function SourceNode() {
     return SOURCE_RENDERERS[data.sourceType];
   }, [data]);
 
-  const updateNodeByKey = (newVal: any, prop: keyof SourceStep) => {
+  const updateNodeByKey = (
+    newVal: string | boolean | undefined,
+    prop: keyof SourceStep
+  ) => {
     const newData = structuredClone(data!);
     newData[prop] = newVal;
 

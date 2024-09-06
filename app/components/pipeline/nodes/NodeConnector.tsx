@@ -1,18 +1,3 @@
-import { Button } from '@/app/components/catalyst/button';
-import {
-  Dialog,
-  DialogActions,
-  DialogBody,
-  DialogDescription,
-  DialogTitle,
-} from '@/app/components/catalyst/dialog';
-import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
-import { Input } from '@/app/components/catalyst/input';
-import { Select } from '@/app/components/catalyst/select';
-import { Textarea } from '@/app/components/catalyst/textarea';
-import { Spinner } from '@/app/components/Spinner';
-import { stepInputLabels } from '@/app/components/step/util';
-import { pipelineAtom } from '@/app/store/store';
 import { generateStep } from '@/src/step/generate';
 import {
   ProcessingStep,
@@ -25,6 +10,21 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
+import { Button } from '~/components/catalyst/button';
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogDescription,
+  DialogTitle,
+} from '~/components/catalyst/dialog';
+import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
+import { Input } from '~/components/catalyst/input';
+import { Select } from '~/components/catalyst/select';
+import { Textarea } from '~/components/catalyst/textarea';
+import { Spinner } from '~/components/Spinner';
+import { stepInputLabels } from '~/components/step/util';
+import { pipelineAtom } from '~/store/store';
 import GeneratePipeline from '../GeneratePipeline';
 
 export function NodeConnector({

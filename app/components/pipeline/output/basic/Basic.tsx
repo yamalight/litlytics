@@ -1,7 +1,7 @@
-import { pipelineAtom } from '@/app/store/store';
 import { OutputStep, StepResult } from '@/src/step/Step';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
+import { pipelineAtom } from '~/store/store';
 import { RenderResults } from '../Results';
 import { BasicOutputConfig } from '../types';
 

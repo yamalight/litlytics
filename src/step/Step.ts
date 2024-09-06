@@ -38,7 +38,7 @@ export interface BaseStep extends Record<string, unknown> {
 export interface SourceStep extends BaseStep {
   type: SourceStepType;
   sourceType: SourceType;
-  config: any;
+  config: object;
 }
 
 export interface ProcessingStep extends BaseStep {
@@ -51,5 +51,5 @@ export interface ProcessingStep extends BaseStep {
 export interface OutputStep extends BaseStep {
   type: OutputStepTypes;
   outputType: OutputType;
-  config: any;
+  config: object;
 }

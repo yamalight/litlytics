@@ -1,6 +1,6 @@
-import { pipelineAtom } from '@/app/store/store';
 import clsx from 'clsx';
 import { useAtomValue } from 'jotai';
+import { pipelineAtom } from '~/store/store';
 import { OutputNode } from './nodes/OutputNode';
 import { SourceNode } from './nodes/SourceNode';
 import { StepNode } from './nodes/StepNode';

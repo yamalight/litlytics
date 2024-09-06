@@ -1,19 +1,19 @@
-import { isRunningAtom, pipelineAtom } from '@/app/store/store';
 import { generatePipeline } from '@/src/pipeline/generate';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SparklesIcon } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
 import { useRef, useState } from 'react';
-import { Button } from '../catalyst/button';
+import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from '../catalyst/dialog';
-import { Field, FieldGroup, Label } from '../catalyst/fieldset';
-import { Textarea } from '../catalyst/textarea';
-import { Spinner } from '../Spinner';
+} from '~/components/catalyst/dialog';
+import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
+import { Textarea } from '~/components/catalyst/textarea';
+import { Spinner } from '~/components/Spinner';
+import { isRunningAtom, pipelineAtom } from '~/store/store';
 import { RefinePipeline } from './RefinePipeline';
 
 export default function GeneratePipeline() {

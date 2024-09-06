@@ -1,10 +1,3 @@
-import {
-  Dropdown,
-  DropdownButton,
-  DropdownItem,
-  DropdownMenu,
-} from '@/app/components/catalyst/dropdown';
-import { isRunningAtom, pipelineAtom } from '@/app/store/store';
 import { runPipeline } from '@/src/engine/runPipeline';
 import { OutputType, OutputTypes } from '@/src/output/Output';
 import { OutputStep } from '@/src/step/Step';
@@ -18,19 +11,26 @@ import {
 } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { Button } from '../../catalyst/button';
+import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from '../../catalyst/dialog';
-import { Field, FieldGroup, Label } from '../../catalyst/fieldset';
-import { Select } from '../../catalyst/select';
-import { Spinner } from '../../Spinner';
+} from '~/components/catalyst/dialog';
+import {
+  Dropdown,
+  DropdownButton,
+  DropdownItem,
+  DropdownMenu,
+} from '~/components/catalyst/dropdown';
+import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
+import { Select } from '~/components/catalyst/select';
+import { Spinner } from '~/components/Spinner';
+import { isRunningAtom, pipelineAtom } from '~/store/store';
 import { BasicOutput } from '../output/basic/Basic';
-import { OutputRender } from '../output/types';
+import { BasicOutputConfig, OutputRender } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 const OUTPUT_RENDERERS: Partial<Record<OutputType, OutputRender>> = {
@@ -50,7 +50,10 @@ export function OutputNode() {
     return OUTPUT_RENDERERS[data.outputType];
   }, [data]);
 
-  const updateNodeByKey = (newVal: any, prop: keyof OutputStep) => {
+  const updateNodeByKey = (
+    newVal: string | boolean | undefined,
+    prop: keyof OutputStep
+  ) => {
     const newData = structuredClone(data!);
     newData[prop] = newVal;
 
@@ -84,7 +87,13 @@ export function OutputNode() {
     <>
       {/* Output node render */}
       <NodeFrame
-        size={data.expanded ? (data.config.results ? 'xl' : 'lg') : 'collapsed'}
+        size={
+          data.expanded
+            ? (data.config as BasicOutputConfig).results
+              ? 'xl'
+              : 'lg'
+            : 'collapsed'
+        }
       >
         <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">

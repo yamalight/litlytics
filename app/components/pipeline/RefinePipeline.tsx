@@ -1,12 +1,12 @@
-import { pipelineAtom } from '@/app/store/store';
 import { pipelineFromText } from '@/src/pipeline/fromText';
 import { refinePipeline } from '@/src/pipeline/refine';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
-import { Button } from '../catalyst/button';
-import { Textarea } from '../catalyst/textarea';
-import { CustomMarkdown } from '../markdown/Markdown';
-import { Spinner } from '../Spinner';
+import { Button } from '~/components/catalyst/button';
+import { Textarea } from '~/components/catalyst/textarea';
+import { CustomMarkdown } from '~/components/markdown/Markdown';
+import { Spinner } from '~/components/Spinner';
+import { pipelineAtom } from '~/store/store';
 
 export function RefinePipeline({ hide }: { hide: () => void }) {
   const [loading, setLoading] = useState(false);

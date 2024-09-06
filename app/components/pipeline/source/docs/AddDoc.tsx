@@ -1,21 +1,19 @@
-'use client';
-
-import { Button } from '@/app/components/catalyst/button';
+import { SourceStep } from '@/src/step/Step';
+import { DocumentIcon } from '@heroicons/react/16/solid';
+import { useAtom } from 'jotai';
+import { useRef, useState } from 'react';
+import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from '@/app/components/catalyst/dialog';
-import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
-import { Input } from '@/app/components/catalyst/input';
-import { Textarea } from '@/app/components/catalyst/textarea';
-import { pipelineAtom } from '@/app/store/store';
-import { SourceStep } from '@/src/step/Step';
-import { DocumentIcon } from '@heroicons/react/16/solid';
-import { useAtom } from 'jotai';
-import { useRef, useState } from 'react';
+} from '~/components/catalyst/dialog';
+import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
+import { Input } from '~/components/catalyst/input';
+import { Textarea } from '~/components/catalyst/textarea';
+import { pipelineAtom } from '~/store/store';
 import { DocsListSourceConfig } from '../types';
 
 export default function AddDoc({ data }: { data: SourceStep }) {

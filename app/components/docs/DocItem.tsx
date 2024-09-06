@@ -2,19 +2,19 @@ import { Doc } from '@/src/doc/Document';
 import { PencilIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
-import { pipelineAtom } from '~/store/store';
-import { Button } from '../catalyst/button';
-import { Checkbox } from '../catalyst/checkbox';
+import { Button } from '~/components/catalyst/button';
+import { Checkbox } from '~/components/catalyst/checkbox';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogDescription,
   DialogTitle,
-} from '../catalyst/dialog';
-import { Field, FieldGroup, Label } from '../catalyst/fieldset';
-import { Input } from '../catalyst/input';
-import { Textarea } from '../catalyst/textarea';
+} from '~/components/catalyst/dialog';
+import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
+import { Input } from '~/components/catalyst/input';
+import { Textarea } from '~/components/catalyst/textarea';
+import { pipelineAtom } from '~/store/store';
 
 export function DocItem({
   doc,

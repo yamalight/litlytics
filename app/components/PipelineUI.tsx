@@ -9,14 +9,13 @@ import {
 } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
 import { useRef, useState } from 'react';
-import { emptyPipeline, pipelineAtom, pipelineUndoAtom } from '../store/store';
-import { Button } from './catalyst/button';
+import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
   DialogActions,
   DialogBody,
   DialogTitle,
-} from './catalyst/dialog';
+} from '~/components/catalyst/dialog';
 import {
   Dropdown,
   DropdownButton,
@@ -24,7 +23,8 @@ import {
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
-} from './catalyst/dropdown';
+} from '~/components/catalyst/dropdown';
+import { emptyPipeline, pipelineAtom, pipelineUndoAtom } from '~/store/store';
 
 function MenuHolder({
   className,
