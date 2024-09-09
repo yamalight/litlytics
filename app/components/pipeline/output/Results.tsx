@@ -1,8 +1,8 @@
-import { StepResult } from '@/src/step/Step';
+import { Doc } from '@/src/doc/Document';
 import { CustomMarkdown } from '~/components/markdown/Markdown';
 
-export function RenderResults({ result }: { result: StepResult[] }) {
-  if (!result?.length) {
+export function RenderResults({ docs }: { docs?: Doc[] }) {
+  if (!docs?.length) {
     return (
       <div className="prose prose-sm dark:prose-invert w-full max-w-full">
         <>No result</>
@@ -12,9 +12,23 @@ export function RenderResults({ result }: { result: StepResult[] }) {
 
   return (
     <div className="prose prose-sm dark:prose-invert w-full max-w-full">
-      {result.map((r, idx) => (
-        <CustomMarkdown key={`${r.stepId}_${idx}`}>{r.result}</CustomMarkdown>
-      ))}
+      {docs.length > 1 ? (
+        <>
+          {docs.map((doc) => (
+            <CustomMarkdown key={doc.id}>{`## Result for "${
+              doc.name
+            }":\n\n${doc.processingResults
+              .map((r) => r.result)
+              .join('\n\n---\n\n')}`}</CustomMarkdown>
+          ))}
+        </>
+      ) : (
+        <>
+          <CustomMarkdown>
+            {docs[0].processingResults.map((r) => r.result).join('\n')}
+          </CustomMarkdown>
+        </>
+      )}
     </div>
   );
 }

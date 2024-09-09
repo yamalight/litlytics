@@ -1,4 +1,5 @@
-import { OutputStep, StepResult } from '@/src/step/Step';
+import { Doc } from '@/src/doc/Document';
+import { OutputStep } from '@/src/step/Step';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
 import { pipelineAtom } from '~/store/store';
@@ -9,31 +10,29 @@ export function BasicOutput({ data }: { data: OutputStep }) {
   const pipeline = useAtomValue(pipelineAtom);
   const config = useMemo(() => data.config as BasicOutputConfig, [data]);
   const result = useMemo(() => {
-    if (!config.results) {
+    const docs = config.results;
+    if (!docs) {
       return;
     }
 
-    let results: StepResult[] = [];
-    if (Array.isArray(config.results)) {
-      results = config.results.map((r) => r.processingResults).flat();
-    } else {
-      results = config.results.processingResults;
-    }
-
-    const lastStep = pipeline.output.id;
-    const res = results.filter((r) => {
-      const steps = pipeline.steps.filter(
-        (s) => s.id === r.stepId && s.connectsTo.includes(lastStep)
-      );
-      return steps;
+    const results: Doc[] = Array.isArray(docs) ? docs : [docs];
+    const res = results.map((doc) => {
+      const d = structuredClone(doc);
+      d.processingResults = d.processingResults.filter((r) => {
+        const steps = pipeline.steps.filter(
+          (s) => s.id === r.stepId && s.connectsTo.includes(pipeline.output.id)
+        );
+        return steps.length > 0;
+      });
+      return d;
     });
-    console.log({ lastStep, res });
+    console.log(res);
     return res;
   }, [config, pipeline]);
 
   return (
     <div className="flex flex-col w-full h-full overflow-auto">
-      {result ? <RenderResults result={result} /> : <>No results</>}
+      {result ? <RenderResults docs={result} /> : <>No results</>}
     </div>
   );
 }
