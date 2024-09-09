@@ -4,7 +4,7 @@ import {
   CompletionUsage as OAIUsage,
 } from 'openai/resources/index.mjs';
 
-// TODO: use
+// TODO: ??? use
 // https://github.com/xenova/transformers.js
 // as fallback for when webgpu is not available
 
@@ -21,11 +21,14 @@ engine.reload(selectedModel);
 
 export const runWithWebLLM = async ({
   messages,
+  args,
 }: {
   messages: OAIChatCompletionMessageParam[];
+  args?: { max_tokens?: number; temperature?: number };
 }) => {
   const reply = await engine.chat.completions.create({
     messages: messages as ChatCompletionMessageParam[],
+    ...args,
   });
   const answers = reply.choices;
   const usage = reply.usage;
