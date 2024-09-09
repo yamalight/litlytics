@@ -21,9 +21,11 @@ export function BasicOutput({ data }: { data: OutputStep }) {
     }
 
     const lastStep = pipeline.output.id;
-    const res = results.find((r) => {
-      const step = pipeline.steps.find((s) => s.id === r.stepId);
-      return step?.connectsTo.includes(lastStep);
+    const res = results.filter((r) => {
+      const steps = pipeline.steps.filter(
+        (s) => s.id === r.stepId && s.connectsTo.includes(lastStep)
+      );
+      return steps;
     });
     console.log({ lastStep, res });
     return res;

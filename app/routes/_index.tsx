@@ -1,6 +1,5 @@
 import type { MetaFunction } from '@remix-run/node';
-import { PipelineBuilder } from '~/components/pipeline/PipelineBuilder';
-import { PipelineUI } from '~/components/PipelineUI';
+import { UI } from '~/components/UI';
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,10 +9,5 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  return (
-    <main className="relative min-h-screen min-w-screen">
-      <PipelineUI />
-      <PipelineBuilder />
-    </main>
-  );
+  return <UI />;
 }
