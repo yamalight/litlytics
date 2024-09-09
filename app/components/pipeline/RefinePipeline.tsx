@@ -9,9 +9,9 @@ import { Spinner } from '~/components/Spinner';
 import { pipelineAtom } from '~/store/store';
 
 export function RefinePipeline({ hide }: { hide: () => void }) {
-  const [status, setStatus] = useState<
-    'loading' | 'refine-loading' | 'Generating pipeline' | ''
-  >('');
+  const [status, setStatus] = useState<'refine-loading' | 'generating' | ''>(
+    ''
+  );
   const [refine, setRefine] = useState(``);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
@@ -38,10 +38,8 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       return;
     }
 
-    setStatus('loading');
-
     // generate plan from LLM
-    setStatus('Generating pipeline');
+    setStatus('generating');
     const newSteps = await pipelineFromText(pipeline.pipelinePlan);
 
     // assign output to last step
@@ -73,13 +71,13 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
         <Textarea
           rows={2}
           placeholder="Your request..."
-          disabled={status === 'refine-loading' || status === 'loading'}
+          disabled={status === 'refine-loading' || status === 'generating'}
           value={refine}
           onChange={(e) => setRefine(e.target.value)}
         />
         <Button
           onClick={doRefine}
-          disabled={status === 'refine-loading' || status === 'loading'}
+          disabled={status === 'refine-loading' || status === 'generating'}
         >
           {status === 'refine-loading' && <Spinner className="h-5 w-5" />}
           Refine
@@ -89,15 +87,15 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       <div className="flex mt-8">
         <Button
           onClick={doCreate}
-          disabled={status === 'refine-loading' || status === 'loading'}
+          disabled={status === 'refine-loading' || status === 'generating'}
         >
-          {status === 'loading' && (
+          {status === 'generating' && (
             <div className="flex items-center">
               <Spinner className="h-5 w-5" />
             </div>
           )}
-          {status !== '' && status !== 'loading' && status !== 'refine-loading'
-            ? status
+          {status === 'generating'
+            ? `Generating pipeline...`
             : `Create described pipeline`}
         </Button>
       </div>

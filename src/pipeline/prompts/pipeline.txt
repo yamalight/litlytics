@@ -15,13 +15,17 @@ Pipelines might have following steps:
 1) LLM Step
   LLM step passes input to LLM with given prompt and returns the result.
   Prompt can be defined by user.
+  Use LLM steps as much as possible.
 2) Code Step
   Code step passes input to javascript function and returns the results.
   Return value is either a string, or `undefined` (those documents are filtered out from the pipeline).
   Javascript function can be defined by user.
+  Only use code steps if something cannot be done by LLM step (e.g. filtering out documents).
 LitLytics handles documents and input automatically, so you don't have to think about input.
 
 Describe a pipeline you think would best fit user's request with a list of steps with names and brief step descriptions.
+
+Keep pipeline as simple as possible while still satisfying all the requirements.
 
 Step inputs are as follows:
 - 'doc' - individual document - should be used if step processes a document (e.g. analyzes a document, extracts info from document, etc) - most commonly used input
@@ -31,6 +35,7 @@ Step inputs are as follows:
 
 Don't write suggested prompts for steps.
 Don't summarize the pipeline at the end.
+Don't include steps if they can be omitted.
 
 List of steps should use following format:
 Step name: name here
