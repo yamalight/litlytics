@@ -21,7 +21,7 @@ Pipelines might have following steps:
   Javascript function can be defined by user.
 LitLytics handles documents and input automatically, so you don't have to think about input.
 
-Describe a pipeline you think would best fit user's request. Include a list of steps with names and brief step descriptions.
+Describe a pipeline you think would best fit user's request with a list of steps with names and brief step descriptions.
 
 Step inputs are as follows:
 - 'doc' - individual document - should be used if step processes a document (e.g. analyzes a document, extracts info from document, etc) - most commonly used input
@@ -32,7 +32,7 @@ Step inputs are as follows:
 Don't write suggested prompts for steps.
 Don't summarize the pipeline at the end.
 
-Return list of steps in following format:
+List of steps should use following format:
 Step name: name here
 Step type: llm/code
 Step input: doc/result/aggregate-docs/aggregate-results
@@ -44,3 +44,5 @@ Step name: name here
 Step type: llm/code
 Step input: doc/result/aggregate-docs/aggregate-results
 Step description: description here
+
+Think the request through step-by-step inside `<thinking>` tags, and then provide your final response inside `<output>` tags.

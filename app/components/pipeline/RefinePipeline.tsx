@@ -9,8 +9,9 @@ import { Spinner } from '~/components/Spinner';
 import { pipelineAtom } from '~/store/store';
 
 export function RefinePipeline({ hide }: { hide: () => void }) {
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState<
+    'loading' | 'refine-loading' | 'Generating pipeline' | ''
+  >('');
   const [refine, setRefine] = useState(``);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
@@ -19,7 +20,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       return;
     }
 
-    setLoading(true);
+    setStatus('refine-loading');
 
     // generate plan from LLM
     const plan = await refinePipeline({ refineRequest: refine, pipeline });
@@ -29,7 +30,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       ...pipeline,
       pipelinePlan: plan ?? '',
     });
-    setLoading(false);
+    setStatus('');
   };
 
   const doCreate = async () => {
@@ -37,7 +38,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       return;
     }
 
-    setLoading(true);
+    setStatus('loading');
 
     // generate plan from LLM
     setStatus('Generating pipeline');
@@ -57,7 +58,6 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       // assign steps
       steps: newSteps,
     });
-    setLoading(false);
     setStatus('');
     hide();
   };
@@ -73,24 +73,32 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
         <Textarea
           rows={2}
           placeholder="Your request..."
-          disabled={loading}
+          disabled={status === 'refine-loading' || status === 'loading'}
           value={refine}
           onChange={(e) => setRefine(e.target.value)}
         />
-        <Button onClick={doRefine} disabled={loading}>
-          {loading && <Spinner className="h-5 w-5" />}
+        <Button
+          onClick={doRefine}
+          disabled={status === 'refine-loading' || status === 'loading'}
+        >
+          {status === 'refine-loading' && <Spinner className="h-5 w-5" />}
           Refine
         </Button>
       </div>
 
-      <div className="flex mt-2">
-        <Button onClick={doCreate} disabled={loading}>
-          {loading && (
+      <div className="flex mt-8">
+        <Button
+          onClick={doCreate}
+          disabled={status === 'refine-loading' || status === 'loading'}
+        >
+          {status === 'loading' && (
             <div className="flex items-center">
               <Spinner className="h-5 w-5" />
             </div>
           )}
-          {status.length > 0 ? status : `Create described pipeline`}
+          {status !== '' && status !== 'loading' && status !== 'refine-loading'
+            ? status
+            : `Create described pipeline`}
         </Button>
       </div>
     </div>

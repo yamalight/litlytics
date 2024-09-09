@@ -1,4 +1,5 @@
 import { runPrompt } from '../engine/runPrompt';
+import { parseThinkingOutputResult } from '../pipeline/util';
 import { ProcessingStep, ProcessingStepTypes, StepInput } from './Step';
 import codeSystem from './prompts/code-step.txt?raw';
 import llmSystem from './prompts/llm-step.txt?raw';
@@ -31,7 +32,8 @@ Step description: ${description}`;
   // generate plan from LLM
   const step = await runPrompt({ system, user });
 
-  const result = cleanResult(step.result, type);
+  const cleanedResult = cleanResult(step.result, type);
+  const result = parseThinkingOutputResult(cleanedResult);
 
   const newStep: ProcessingStep = {
     id,

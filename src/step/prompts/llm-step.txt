@@ -10,3 +10,5 @@ Use step name and description to decide what prompt should do.
 Make sure to not include original document in response.
 
 Return only the prompt itself.
+
+Think the request through step-by-step inside `<thinking>` tags, and then provide your final response inside `<output>` tags.

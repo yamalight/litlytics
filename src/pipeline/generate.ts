@@ -1,5 +1,6 @@
 import { runPrompt } from '../engine/runPrompt';
 import system from './prompts/pipeline.txt?raw';
+import { parseThinkingOutputResult } from './util';
 
 export const generatePipeline = async ({
   description,
@@ -12,7 +13,9 @@ export const generatePipeline = async ({
 
   // generate plan from LLM
   const plan = await runPrompt({ system, user: description });
-  const plannedSteps = plan.result;
+  const plannedSteps = plan.result
+    ? parseThinkingOutputResult(plan.result)
+    : plan.result;
 
   const steps = plannedSteps
     ?.split('---')
