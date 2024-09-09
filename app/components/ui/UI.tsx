@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { PipelineBuilder } from '~/components/pipeline/PipelineBuilder';
-import { PipelineUI } from '~/components/PipelineUI';
-import { Background } from './Background';
-import { Spinner } from './Spinner';
+import { OverlayUI } from '~/components/ui/Overlay';
+import { Background } from '../Background';
+import { Spinner } from '../Spinner';
 
 // client-side only render to prevent hydration errors
 // required since config is stored in localstorage so hydrating is guaranteed to fail
@@ -30,7 +30,7 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
 export function UI() {
   return (
     <ClientOnly>
-      <PipelineUI />
+      <OverlayUI />
       <PipelineBuilder />
     </ClientOnly>
   );

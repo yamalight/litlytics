@@ -25,6 +25,8 @@ import {
   DropdownMenu,
 } from '~/components/catalyst/dropdown';
 import { emptyPipeline, pipelineAtom, pipelineUndoAtom } from '~/store/store';
+import { Field, FieldGroup, Label } from '../catalyst/fieldset';
+import { Input } from '../catalyst/input';
 
 function MenuHolder({
   className,
@@ -42,11 +44,13 @@ function MenuHolder({
   );
 }
 
-export function PipelineUI() {
+export function OverlayUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const pipelineNameRef = useRef<HTMLInputElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSaveOpen, setIsSaveOpen] = useState(false);
 
   const resetPipeline = () => {
     setPipeline(structuredClone(emptyPipeline));
@@ -63,11 +67,13 @@ export function PipelineUI() {
     // Create a temporary anchor element
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${pipeline.name ?? 'pipeline'}.json`;
+    a.download = `${pipelineNameRef.current?.value ?? 'pipeline'}.json`;
     // Programmatically click the anchor to trigger the download
     a.click();
     // Clean up: revoke the object URL
     URL.revokeObjectURL(url);
+    // close modal
+    setIsSaveOpen(false);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +116,7 @@ export function PipelineUI() {
                 <DropdownLabel>Open pipeline</DropdownLabel>
               </DropdownItem>
 
-              <DropdownItem onClick={savePipeline}>
+              <DropdownItem onClick={() => setIsSaveOpen(true)}>
                 <ArrowDownTrayIcon aria-hidden="true" className="h-5 w-5" />
                 <DropdownLabel>Save pipeline</DropdownLabel>
               </DropdownItem>
@@ -158,6 +164,37 @@ export function PipelineUI() {
           </Button>
           <Button plain onClick={() => setIsOpen(false)}>
             Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        size="xl"
+        open={isSaveOpen}
+        onClose={setIsSaveOpen}
+        topClassName="z-20"
+      >
+        <DialogTitle>Save pipeline?</DialogTitle>
+        <DialogBody className="w-full">
+          <FieldGroup>
+            <Field>
+              <Label>Name</Label>
+              <Input
+                ref={pipelineNameRef}
+                name="name"
+                placeholder="Pipeline name"
+                autoFocus
+                defaultValue="pipeline"
+              />
+            </Field>
+          </FieldGroup>
+        </DialogBody>
+        <DialogActions className="flex justify-between">
+          <Button plain onClick={() => setIsSaveOpen(false)}>
+            Close
+          </Button>
+          <Button color="green" onClick={savePipeline}>
+            Save
           </Button>
         </DialogActions>
       </Dialog>
