@@ -6,6 +6,7 @@ export interface StepResult {
   stepId: string;
   result?: string;
   usage?: CompletionUsage;
+  timingMs: number;
 }
 
 // step types

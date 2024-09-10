@@ -22,6 +22,7 @@
     "framer-motion": "^11.5.4",
     "isbot": "^5.1.17",
     "jotai": "^2.9.3",
+    "lodash": "^4.17.21",
     "openai": "^4.58.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@remix-run/dev": "^2.11.2",
     "@tailwindcss/typography": "^0.5.15",
+    "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.4.0",

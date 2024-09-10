@@ -74,7 +74,9 @@ export async function runLLMStep({
   }
 
   const user = input;
+  const startTime = performance.now();
   const res = await runPrompt({ system, user });
+  const endTime = performance.now();
   // replace existing result if present
   const existingResult = doc?.processingResults.find(
     (r) => r.stepId === step.id
@@ -82,12 +84,14 @@ export async function runLLMStep({
   if (existingResult) {
     existingResult.result = res.result!;
     existingResult.usage = res.usage;
+    existingResult.timingMs = endTime - startTime;
   } else {
     // or insert new one of not
     doc?.processingResults.push({
       stepId: step.id,
       result: res.result!,
       usage: res.usage,
+      timingMs: endTime - startTime,
     });
   }
   console.log(doc);

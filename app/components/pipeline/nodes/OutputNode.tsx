@@ -1,16 +1,23 @@
 import { runPipeline } from '@/src/engine/runPipeline';
+import { defaultModelName } from '@/src/llm/config';
+import { modelCosts } from '@/src/llm/costs';
 import { OutputType, OutputTypes } from '@/src/output/Output';
 import { OutputStep } from '@/src/step/Step';
 import {
   ChevronDownIcon,
   ChevronRightIcon,
+  ClockIcon,
   CogIcon,
+  CurrencyDollarIcon,
   EllipsisHorizontalIcon,
+  PencilSquareIcon,
   PlayIcon,
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
+import _ from 'lodash';
 import { ChangeEvent, useMemo, useState } from 'react';
+import { Badge } from '~/components/catalyst/badge';
 import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
@@ -43,6 +50,32 @@ export function OutputNode() {
   const [isRunning, setIsRunning] = useAtom(isRunningAtom);
 
   const data = useMemo(() => pipeline.output, [pipeline]);
+
+  const { timing, prompt, completion, cost } = useMemo(() => {
+    // const timings = data.
+    const cfg = data.config as BasicOutputConfig;
+    const results = Array.isArray(cfg.results) ? cfg.results : [cfg.results];
+    const res = results.filter((doc) => doc !== undefined);
+    if (!res.length) {
+      return {};
+    }
+    const stepRes = res.map((doc) => doc.processingResults).flat();
+    const promptTokens = stepRes.map((res) => res.usage?.prompt_tokens ?? 0);
+    const completionTokens = stepRes.map(
+      (res) => res.usage?.completion_tokens ?? 0
+    );
+    const timings = stepRes.map((res) => res.timingMs);
+    const timing = _.round(timings.reduce((acc, val) => acc + val, 0));
+    const prompt = promptTokens.reduce((acc, val) => acc + val, 0);
+    const completion = completionTokens.reduce((acc, val) => acc + val, 0);
+    const cost = _.round(
+      prompt * modelCosts[defaultModelName].input +
+        completion * modelCosts[defaultModelName].output,
+      3
+    );
+    return { timing, prompt, completion, cost };
+  }, [data]);
+
   const Render = useMemo(() => {
     if (!data) {
       return;
@@ -132,7 +165,35 @@ export function OutputNode() {
           </div>
         </NodeHeader>
         {data.expanded ? (
-          <NodeContent className="h-[calc(100%-2rem)]">
+          <NodeContent className="flex flex-col relative h-[calc(100%-2rem)]">
+            <div className="flex items-center justify-center gap-1 my-1">
+              {timing !== undefined && (
+                <Badge
+                  title="Total execution time (ms)"
+                  className="flex items-center"
+                >
+                  <ClockIcon className="w-3 h-3" /> {timing}
+                </Badge>
+              )}
+              {Boolean(prompt) && (
+                <Badge
+                  title="Total input / completion tokens"
+                  className="flex items-center"
+                >
+                  <PencilSquareIcon className="w-3 h-3" />
+                  {prompt} / {completion}
+                </Badge>
+              )}
+              {Boolean(cost) && (
+                <Badge
+                  title="Total cost (US cents)"
+                  className="flex items-center"
+                >
+                  <CurrencyDollarIcon className="w-3 h-3" />
+                  {cost}
+                </Badge>
+              )}
+            </div>
             {Render && <Render data={data} />}
           </NodeContent>
         ) : (

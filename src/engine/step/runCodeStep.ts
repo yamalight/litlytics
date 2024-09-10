@@ -50,7 +50,9 @@ export async function runCodeStep({
       break;
   }
   console.log({ input });
+  const startTime = performance.now();
   const res = await mod(input);
+  const endTime = performance.now();
   console.log({ res });
   // replace existing result if present
   const existingResult = doc?.processingResults.find(
@@ -63,6 +65,7 @@ export async function runCodeStep({
     doc?.processingResults.push({
       stepId: step.id,
       result: res,
+      timingMs: endTime - startTime,
     });
   }
   console.log(doc);

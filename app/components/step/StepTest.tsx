@@ -44,11 +44,13 @@ export function StepTest({ data }: { data: ProcessingStep }) {
     setLoading(true);
 
     // try {
+    const startTime = performance.now();
     const doc = await testPipelineStep({
       pipeline,
       step: data,
       docId: testDocId,
     });
+    const endTime = performance.now();
 
     if (!doc) {
       // update result manually with no execution
@@ -59,6 +61,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
             d.processingResults.push({
               result: undefined,
               stepId: data.id,
+              timingMs: endTime - startTime,
             });
             return d;
           }

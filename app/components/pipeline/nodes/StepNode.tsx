@@ -1,15 +1,22 @@
+import { defaultModelName } from '@/src/llm/config';
+import { modelCosts } from '@/src/llm/costs';
 import { ProcessingStep, StepInputs } from '@/src/step/Step';
 import {
   ChatBubbleBottomCenterIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  ClockIcon,
   CodeBracketIcon,
   CogIcon,
+  CurrencyDollarIcon,
+  PencilSquareIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
-import { ChangeEvent, useState } from 'react';
+import _ from 'lodash';
+import { ChangeEvent, useMemo, useState } from 'react';
+import { Badge } from '~/components/catalyst/badge';
 import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
@@ -27,11 +34,49 @@ import { CodeEditor } from '~/components/step/CodeEditor';
 import { StepTest } from '~/components/step/StepTest';
 import { stepInputLabels } from '~/components/step/util';
 import { pipelineAtom } from '~/store/store';
+import { BasicOutputConfig } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function StepNode({ data }: { data: ProcessingStep }) {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
+
+  const { averageTiming, averagePrompt, averageCompletion, averageCost } =
+    useMemo(() => {
+      // const timings = data.
+      const cfg = pipeline.output.config as BasicOutputConfig;
+      const results = Array.isArray(cfg.results) ? cfg.results : [cfg.results];
+      const res = results.filter((doc) => doc !== undefined);
+      if (!res.length) {
+        return {};
+      }
+      const stepRes = res
+        .map((doc) =>
+          doc.processingResults.filter((res) => res.stepId === data.id)
+        )
+        .flat();
+      const promptTokens = stepRes.map((res) => res.usage?.prompt_tokens ?? 0);
+      const completionTokens = stepRes.map(
+        (res) => res.usage?.completion_tokens ?? 0
+      );
+      const timings = stepRes.map((res) => res.timingMs);
+      const averageTiming = _.round(
+        timings.reduce((acc, val) => acc + val, 0) / timings.length
+      );
+      const averagePrompt = _.round(
+        promptTokens.reduce((acc, val) => acc + val, 0) / promptTokens.length
+      );
+      const averageCompletion = _.round(
+        completionTokens.reduce((acc, val) => acc + val, 0) /
+          completionTokens.length
+      );
+      const averageCost = _.round(
+        averagePrompt * modelCosts[defaultModelName].input +
+          averageCompletion * modelCosts[defaultModelName].output,
+        3
+      );
+      return { averageTiming, averagePrompt, averageCompletion, averageCost };
+    }, [pipeline.output.config, data]);
 
   const updateNodeByKey = (
     newVal: string | boolean | undefined,
@@ -164,8 +209,38 @@ export function StepNode({ data }: { data: ProcessingStep }) {
               </RadioH>
             </div>
 
-            <div className="flex flex-1 items-end justify-between">
+            <div className="flex flex-1 items-center justify-between">
               <StepTest data={data} />
+
+              <div className="flex items-center justify-center gap-1">
+                {averageTiming !== undefined && (
+                  <Badge
+                    title="Average time per document (ms)"
+                    className="flex items-center"
+                  >
+                    <ClockIcon className="w-3 h-3" /> {averageTiming}
+                  </Badge>
+                )}
+                {Boolean(averagePrompt) && (
+                  <Badge
+                    title="Average input / completion tokens"
+                    className="flex items-center"
+                  >
+                    <PencilSquareIcon className="w-3 h-3" />
+                    {averagePrompt} / {averageCompletion}
+                  </Badge>
+                )}
+                {Boolean(averageCost) && (
+                  <Badge
+                    title="Average cost (US cents)"
+                    className="flex items-center"
+                  >
+                    <CurrencyDollarIcon className="w-3 h-3" />
+                    {averageCost}
+                  </Badge>
+                )}
+              </div>
+
               <Button
                 plain
                 onClick={() => setIsOpen(true)}

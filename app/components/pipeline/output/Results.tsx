@@ -16,6 +16,7 @@ export function RenderResults({ docs }: { docs?: Doc[] }) {
 
     if (docs.length > 1) {
       return docs
+        .filter((doc) => doc?.processingResults?.length > 0)
         .map(
           (doc) =>
             `## Result for "${doc.name}":\n\n${doc.processingResults
@@ -43,8 +44,8 @@ export function RenderResults({ docs }: { docs?: Doc[] }) {
   }
 
   return (
-    <div className="relative prose prose-sm dark:prose-invert w-full max-w-full">
-      <Button plain onClick={handleCopy} className="!absolute top-2 right-2">
+    <div className="prose prose-sm dark:prose-invert w-full max-w-full">
+      <Button plain onClick={handleCopy} className="!absolute top-1 right-2">
         {copied ? (
           <ClipboardDocumentCheckIcon className="fill-sky-500" />
         ) : (
