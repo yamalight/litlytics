@@ -9,8 +9,9 @@ import {
 import { PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { useAtom } from 'jotai';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
+import { Checkbox } from '~/components/catalyst/checkbox';
 import {
   Dialog,
   DialogActions,
@@ -23,9 +24,22 @@ import { Input } from '~/components/catalyst/input';
 import { Select } from '~/components/catalyst/select';
 import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
+import { CodeEditor } from '~/components/step/CodeEditor';
 import { stepInputLabels } from '~/components/step/util';
 import { pipelineAtom } from '~/store/store';
 import GeneratePipeline from '../GeneratePipeline';
+
+const defaultStep: ProcessingStep = {
+  id: '',
+  name: '',
+  description: '',
+  input: 'doc',
+  type: 'llm',
+  connectsTo: [],
+  code: '',
+  prompt: '',
+  expanded: true,
+};
 
 export function NodeConnector({
   currentStep,
@@ -34,18 +48,21 @@ export function NodeConnector({
   currentStep?: SourceStep | ProcessingStep;
   showAuto?: boolean;
 }) {
-  const nameInputRef = useRef<HTMLInputElement>(null);
-  const contentInputRef = useRef<HTMLTextAreaElement>(null);
-  const [type, setType] = useState<ProcessingStepTypes>('llm');
+  const [step, setStep] = useState<ProcessingStep>(
+    structuredClone(defaultStep)
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [input, setInput] = useState<StepInput>('doc');
+  const [manual, setManual] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
+  const showAddStep = () => {
+    setStep(structuredClone(defaultStep));
+    setIsOpen(true);
+  };
+
   const createStep = async () => {
-    const name = nameInputRef.current?.value;
-    const description = contentInputRef.current?.value;
-    if (!name?.length || !description?.length) {
+    if (!step.name?.length || !step.description?.length) {
       return;
     }
 
@@ -59,14 +76,20 @@ export function NodeConnector({
     }
     // generate final id
     const idStr = `step_${id}`;
-    // generate new step
-    const newStep = await generateStep({
-      id: idStr,
-      name,
-      description,
-      input,
-      type,
-    });
+
+    let newStep: ProcessingStep | undefined = undefined;
+    if (manual) {
+      newStep = structuredClone(step);
+    } else {
+      // generate new step
+      newStep = await generateStep({
+        id: idStr,
+        name: step.name,
+        description: step.description,
+        input: step.input as StepInput,
+        type: step.type,
+      });
+    }
 
     if (currentStep?.type === 'source') {
       // connect new step to next node
@@ -127,7 +150,7 @@ export function NodeConnector({
             // margins
             'mb-1 mt-1'
           )}
-          onClick={() => setIsOpen(true)}
+          onClick={showAddStep}
         >
           <PlusIcon className="stroke-sky-500" />
         </Button>
@@ -156,7 +179,7 @@ export function NodeConnector({
         </svg>
       </div>
 
-      <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
+      <Dialog open={isOpen} onClose={setIsOpen} size="3xl" topClassName="z-20">
         <DialogTitle>Add processing step</DialogTitle>
         <DialogDescription>
           Add new processing step to project
@@ -168,8 +191,13 @@ export function NodeConnector({
               <Select
                 aria-label="Step type"
                 name="type"
-                value={type}
-                onChange={(e) => setType(e.target.value as ProcessingStepTypes)}
+                value={step.type}
+                onChange={(e) =>
+                  setStep((s) => ({
+                    ...s,
+                    type: e.target.value as ProcessingStepTypes,
+                  }))
+                }
               >
                 <option value="llm">LLM</option>
                 <option value="code">Code</option>
@@ -181,7 +209,10 @@ export function NodeConnector({
                 name="content"
                 placeholder="Step name"
                 autoFocus
-                ref={nameInputRef}
+                value={step.name}
+                onChange={(e) =>
+                  setStep((s) => ({ ...s, name: e.target.value }))
+                }
               />
             </Field>
             <Field>
@@ -189,15 +220,20 @@ export function NodeConnector({
               <Textarea
                 name="content"
                 placeholder="Step description"
-                ref={contentInputRef}
+                value={step.description}
+                onChange={(e) =>
+                  setStep((s) => ({ ...s, description: e.target.value }))
+                }
               />
             </Field>
             <Field>
               <Label>Step input</Label>
               <Select
                 name="step-input"
-                value={input}
-                onChange={(e) => setInput(e.target.value as StepInput)}
+                value={step.input}
+                onChange={(e) =>
+                  setStep((s) => ({ ...s, input: e.target.value as StepInput }))
+                }
               >
                 {Object.keys(StepInputs).map((key) => (
                   <option key={key} value={StepInputs[key as keyof StepInputs]}>
@@ -206,6 +242,39 @@ export function NodeConnector({
                 ))}
               </Select>
             </Field>
+            <Field className="flex items-center gap-1">
+              <Checkbox
+                name="step-manual"
+                checked={manual}
+                onChange={(e) => setManual(e)}
+              ></Checkbox>
+              <Label>Manual creation</Label>
+            </Field>
+            {manual && step.type === 'llm' && (
+              <Field>
+                <Label>Prompt</Label>
+                <Textarea
+                  name="step-prompt"
+                  value={step.prompt}
+                  onChange={(e) =>
+                    setStep((s) => ({ ...s, prompt: e.target.value }))
+                  }
+                />
+              </Field>
+            )}
+            {manual && step.type === 'code' && (
+              <Field>
+                <Label>Step code</Label>
+                <div className="h-[60vh] min-h-[60vh]">
+                  <CodeEditor
+                    code={step.code}
+                    onChange={(newCode) =>
+                      setStep((s) => ({ ...s, code: newCode }))
+                    }
+                  />
+                </div>
+              </Field>
+            )}
           </FieldGroup>
         </DialogBody>
         <DialogActions>
