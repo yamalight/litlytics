@@ -167,7 +167,7 @@ export function OutputNode() {
         {data.expanded ? (
           <NodeContent className="flex flex-col relative h-[calc(100%-2rem)]">
             <div className="flex items-center justify-center gap-1 my-1">
-              {timing !== undefined && (
+              {Number.isFinite(timing) && (
                 <Badge
                   title="Total execution time (ms)"
                   className="flex items-center"

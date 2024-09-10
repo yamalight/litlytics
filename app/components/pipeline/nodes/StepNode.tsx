@@ -213,7 +213,7 @@ export function StepNode({ data }: { data: ProcessingStep }) {
               <StepTest data={data} />
 
               <div className="flex items-center justify-center gap-1">
-                {averageTiming !== undefined && (
+                {Number.isFinite(averageTiming) && (
                   <Badge
                     title="Average time per document (ms)"
                     className="flex items-center"
