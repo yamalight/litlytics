@@ -22,6 +22,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
   const [testDocId, setTestDocId] = useState(pipeline.testDocs.at(0)?.id ?? '');
   const [isTestOpen, setTestOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error>();
   const testResult = useMemo(() => {
     return pipeline.testDocs
       .find((d) => d.id === testDocId)
@@ -42,43 +43,47 @@ export function StepTest({ data }: { data: ProcessingStep }) {
     }
 
     setLoading(true);
+    setError(undefined);
 
-    // try {
-    const startTime = performance.now();
-    const doc = await testPipelineStep({
-      pipeline,
-      step: data,
-      docId: testDocId,
-    });
-    const endTime = performance.now();
+    try {
+      const startTime = performance.now();
+      const doc = await testPipelineStep({
+        pipeline,
+        step: data,
+        docId: testDocId,
+      });
+      const endTime = performance.now();
 
-    if (!doc) {
-      // update result manually with no execution
-      setPipeline({
-        ...pipeline,
-        testDocs: pipeline.testDocs.map((d) => {
-          if (d.id === testDocId) {
-            d.processingResults.push({
-              result: undefined,
-              stepId: data.id,
-              timingMs: endTime - startTime,
-            });
+      if (!doc) {
+        // update result manually with no execution
+        setPipeline({
+          ...pipeline,
+          testDocs: pipeline.testDocs.map((d) => {
+            if (d.id === testDocId) {
+              d.processingResults.push({
+                result: undefined,
+                stepId: data.id,
+                timingMs: endTime - startTime,
+              });
+              return d;
+            }
             return d;
-          }
-          return d;
-        }),
-      });
-    } else {
-      // update test doc results
-      setPipeline({
-        ...pipeline,
-        testDocs: pipeline.testDocs.map((d) => {
-          if (d.id === doc?.id) {
-            return doc;
-          }
-          return d;
-        }),
-      });
+          }),
+        });
+      } else {
+        // update test doc results
+        setPipeline({
+          ...pipeline,
+          testDocs: pipeline.testDocs.map((d) => {
+            if (d.id === doc?.id) {
+              return doc;
+            }
+            return d;
+          }),
+        });
+      }
+    } catch (err) {
+      setError(err as Error);
     }
 
     setLoading(false);
@@ -138,6 +143,14 @@ export function StepTest({ data }: { data: ProcessingStep }) {
                   : 'No value returned'
                 : 'No test execution'}
             </CustomMarkdown>
+            {error && (
+              <div
+                className="px-2 py-1 text-sm text-red-800 dark:text-red-50 rounded-lg bg-red-50 dark:bg-red-800"
+                role="alert"
+              >
+                <b>Error:</b> {error.message}
+              </div>
+            )}
           </div>
         </DialogBody>
         <DialogActions>
