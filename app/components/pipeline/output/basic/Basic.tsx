@@ -16,16 +16,19 @@ export function BasicOutput({ data }: { data: OutputStep }) {
     }
 
     const results: Doc[] = Array.isArray(docs) ? docs : [docs];
-    const res = results.map((doc) => {
-      const d = structuredClone(doc);
-      d.processingResults = d.processingResults.filter((r) => {
-        const steps = pipeline.steps.filter(
-          (s) => s.id === r.stepId && s.connectsTo.includes(pipeline.output.id)
-        );
-        return steps.length > 0;
+    const res = results
+      .filter((doc) => doc)
+      .map((doc) => {
+        const d = structuredClone(doc);
+        d.processingResults = d.processingResults.filter((r) => {
+          const steps = pipeline.steps.filter(
+            (s) =>
+              s.id === r.stepId && s.connectsTo.includes(pipeline.output.id)
+          );
+          return steps.length > 0;
+        });
+        return d;
       });
-      return d;
-    });
     console.log(res);
     return res;
   }, [config, pipeline]);

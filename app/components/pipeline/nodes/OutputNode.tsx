@@ -57,11 +57,14 @@ export function OutputNode() {
     // const timings = data.
     const cfg = data.config as BasicOutputConfig;
     const results = Array.isArray(cfg.results) ? cfg.results : [cfg.results];
-    const res = results.filter((doc) => doc !== undefined);
+    const res = results.filter((doc) => doc);
     if (!res.length) {
       return {};
     }
     const stepRes = res.map((doc) => doc.processingResults).flat();
+    if (!stepRes) {
+      return {};
+    }
     const promptTokens = stepRes.map((res) => res.usage?.prompt_tokens ?? 0);
     const completionTokens = stepRes.map(
       (res) => res.usage?.completion_tokens ?? 0

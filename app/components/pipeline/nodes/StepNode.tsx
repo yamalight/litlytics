@@ -48,7 +48,7 @@ export function StepNode({ data }: { data: ProcessingStep }) {
       // const timings = data.
       const cfg = pipeline.output.config as BasicOutputConfig;
       const results = Array.isArray(cfg.results) ? cfg.results : [cfg.results];
-      const res = results.filter((doc) => doc !== undefined);
+      const res = results.filter((doc) => doc);
       if (!res.length) {
         return {};
       }
@@ -57,6 +57,9 @@ export function StepNode({ data }: { data: ProcessingStep }) {
           doc.processingResults.filter((res) => res.stepId === data.id)
         )
         .flat();
+      if (!stepRes) {
+        return {};
+      }
       const promptTokens = stepRes.map((res) => res.usage?.prompt_tokens ?? 0);
       const completionTokens = stepRes.map(
         (res) => res.usage?.completion_tokens ?? 0
