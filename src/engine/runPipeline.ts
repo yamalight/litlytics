@@ -1,11 +1,14 @@
 import { Doc } from '../doc/Document';
-import { Pipeline } from '../pipeline/Pipeline';
+import { Pipeline, PipelineStatus } from '../pipeline/Pipeline';
 import { getDocsListSourceDocuments } from '../source/docsList';
 import { SourceTypes } from '../source/Source';
 import { getTextSourceDocuments } from '../source/textSource';
 import { runStep } from './runStep';
 
-export async function runPipeline(pipeline: Pipeline) {
+export async function runPipeline(
+  pipeline: Pipeline,
+  onStatus: (status: PipelineStatus) => void
+) {
   // get source
   const source = pipeline.source;
   // validate
@@ -13,6 +16,9 @@ export async function runPipeline(pipeline: Pipeline) {
     throw new Error('Source is required!');
   }
   console.log(source);
+
+  // update status
+  onStatus({ status: 'sourcing' });
 
   // get all documents from the source
   let docs: Doc[] = [];
@@ -33,6 +39,7 @@ export async function runPipeline(pipeline: Pipeline) {
   let nextStep = pipeline.steps.find((s) => stepIds.includes(s.id));
   // while there are follow-up steps - continue;
   while (nextStep !== undefined) {
+    onStatus({ status: 'step', currentStep: nextStep });
     // process docs using current step
     // if it's a basic doc/result step - process all docs with it
     if (nextStep.input === 'doc' || nextStep.input === 'result') {
@@ -81,6 +88,8 @@ export async function runPipeline(pipeline: Pipeline) {
   }
 
   console.log(docs);
+
+  onStatus({ status: 'done' });
 
   // save result to pipeline
   // pipeline.results = finalResult;

@@ -7,7 +7,7 @@ import {
   EllipsisHorizontalIcon,
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
@@ -25,7 +25,8 @@ import {
 } from '~/components/catalyst/dropdown';
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
-import { pipelineAtom } from '~/store/store';
+import { Spinner } from '~/components/Spinner';
+import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
 import { DocsListSource } from '../source/docs/DocsList';
 import { TextSource } from '../source/text/TextSource';
 import { SourceRender } from '../source/types';
@@ -40,6 +41,7 @@ const SOURCE_RENDERERS: Partial<Record<SourceType, SourceRender>> = {
 export function SourceNode() {
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
+  const { status } = useAtomValue(pipelineStatusAtom);
 
   const data = useMemo(() => pipeline.source, [pipeline]);
   const Render = useMemo(() => {
@@ -92,13 +94,17 @@ export function SourceNode() {
       >
         <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">
-            <Button
-              icon
-              className="!p-0"
-              onClick={() => updateNodeByKey(!data.expanded, 'expanded')}
-            >
-              {data.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
-            </Button>
+            {status === 'sourcing' ? (
+              <Spinner className="w-4 h-4" />
+            ) : (
+              <Button
+                icon
+                className="!p-0"
+                onClick={() => updateNodeByKey(!data.expanded, 'expanded')}
+              >
+                {data.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
+              </Button>
+            )}
             <RectangleStackIcon className="w-4 h-4" /> Source
           </div>
           <div className="flex items-center">

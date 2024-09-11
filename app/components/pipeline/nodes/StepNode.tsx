@@ -13,7 +13,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import _ from 'lodash';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Badge } from '~/components/catalyst/badge';
@@ -30,14 +30,16 @@ import { Input } from '~/components/catalyst/input';
 import { RadioH, RadioHGroup } from '~/components/catalyst/radiogroup';
 import { Select } from '~/components/catalyst/select';
 import { Textarea } from '~/components/catalyst/textarea';
+import { Spinner } from '~/components/Spinner';
 import { CodeEditor } from '~/components/step/CodeEditor';
 import { StepTest } from '~/components/step/StepTest';
 import { stepInputLabels } from '~/components/step/util';
-import { pipelineAtom } from '~/store/store';
+import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
 import { BasicOutputConfig } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function StepNode({ data }: { data: ProcessingStep }) {
+  const status = useAtomValue(pipelineStatusAtom);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -143,13 +145,17 @@ export function StepNode({ data }: { data: ProcessingStep }) {
       >
         <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">
-            <Button
-              icon
-              className="!p-0"
-              onClick={() => updateNodeByKey(!data.expanded, 'expanded')}
-            >
-              {data.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
-            </Button>
+            {status.status === 'step' && status.currentStep?.id === data.id ? (
+              <Spinner className="w-4 h-4" />
+            ) : (
+              <Button
+                icon
+                className="!p-0"
+                onClick={() => updateNodeByKey(!data.expanded, 'expanded')}
+              >
+                {data.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
+              </Button>
+            )}
             {data.type === 'llm' ? (
               <ChatBubbleBottomCenterIcon className="w-4 h-4" />
             ) : (

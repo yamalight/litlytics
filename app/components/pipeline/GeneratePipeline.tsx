@@ -13,11 +13,11 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
-import { isRunningAtom, pipelineAtom } from '~/store/store';
+import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
 import { RefinePipeline } from './RefinePipeline';
 
 export default function GeneratePipeline() {
-  const isRunning = useAtomValue(isRunningAtom);
+  const status = useAtomValue(pipelineStatusAtom);
   const [selectedTab, setSelectedTab] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,7 +49,7 @@ export default function GeneratePipeline() {
         title="Generate pipeline"
         outline
         onClick={() => setIsOpen(true)}
-        disabled={isRunning}
+        disabled={status.running}
         className="border-sky-500 dark:border-sky-500"
       >
         <SparklesIcon aria-hidden="true" className="h-5 w-5 fill-sky-500" />{' '}

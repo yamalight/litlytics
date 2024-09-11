@@ -1,4 +1,4 @@
-import { Pipeline } from '@/src/pipeline/Pipeline';
+import { Pipeline, PipelineStatus } from '@/src/pipeline/Pipeline';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { atomWithUndo } from './atomWithUndo';
@@ -37,7 +37,9 @@ export const emptyPipeline: Pipeline = {
   steps: [],
 };
 
-export const isRunningAtom = atom<boolean>(false);
+export const pipelineStatusAtom = atom<PipelineStatus>({
+  status: 'init',
+});
 
 export const pipelineAtom = atomWithStorage<Pipeline>(
   'litlytics.pipeline',

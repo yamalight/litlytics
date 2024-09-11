@@ -10,3 +10,8 @@ export interface Pipeline {
   steps: ProcessingStep[];
   testDocs: Doc[];
 }
+
+export interface PipelineStatus {
+  status: 'init' | 'sourcing' | 'step' | 'done';
+  currentStep?: ProcessingStep;
+}

@@ -4,6 +4,7 @@ import { modelCosts } from '@/src/llm/costs';
 import { OutputType, OutputTypes } from '@/src/output/Output';
 import { OutputStep } from '@/src/step/Step';
 import {
+  CheckIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   ClockIcon,
@@ -35,7 +36,7 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
-import { isRunningAtom, pipelineAtom } from '~/store/store';
+import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
 import { BasicOutput } from '../output/basic/Basic';
 import { BasicOutputConfig, OutputRender } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
@@ -47,7 +48,7 @@ const OUTPUT_RENDERERS: Partial<Record<OutputType, OutputRender>> = {
 export function OutputNode() {
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const [isRunning, setIsRunning] = useAtom(isRunningAtom);
+  const [status, setStatus] = useAtom(pipelineStatusAtom);
 
   const data = useMemo(() => pipeline.output, [pipeline]);
 
@@ -105,12 +106,13 @@ export function OutputNode() {
   };
 
   const doRunPipeline = async () => {
-    setIsRunning(true);
-    const newPipeline = await runPipeline(pipeline);
+    setStatus((s) => ({ ...s, status: 'init' }));
+    const newPipeline = await runPipeline(pipeline, setStatus);
     console.log(newPipeline);
     setPipeline(structuredClone(newPipeline));
-    setIsRunning(false);
   };
+
+  const running = status.status !== 'init' && status.status !== 'done';
 
   if (!data) {
     return <></>;
@@ -142,14 +144,22 @@ export function OutputNode() {
               plain
               title="Run pipeline"
               onClick={doRunPipeline}
-              disabled={isRunning}
+              disabled={running}
             >
-              {isRunning ? (
+              {running ? (
                 <Spinner className="h-3 w-3 border-2" />
               ) : (
                 <PlayIcon aria-hidden="true" className="h-5 w-5" />
               )}
             </Button>
+            {status.status === 'done' && (
+              <div
+                className="flex flex-1 justify-end"
+                title="Successfully finished!"
+              >
+                <CheckIcon color="green" className="w-5 h-5" />
+              </div>
+            )}
           </div>
           <div className="flex items-center">
             <Dropdown>
