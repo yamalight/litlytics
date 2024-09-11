@@ -2,7 +2,7 @@ import { generatePipeline } from '@/src/pipeline/generate';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SparklesIcon } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
@@ -18,22 +18,21 @@ import { RefinePipeline } from './RefinePipeline';
 
 export default function GeneratePipeline() {
   const isRunning = useAtomValue(isRunningAtom);
-  const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const runPlan = async () => {
-    const description = contentInputRef.current?.value;
-
-    if (!description?.length) {
+    if (!pipeline.pipelineDescription?.length) {
       return;
     }
     setLoading(true);
 
     // generate plan from LLM
-    const plan = await generatePipeline({ description });
+    const plan = await generatePipeline({
+      description: pipeline.pipelineDescription,
+    });
     console.log(plan);
 
     setPipeline({
@@ -83,9 +82,14 @@ export default function GeneratePipeline() {
                       rows={5}
                       name="task"
                       placeholder="Task description"
-                      defaultValue={pipeline.pipelineDescription}
+                      value={pipeline.pipelineDescription}
+                      onChange={(e) =>
+                        setPipeline((p) => ({
+                          ...p,
+                          pipelineDescription: e.target.value,
+                        }))
+                      }
                       autoFocus
-                      ref={contentInputRef}
                       disabled={loading}
                     />
                   </Field>
