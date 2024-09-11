@@ -33,6 +33,7 @@ export async function runLLMStep({
 
   // filter doc out if previous step was code and it returned nothing
   if (
+    (step.input === 'doc' || step.input === 'result') &&
     (prevStep as BaseStep).type === 'code' &&
     (prevResult === undefined || prevResult.length === 0)
   ) {
