@@ -56,10 +56,18 @@ export function SourceNode() {
     const newData = structuredClone(data!);
     newData[prop] = newVal;
 
-    setPipeline({
+    const newPipeline = {
       ...pipeline,
       source: newData,
-    });
+    };
+
+    // clear docs when changing source type
+    if (prop === 'sourceType') {
+      newData.config = {};
+      newPipeline.testDocs = [];
+    }
+
+    setPipeline(newPipeline);
   };
 
   const updateNode = (
