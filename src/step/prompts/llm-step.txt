@@ -7,6 +7,8 @@ LLM will always process documents one by one.
 System prompt should process the document in a way that is defined by user.
 Use step name and description to decide what prompt should do.
 
+Make sure to use advanced prompting techniques such as chain-of-thought and others.
+
 Make sure to not include original document in response.
 
 Return only the prompt itself.
