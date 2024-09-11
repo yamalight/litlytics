@@ -11,6 +11,7 @@ import {
   CogIcon,
   CurrencyDollarIcon,
   EllipsisHorizontalIcon,
+  ExclamationCircleIcon,
   PencilSquareIcon,
   PlayIcon,
   RectangleStackIcon,
@@ -107,12 +108,16 @@ export function OutputNode() {
 
   const doRunPipeline = async () => {
     setStatus((s) => ({ ...s, status: 'init' }));
-    const newPipeline = await runPipeline(pipeline, setStatus);
-    console.log(newPipeline);
-    setPipeline(structuredClone(newPipeline));
+    try {
+      const newPipeline = await runPipeline(pipeline, setStatus);
+      console.log(newPipeline);
+      setPipeline(structuredClone(newPipeline));
+    } catch (err) {
+      setStatus((s) => ({ ...s, status: 'error', error: err as Error }));
+    }
   };
 
-  const running = status.status !== 'init' && status.status !== 'done';
+  const running = status.status === 'sourcing' || status.status === 'step';
 
   if (!data) {
     return <></>;
@@ -158,6 +163,14 @@ export function OutputNode() {
                 title="Successfully finished!"
               >
                 <CheckIcon color="green" className="w-5 h-5" />
+              </div>
+            )}
+            {status.status === 'error' && (
+              <div
+                className="flex flex-1 justify-end"
+                title="Error during execution!"
+              >
+                <ExclamationCircleIcon color="red" className="w-5 h-5" />
               </div>
             )}
           </div>

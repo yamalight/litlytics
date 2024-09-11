@@ -49,7 +49,7 @@ export default function GeneratePipeline() {
         title="Generate pipeline"
         outline
         onClick={() => setIsOpen(true)}
-        disabled={status.running}
+        disabled={status.status === 'sourcing' || status.status === 'step'}
         className="border-sky-500 dark:border-sky-500"
       >
         <SparklesIcon aria-hidden="true" className="h-5 w-5 fill-sky-500" />{' '}

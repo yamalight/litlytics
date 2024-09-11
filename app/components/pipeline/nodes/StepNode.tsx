@@ -142,6 +142,11 @@ export function StepNode({ data }: { data: ProcessingStep }) {
         currentStep={data}
         size={data.expanded ? 'sm' : 'collapsed'}
         className="pb-1"
+        error={
+          status.status === 'error' && status.currentStep?.id === data.id
+            ? status.error
+            : undefined
+        }
       >
         <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">

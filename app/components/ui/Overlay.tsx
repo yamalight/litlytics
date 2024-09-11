@@ -7,7 +7,7 @@ import {
   FolderIcon,
   TrashIcon,
 } from '@heroicons/react/24/solid';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useRef, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
@@ -24,7 +24,12 @@ import {
   DropdownLabel,
   DropdownMenu,
 } from '~/components/catalyst/dropdown';
-import { emptyPipeline, pipelineAtom, pipelineUndoAtom } from '~/store/store';
+import {
+  emptyPipeline,
+  pipelineAtom,
+  pipelineStatusAtom,
+  pipelineUndoAtom,
+} from '~/store/store';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
 
@@ -48,12 +53,14 @@ export function OverlayUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const pipelineNameRef = useRef<HTMLInputElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
+  const setStatus = useSetAtom(pipelineStatusAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
 
   const resetPipeline = () => {
     setPipeline(structuredClone(emptyPipeline));
+    setStatus({ status: 'init' });
     setIsOpen(false);
   };
 
@@ -84,6 +91,7 @@ export function OverlayUI() {
         try {
           const json = JSON.parse(e.target?.result as string) as Pipeline;
           setPipeline(json);
+          setStatus({ status: 'init' });
         } catch (error) {
           console.error('Error parsing JSON:', error);
         }
