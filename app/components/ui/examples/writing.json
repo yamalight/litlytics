@@ -1,0 +1,140 @@
+{
+  "name": "instagram-example",
+  "testDocs": [
+    {
+      "id": "textdoc",
+      "name": "Default document",
+      "content": "Post is a photo of my cute black cat with white mustache.",
+      "processingResults": [
+        {
+          "stepId": "step_0",
+          "result": "🐾 Meet Mr. Mustache! 🐾\n\nIsn’t he the cutest? 😻 This little guy is my cuddly black cat with a special white mustache that makes him stand out! Every day feels brighter with him around. 💖 \n\nWhat do you think of his fancy mustache? Tell me in the comments! 👇 \n\n#CatLove #CuteCats #BlackCat #WhiteMustache #CatsofInstagram #FurryFriend #CaturdayEveryday #Petstagram",
+          "usage": {
+            "prompt_tokens": 89,
+            "completion_tokens": 102,
+            "total_tokens": 191
+          },
+          "timingMs": 1821
+        },
+        {
+          "stepId": "step_1",
+          "result": "🐾 Meet Mr. Mustache! 🐾\n\nIsn’t he the cutest? 😻 This little guy is my snuggly black cat with an adorable white mustache that sets him apart! Every day feels brighter with him by my side. 💖 \n\nWhat do you think of his fancy mustache? Let me know in the comments! 👇 \n\n#CatLove #CuteCats #BlackCat #WhiteMustache #CatsofInstagram #FurryFriend #CaturdayEveryday #Petstagram",
+          "usage": {
+            "prompt_tokens": 153,
+            "completion_tokens": 105,
+            "total_tokens": 258
+          },
+          "timingMs": 1187
+        }
+      ]
+    }
+  ],
+  "pipelinePlan": "",
+  "pipelineDescription": "",
+  "source": {
+    "id": "source_0",
+    "name": "Source",
+    "description": "Primary source",
+    "type": "source",
+    "sourceType": "text",
+    "config": {
+      "document": {
+        "id": "textdoc",
+        "name": "Default document",
+        "content": "Post is a photo of my cute black cat with white mustache.",
+        "processingResults": [
+          {
+            "stepId": "step_0",
+            "result": "🐾 Meet Mr. Mustache! 🐾\n\nIsn’t he the cutest? 😻 This little guy is my cuddly black cat with a special white mustache that makes him stand out! Every day feels brighter with him around. 💖 \n\nWhat do you think of his fancy mustache? Tell me in the comments! 👇 \n\n#CatLove #CuteCats #BlackCat #WhiteMustache #CatsofInstagram #FurryFriend #CaturdayEveryday #Petstagram",
+            "usage": {
+              "prompt_tokens": 89,
+              "completion_tokens": 102,
+              "total_tokens": 191
+            },
+            "timingMs": 1821
+          },
+          {
+            "stepId": "step_1",
+            "result": "🐾 Meet Mr. Mustache! 🐾\n\nIsn’t he the cutest? 😻 This little guy is my snuggly black cat with an adorable white mustache that sets him apart! Every day feels brighter with him by my side. 💖 \n\nWhat do you think of his fancy mustache? Let me know in the comments! 👇 \n\n#CatLove #CuteCats #BlackCat #WhiteMustache #CatsofInstagram #FurryFriend #CaturdayEveryday #Petstagram",
+            "usage": {
+              "prompt_tokens": 153,
+              "completion_tokens": 105,
+              "total_tokens": 258
+            },
+            "timingMs": 1187
+          }
+        ]
+      }
+    },
+    "connectsTo": [
+      "step_0"
+    ],
+    "expanded": true
+  },
+  "output": {
+    "id": "output_0",
+    "name": "Output",
+    "description": "Primary output",
+    "type": "output",
+    "outputType": "basic",
+    "config": {
+      "results": [
+        {
+          "id": "textdoc",
+          "name": "Default document",
+          "content": "Post is a photo of my cute black cat with white mustache.",
+          "processingResults": [
+            {
+              "stepId": "step_0",
+              "result": "🐾 Meet Mr. Mustache! 🐾\n\nIsn’t he the cutest? 😻 This little guy is my cuddly black cat with a special white mustache that makes him stand out! Every day feels brighter with him around. 💖 \n\nWhat do you think of his fancy mustache? Tell me in the comments! 👇 \n\n#CatLove #CuteCats #BlackCat #WhiteMustache #CatsofInstagram #FurryFriend #CaturdayEveryday #Petstagram",
+              "usage": {
+                "prompt_tokens": 89,
+                "completion_tokens": 102,
+                "total_tokens": 191
+              },
+              "timingMs": 1821
+            },
+            {
+              "stepId": "step_1",
+              "result": "🐾 Meet Mr. Mustache! 🐾\n\nIsn’t he the cutest? 😻 This little guy is my snuggly black cat with an adorable white mustache that sets him apart! Every day feels brighter with him by my side. 💖 \n\nWhat do you think of his fancy mustache? Let me know in the comments! 👇 \n\n#CatLove #CuteCats #BlackCat #WhiteMustache #CatsofInstagram #FurryFriend #CaturdayEveryday #Petstagram",
+              "usage": {
+                "prompt_tokens": 153,
+                "completion_tokens": 105,
+                "total_tokens": 258
+              },
+              "timingMs": 1187
+            }
+          ]
+        }
+      ]
+    },
+    "connectsTo": [],
+    "expanded": true
+  },
+  "steps": [
+    {
+      "id": "step_0",
+      "name": "Write an instagram post",
+      "description": "Write a post for instagram based on text description of the image.",
+      "type": "llm",
+      "input": "doc",
+      "prompt": "Create an engaging Instagram post based on the provided text description of the image.\nHighlight key elements, emotions, and any relevant hashtags to enhance visibility and engagement.\nEnsure the tone is suitable for Instagram, aiming to captivate the audience and encourage interaction.\nUse simpler language. Write as if you are not a native English speaker.",
+      "connectsTo": [
+        "step_1"
+      ],
+      "expanded": true
+    },
+    {
+      "id": "step_1",
+      "name": "Proof-read and edit instagram post text",
+      "description": "Proof-read and edit instagram post text to make it more natural and engaging.",
+      "type": "llm",
+      "input": "result",
+      "prompt": "Please proofread and edit the provided Instagram post text to enhance its natural flow and engagement.\nFocus on improving grammar, clarity, and overall appeal to the audience, while maintaining the original message and tone.",
+      "connectsTo": [
+        "output_0"
+      ],
+      "expanded": true
+    }
+  ]
+}

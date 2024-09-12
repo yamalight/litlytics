@@ -5,10 +5,12 @@ import {
   ArrowUturnRightIcon,
   Bars3Icon,
   FolderIcon,
+  QuestionMarkCircleIcon,
   TrashIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useRef, useState } from 'react';
+import { atomWithStorage } from 'jotai/utils';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
@@ -32,6 +34,12 @@ import {
 } from '~/store/store';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
+import { Help } from './Help';
+
+// first time help display
+const helpAtom = atomWithStorage('litlytics.help.first', true, undefined, {
+  getOnInit: true,
+});
 
 function MenuHolder({
   className,
@@ -57,6 +65,21 @@ export function OverlayUI() {
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isHelpFirstTime, setHelpFirstTime] = useAtom(helpAtom);
+
+  useEffect(() => {
+    if (isHelpFirstTime) {
+      setIsHelpOpen(true);
+    }
+  }, [isHelpFirstTime]);
+
+  const closeHelp = () => {
+    setIsHelpOpen(false);
+    if (isHelpFirstTime) {
+      setHelpFirstTime(false);
+    }
+  };
 
   const resetPipeline = () => {
     setPipeline(structuredClone(emptyPipeline));
@@ -155,11 +178,19 @@ export function OverlayUI() {
                 <Cog8ToothIcon />
                 <DropdownLabel>Settings</DropdownLabel>
               </DropdownItem> */}
+
+              <DropdownDivider />
+
+              <DropdownItem onClick={() => setIsHelpOpen(true)}>
+                <QuestionMarkCircleIcon />
+                <DropdownLabel>Help</DropdownLabel>
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </MenuHolder>
       </div>
 
+      {/* Pipeline reset dialog */}
       <Dialog size="3xl" open={isOpen} onClose={setIsOpen} topClassName="z-20">
         <DialogTitle>Reset pipeline?</DialogTitle>
         <DialogBody className="w-full">
@@ -176,6 +207,7 @@ export function OverlayUI() {
         </DialogActions>
       </Dialog>
 
+      {/* Pipeline save dialog */}
       <Dialog
         size="xl"
         open={isSaveOpen}
@@ -205,6 +237,21 @@ export function OverlayUI() {
             Save
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* Help dialog */}
+      <Dialog
+        size="2xl"
+        open={isHelpOpen}
+        onClose={closeHelp}
+        topClassName="z-20"
+      >
+        <DialogTitle className="!text-lg">
+          Welcome to 🔥 LitLytics – Your Automated Data Analytics Companion!
+        </DialogTitle>
+        <DialogBody className="w-full">
+          <Help close={() => setIsHelpOpen(false)} />
+        </DialogBody>
       </Dialog>
 
       <input

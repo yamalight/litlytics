@@ -8,7 +8,7 @@ import { defaultModelArgs, defaultModelName } from './config';
 
 export const openai = new OpenAI({
   maxRetries: 3,
-  timeout: 10000, // 10s
+  timeout: 180000, // 180s
   apiKey: process.env.OPENAI_API_KEY ?? 'not-set',
   // override default fetch function to make it mockable my MSW for tests
   fetch: (...args) => fetch(...args),
