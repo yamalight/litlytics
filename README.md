@@ -1,7 +1,5 @@
 # ToDo
 
-- [ ] Fix for saving - update name in json before saving
-
 - [ ] Add function-to-text description for non-programmers
 
 - [ ] Add way to interate over steps (code and prompts)

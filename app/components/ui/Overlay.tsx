@@ -59,7 +59,6 @@ function MenuHolder({
 
 export function OverlayUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const pipelineNameRef = useRef<HTMLInputElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const setStatus = useSetAtom(pipelineStatusAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
@@ -97,7 +96,7 @@ export function OverlayUI() {
     // Create a temporary anchor element
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${pipelineNameRef.current?.value ?? 'pipeline'}.json`;
+    a.download = `${pipeline.name}.json`;
     // Programmatically click the anchor to trigger the download
     a.click();
     // Clean up: revoke the object URL
@@ -220,11 +219,13 @@ export function OverlayUI() {
             <Field>
               <Label>Name</Label>
               <Input
-                ref={pipelineNameRef}
                 name="name"
                 placeholder="Pipeline name"
                 autoFocus
-                defaultValue="pipeline"
+                value={pipeline.name}
+                onChange={(e) =>
+                  setPipeline({ ...pipeline, name: e.target.value })
+                }
               />
             </Field>
           </FieldGroup>
