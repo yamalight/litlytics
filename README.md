@@ -1,6 +1,5 @@
 # ToDo
 
-- [ ] Fix save button in docs list
 - [ ] Fix for saving - update name in json before saving
 
 - [ ] Add function-to-text description for non-programmers

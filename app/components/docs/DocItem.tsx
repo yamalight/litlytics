@@ -85,6 +85,7 @@ export function DocItem({
             <Field>
               <Label>Document content</Label>
               <Textarea
+                rows={5}
                 name="description"
                 placeholder="Doc content"
                 value={doc.content}
@@ -95,9 +96,8 @@ export function DocItem({
         </DialogBody>
         <DialogActions>
           <Button plain onClick={() => setIsOpen(false)}>
-            Close
+            Done
           </Button>
-          <Button onClick={() => {}}>Save</Button>
         </DialogActions>
       </Dialog>
     </>
