@@ -9,15 +9,15 @@ import {
 import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
 import { Select } from '@/app/components/catalyst/select';
 import { Spinner } from '@/app/components/Spinner';
-import { pipelineAtom } from '@/app/store/store';
-import { testPipelineStep } from '@/src/engine/testStep';
+import { litlyticsStore, pipelineAtom } from '@/app/store/store';
 import { ProcessingStep } from '@/src/step/Step';
 import { BeakerIcon } from '@heroicons/react/24/solid';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import { CustomMarkdown } from '../markdown/Markdown';
 
 export function StepTest({ data }: { data: ProcessingStep }) {
+  const litlytics = useAtomValue(litlyticsStore);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [testDocId, setTestDocId] = useState(pipeline.testDocs.at(0)?.id ?? '');
   const [isTestOpen, setTestOpen] = useState(false);
@@ -47,7 +47,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
 
     try {
       const startTime = performance.now();
-      const doc = await testPipelineStep({
+      const doc = await litlytics.testPipelineStep({
         pipeline,
         step: data,
         docId: testDocId,

@@ -1,9 +1,10 @@
-import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
+import { CoreMessage } from 'ai';
 import type { LitLytics } from '../litlytics';
 import { parseThinkingOutputResult } from '../pipeline/util';
 import codeSystem from './prompts/code-step.txt?raw';
 import llmSystem from './prompts/llm-step.txt?raw';
 import { ProcessingStep } from './Step';
+import { cleanResult } from './util';
 
 export const refineStep = async ({
   litlytics,
@@ -30,10 +31,10 @@ Step input: ${step.input}`;
   const result = step.type === 'llm' ? step.prompt : step.code;
 
   // construct refine message chain
-  const messages: ChatCompletionMessageParam[] = [
+  const messages: CoreMessage[] = [
     { role: 'system', content: system },
     { role: 'user', content: user },
-    { role: 'assistant', content: result },
+    { role: 'assistant', content: result! },
     { role: 'user', content: refineRequest.trim() },
   ];
 
@@ -50,9 +51,10 @@ Step input: ${step.input}`;
   if (step.type === 'llm') {
     newStep.prompt = res;
   } else {
-    newStep.code = res;
+    const cleanedCode = cleanResult(res, step.type);
+    newStep.code = cleanedCode;
     newStep.codeExplanation = await litlytics.generateCodeExplain({
-      code: res,
+      code: cleanedCode,
     });
   }
   return newStep;

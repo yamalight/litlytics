@@ -69,9 +69,9 @@ export function OutputNode() {
     if (!stepRes) {
       return {};
     }
-    const promptTokens = stepRes.map((res) => res.usage?.prompt_tokens ?? 0);
+    const promptTokens = stepRes.map((res) => res.usage?.promptTokens ?? 0);
     const completionTokens = stepRes.map(
-      (res) => res.usage?.completion_tokens ?? 0
+      (res) => res.usage?.completionTokens ?? 0
     );
     const timings = stepRes.map((res) => res.timingMs);
     const timing = _.round(timings.reduce((acc, val) => acc + val, 0));

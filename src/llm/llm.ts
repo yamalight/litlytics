@@ -1,46 +1,60 @@
-import { type CompletionResponse, TokenJS } from 'token.js';
-import { LLMProvider } from 'token.js/dist/chat';
-import { LLMRequest } from './types';
+import { createAnthropic } from '@ai-sdk/anthropic';
+import { createAzure } from '@ai-sdk/azure';
+import { createCohere } from '@ai-sdk/cohere';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { createMistral } from '@ai-sdk/mistral';
+import { createOpenAI } from '@ai-sdk/openai';
+import { generateText } from 'ai';
+import { LLMModel, LLMProvider, LLMRequest } from './types';
 
-// Create the Token.js client
-const tokenjs = new TokenJS();
-
-function setKey(provider: LLMProvider, key: string) {
+function getModel(provider: LLMProvider, model: LLMModel, key: string) {
   // OpenAI
   switch (provider) {
-    case 'openai':
-      process.env.OPENAI_API_KEY = key;
-      break;
-    case 'ai21':
-      process.env.AI21_API_KEY = key;
-      break;
-    case 'anthropic':
-      process.env.ANTHROPIC_API_KEY = key;
-      break;
-    case 'cohere':
-      process.env.COHERE_API_KEY = key;
-      break;
-    case 'gemini':
-      process.env.GEMINI_API_KEY = key;
-      break;
-    case 'groq':
-      process.env.GROQ_API_KEY = key;
-      break;
-    case 'mistral':
-      process.env.MISTRAL_API_KEY = key;
-      break;
-    case 'perplexity':
-      process.env.PERPLEXITY_API_KEY = key;
-      break;
-    case 'openrouter':
-      process.env.OPENROUTER_API_KEY = key;
-      break;
-    case 'bedrock': {
-      const [region, id, access] = key.split('||');
-      process.env.AWS_REGION_NAME = region.trim();
-      process.env.AWS_ACCESS_KEY_ID = id.trim();
-      process.env.AWS_SECRET_ACCESS_KEY = access.trim();
-      break;
+    case 'openai': {
+      const openai = createOpenAI({
+        apiKey: key,
+      });
+      return openai(model);
+    }
+    case 'anthropic': {
+      const anthropic = createAnthropic({
+        apiKey: key,
+      });
+      return anthropic(model);
+    }
+    case 'gemini': {
+      const google = createGoogleGenerativeAI({
+        apiKey: key,
+      });
+      return google(model);
+    }
+    case 'azure': {
+      const azure = createAzure({
+        apiKey: key,
+      });
+      return azure(model);
+    }
+    case 'cohere': {
+      const cohere = createCohere({ apiKey: key });
+      return cohere(model);
+    }
+    case 'mistral': {
+      const mistral = createMistral({ apiKey: key });
+      return mistral(model);
+    }
+    case 'groq': {
+      const groq = createOpenAI({
+        baseURL: 'https://api.groq.com/openai/v1',
+        apiKey: key,
+      });
+      return groq(model);
+    }
+    case 'perplexity': {
+      const perplexity = createOpenAI({
+        apiKey: key,
+        baseURL: 'https://api.perplexity.ai/',
+      });
+      return perplexity(model);
     }
   }
 }
@@ -56,25 +70,18 @@ export async function executeOnLLM({
   modelArgs,
 }: LLMRequest) {
   // set key
-  setKey(provider, key);
-  // run llm
-  const chatCompletion = (await tokenjs.chat.completions.create({
-    provider,
-    model,
+  const modelObj = getModel(provider, model, key);
+  const { text, usage } = await generateText({
+    maxTokens: 4096,
     ...modelArgs,
+    model: modelObj,
     messages,
-  })) as CompletionResponse;
-  const answers = chatCompletion.choices;
-  const usage = chatCompletion.usage;
+  });
   if (process.env.NODE_ENV != 'production' && process.env.NODE_ENV != 'test') {
     console.log('\n\n');
-    console.log(
-      model,
-      messages,
-      answers.map((a) => a.message)
-    );
+    console.log(model, messages, text);
     console.log('\n\n');
   }
-  const result = answers[0].message.content;
-  return { result, answers, usage };
+  const result = text;
+  return { result, usage };
 }

@@ -1,4 +1,4 @@
-import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
+import { CoreMessage } from 'ai';
 import type { LitLytics } from '../litlytics';
 import { Pipeline } from './Pipeline';
 import system from './prompts/pipeline.txt?raw';
@@ -17,7 +17,7 @@ export const refinePipeline = async ({
     throw new Error('Pipeline is required for refinement!');
   }
 
-  const messages: ChatCompletionMessageParam[] = [
+  const messages: CoreMessage[] = [
     { role: 'system', content: system.trim() },
     { role: 'user', content: pipeline.pipelineDescription!.trim() },
     { role: 'assistant', content: pipeline.pipelinePlan!.trim() },

@@ -1,11 +1,11 @@
-import { CompletionUsage } from 'openai/resources/completions.mjs';
+import { LanguageModelUsage } from 'ai';
 import { OutputType } from '../output/Output';
 import { SourceType } from '../source/Source';
 
 export interface StepResult {
   stepId: string;
   result?: string;
-  usage?: CompletionUsage;
+  usage?: LanguageModelUsage;
   timingMs: number;
 }
 

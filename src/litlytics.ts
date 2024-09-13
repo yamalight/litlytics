@@ -1,4 +1,3 @@
-import { LLMChatModel, LLMProvider } from 'token.js/dist/chat';
 import { runPipeline } from './engine/runPipeline';
 import {
   runPrompt,
@@ -9,6 +8,7 @@ import {
 import { runStep, RunStepArgs } from './engine/runStep';
 import { runLLMStep, RunLLMStepArgs } from './engine/step/runLLMStep';
 import { testPipelineStep } from './engine/testStep';
+import { LLMModel, LLMProvider } from './llm/types';
 import { pipelineFromText } from './pipeline/fromText';
 import { generatePipeline } from './pipeline/generate';
 import { Pipeline, PipelineStatus } from './pipeline/Pipeline';
@@ -22,7 +22,7 @@ export type LLMProviders = LLMProvider | 'local';
 
 export class LitLytics {
   provider?: LLMProviders;
-  model?: LLMChatModel;
+  model?: LLMModel;
   #llmKey?: string;
 
   constructor({
@@ -31,7 +31,7 @@ export class LitLytics {
     key,
   }: {
     provider: LLMProviders;
-    model: LLMChatModel;
+    model: LLMModel;
     key: string;
   }) {
     this.provider = provider;

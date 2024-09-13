@@ -36,8 +36,8 @@ Step input: ${input}`;
   // generate plan from LLM
   const step = await litlytics.runPrompt({ system, user });
 
-  const cleanedResult = cleanResult(step.result, type);
-  const result = parseThinkingOutputResult(cleanedResult);
+  const outputResult = parseThinkingOutputResult(step.result);
+  const result = cleanResult(outputResult, type);
 
   let explanation: string | undefined = undefined;
   if (type === 'code') {

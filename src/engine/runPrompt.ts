@@ -1,16 +1,15 @@
-import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
-import { LLMChatModel, LLMProvider } from 'token.js/dist/chat';
+import { CoreMessage, CoreTool } from 'ai';
 import type { LLMProviders } from '../litlytics';
 import { executeOnLLM } from '../llm/llm';
-import { LLMRequest } from '../llm/types';
+import { LLMModel, LLMProvider, LLMRequest } from '../llm/types';
 // import { runWithWebLLM } from '../webllm/webllm.client';
 
 export interface RunPromptFromMessagesArgs {
   provider: LLMProviders;
   key: string;
-  model: LLMChatModel;
-  messages: ChatCompletionMessageParam[];
-  args?: { max_tokens?: number; temperature?: number };
+  model: LLMModel;
+  messages: CoreMessage[];
+  args?: Record<string, CoreTool>;
 }
 export const runPromptFromMessages = async ({
   provider,
@@ -43,10 +42,10 @@ export const runPromptFromMessages = async ({
 export interface RunPromptArgs {
   provider: LLMProviders;
   key: string;
-  model: LLMChatModel;
+  model: LLMModel;
   system: string;
   user: string;
-  args?: { max_tokens?: number; temperature?: number };
+  args?: Record<string, CoreTool>;
 }
 export const runPrompt = async ({
   provider,
@@ -56,7 +55,7 @@ export const runPrompt = async ({
   user,
   args,
 }: RunPromptArgs) => {
-  const messages: ChatCompletionMessageParam[] = [];
+  const messages: CoreMessage[] = [];
   if (system) {
     messages.push({ role: 'system', content: system.trim() });
   }

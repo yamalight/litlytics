@@ -1,8 +1,8 @@
 import { LitLytics } from '@/src/litlytics';
+import { LLMModel, LLMProvider } from '@/src/llm/types';
 import { Pipeline, PipelineStatus } from '@/src/pipeline/Pipeline';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
-import { LLMChatModel, LLMProvider } from 'token.js/dist/chat';
 import { atomWithUndo } from './atomWithUndo';
 
 export const emptyPipeline: Pipeline = {
@@ -41,7 +41,7 @@ export const emptyPipeline: Pipeline = {
 
 export const litlyticsConfigStore = atomWithStorage<{
   provider: LLMProvider | 'local';
-  model: LLMChatModel;
+  model: LLMModel;
   llmKey: string;
 }>(
   'litltyics.config',
