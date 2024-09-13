@@ -7,10 +7,19 @@ export async function pipelineFromText(
   litlytics: LitLytics,
   description: string
 ) {
-  const steps = description
+  let steps = description
     .split('---')
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
+
+  // if split failed - try to re-split by name prefix (usually happens on smaller models)
+  if (steps.length === 1) {
+    steps = description
+      .split('Step name')
+      .filter((s) => s.length > 0)
+      .map((s) => `Step name: ${s}`.trim());
+  }
+  console.log({ steps });
 
   const resultSteps: ProcessingStep[] = [];
 

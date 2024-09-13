@@ -1,40 +1,37 @@
 import { ChatCompletionMessageParam, MLCEngine } from '@mlc-ai/web-llm';
-import {
-  ChatCompletionMessageParam as OAIChatCompletionMessageParam,
-  CompletionUsage as OAIUsage,
-} from 'openai/resources/index.mjs';
+import { CoreMessage, LanguageModelUsage } from 'ai';
 
 // TODO: ??? use
 // https://github.com/xenova/transformers.js
 // as fallback for when webgpu is not available
 
-// model
-const selectedModel = 'Llama-3.1-8B-Instruct-q4f32_1-MLC'; // ~4.9 GB
-// const selectedModel = 'Phi-3-mini-4k-instruct-q4f32_1-MLC'; // ~2.1 GB 'Phi-3.5-mini-instruct-q4f16_1-MLC'; //
-
-// create engine
-const engine = new MLCEngine();
-engine.setInitProgressCallback((initProgress) => {
-  console.log(initProgress);
-});
-engine.reload(selectedModel);
-
 export const runWithWebLLM = async ({
+  engine,
   messages,
   args,
 }: {
-  messages: OAIChatCompletionMessageParam[];
+  engine?: MLCEngine;
+  messages: CoreMessage[];
   args?: { max_tokens?: number; temperature?: number };
 }) => {
+  if (!engine) {
+    throw new Error('WebLLM engine required! Load model first!');
+  }
+  console.log(messages);
   const reply = await engine.chat.completions.create({
     messages: messages as ChatCompletionMessageParam[],
     ...args,
   });
   const answers = reply.choices;
-  const usage = reply.usage;
+  const usage: LanguageModelUsage = {
+    completionTokens: reply.usage?.completion_tokens ?? 0,
+    promptTokens: reply.usage?.prompt_tokens ?? 0,
+    totalTokens: reply.usage?.total_tokens ?? 0,
+  };
+  console.log(answers);
   const result = answers[0].message.content;
   return {
     result,
-    usage: usage as OAIUsage,
+    usage,
   };
 };

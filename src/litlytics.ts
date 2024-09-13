@@ -1,3 +1,4 @@
+import { MLCEngine } from '@mlc-ai/web-llm';
 import { runPipeline } from './engine/runPipeline';
 import {
   runPrompt,
@@ -24,19 +25,23 @@ export class LitLytics {
   provider?: LLMProviders;
   model?: LLMModel;
   #llmKey?: string;
+  engine?: MLCEngine;
 
   constructor({
     provider,
     model,
     key,
+    engine,
   }: {
     provider: LLMProviders;
     model: LLMModel;
     key: string;
+    engine?: MLCEngine;
   }) {
     this.provider = provider;
     this.model = model;
     this.#llmKey = key;
+    this.engine = engine;
   }
 
   /**
@@ -50,15 +55,16 @@ export class LitLytics {
     if (
       !this.provider?.length ||
       !this.model?.length ||
-      !this.#llmKey?.length
+      (!this.#llmKey?.length && this.provider !== 'local')
     ) {
       throw new Error('No provider, model or key set!');
     }
 
     return await runPromptFromMessages({
       provider: this.provider,
-      key: this.#llmKey,
+      key: this.#llmKey ?? 'local',
       model: this.model,
+      engine: this.engine,
       messages,
       args,
     });
@@ -72,15 +78,16 @@ export class LitLytics {
     if (
       !this.provider?.length ||
       !this.model?.length ||
-      !this.#llmKey?.length
+      (!this.#llmKey?.length && this.provider !== 'local')
     ) {
       throw new Error('No provider, model or key set!');
     }
 
     return await runPrompt({
       provider: this.provider,
-      key: this.#llmKey,
+      key: this.#llmKey ?? 'local',
       model: this.model,
+      engine: this.engine,
       system,
       user,
       args,

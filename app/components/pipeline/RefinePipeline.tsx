@@ -32,6 +32,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       ...pipeline,
       pipelinePlan: plan ?? '',
     });
+    setRefine('');
     setStatus('');
   };
 

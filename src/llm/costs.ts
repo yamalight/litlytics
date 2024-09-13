@@ -18,6 +18,151 @@ const gpt4oMini = {
 };
 
 export const modelCosts: Record<LLMModel, { input: number; output: number }> = {
+  // local
+  'Llama-3.1-70B-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Llama-3.1-70B-Instruct-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Llama-3.1-8B-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Llama-3.1-8B-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Llama-3.1-8B-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Llama-3.1-8B-Instruct-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Hermes-3-Llama-3.1-8B-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Hermes-3-Llama-3.1-8B-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Phi-3-mini-128k-instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Phi-3-mini-128k-instruct-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Phi-3.5-mini-instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Phi-3.5-mini-instruct-q4f16_0-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Mistral-7B-Instruct-v0.3-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Mistral-7B-Instruct-v0.3-q4f16_0-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Qwen2-0.5B-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Qwen2-0.5B-Instruct-q4f16_0-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Qwen2-1.5B-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Qwen2-1.5B-Instruct-q4f16_0-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Qwen2-72B-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Qwen2-72B-Instruct-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Qwen2-7B-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Qwen2-7B-Instruct-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Mixtral-8x7B-Instruct-v0.1-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'Mixtral-8x7B-Instruct-v0.1-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'SmolLM-1.7B-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'SmolLM-1.7B-Instruct-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'SmolLM-135M-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'SmolLM-135M-Instruct-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'SmolLM-360M-Instruct-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'SmolLM-360M-Instruct-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'gemma-2-27b-it-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'gemma-2-27b-it-q4f32_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'gemma-2-2b-it-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'gemma-2-2b-it-q4f16_0-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'gemma-2-9b-it-q0f16-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
+  'gemma-2-9b-it-q4f16_1-MLC': {
+    input: 0, // 0, local
+    output: 0, // 0, local
+  },
   // anthropic
   'claude-3-5-sonnet-20240620': {
     input: 300 / 1000000, // $3 / MTok

@@ -3,7 +3,11 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { PipelineBuilder } from '~/components/pipeline/PipelineBuilder';
 import { OverlayUI } from '~/components/ui/Overlay';
-import { litlyticsConfigStore, litlyticsStore } from '~/store/store';
+import {
+  litlyticsConfigStore,
+  litlyticsStore,
+  webllmAtom,
+} from '~/store/store';
 import { Background } from '../Background';
 import { Spinner } from '../Spinner';
 
@@ -12,6 +16,7 @@ import { Spinner } from '../Spinner';
 // if user has data in localstorage
 function ClientOnly({ children }: { children: React.ReactNode }) {
   const config = useAtomValue(litlyticsConfigStore);
+  const webllm = useAtomValue(webllmAtom);
   const setLitlytics = useSetAtom(litlyticsStore);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -20,9 +25,10 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
       provider: config.provider,
       model: config.model,
       key: config.llmKey,
+      engine: webllm.engine,
     });
     setLitlytics(newLL);
-  }, [config, setLitlytics]);
+  }, [config, webllm, setLitlytics]);
 
   useEffect(() => {
     setHasMounted(true);
