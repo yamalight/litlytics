@@ -117,7 +117,6 @@ export function OutputNode() {
     setStatus((s) => ({ ...s, status: 'init' }));
     try {
       const newPipeline = await litlytics.runPipeline(pipeline, setStatus);
-      console.log(newPipeline);
       setPipeline(structuredClone(newPipeline));
     } catch (err) {
       setStatus((s) => ({ ...s, status: 'error', error: err as Error }));

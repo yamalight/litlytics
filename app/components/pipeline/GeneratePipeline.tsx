@@ -37,7 +37,6 @@ export default function GeneratePipeline() {
     const plan = await litlytics.generatePipeline({
       description: pipeline.pipelineDescription,
     });
-    console.log(plan);
 
     setPipeline({
       ...pipeline,

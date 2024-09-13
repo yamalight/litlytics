@@ -19,14 +19,14 @@ export async function runLLMStep({
   allDocs,
 }: RunLLMStepArgs) {
   const system = step.prompt!;
-  console.log({ step, source, allSteps, doc, allDocs });
+  // console.log({ step, source, allSteps, doc, allDocs });
 
   // get previous step and previous result
   const prevStep: SourceStep | ProcessingStep | undefined =
     allSteps.find((s) => s.connectsTo.includes(step.id)) ??
     (source.connectsTo.includes(step.id) ? source : undefined);
   if (!prevStep) {
-    console.log('No prev step:', step, allSteps, source);
+    // console.log('No prev step:', step, allSteps, source);
     throw new Error('Previous step not found!');
   }
 
@@ -98,6 +98,5 @@ export async function runLLMStep({
       timingMs: endTime - startTime,
     });
   }
-  console.log(doc);
   return doc;
 }

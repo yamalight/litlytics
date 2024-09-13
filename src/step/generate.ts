@@ -56,7 +56,6 @@ Step input: ${input}`;
     connectsTo: [],
     expanded: true,
   };
-  console.log(newStep);
 
   return newStep;
 };

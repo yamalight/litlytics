@@ -21,7 +21,6 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
       model: config.model,
       key: config.llmKey,
     });
-    console.log(newLL);
     setLitlytics(newLL);
   }, [config, setLitlytics]);
 

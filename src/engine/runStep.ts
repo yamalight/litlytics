@@ -19,7 +19,7 @@ export async function runStep({
   doc,
   allDocs,
 }: RunStepArgs) {
-  console.log({ step, source, allSteps, doc, allDocs });
+  // console.log({ step, source, allSteps, doc, allDocs });
   // llm execution
   if (step.type === 'llm') {
     return litlytics.runLLMStep({ step, source, allSteps, doc, allDocs });

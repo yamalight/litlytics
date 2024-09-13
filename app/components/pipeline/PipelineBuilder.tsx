@@ -7,7 +7,6 @@ import { StepNode } from './nodes/StepNode';
 
 export function PipelineBuilder() {
   const pipeline = useAtomValue(pipelineAtom);
-  console.log(pipeline);
 
   return (
     <Background>

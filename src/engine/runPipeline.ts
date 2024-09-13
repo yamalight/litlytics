@@ -16,7 +16,6 @@ export async function runPipeline(
   if (!source) {
     throw new Error('Source is required!');
   }
-  console.log(source);
 
   // update status
   onStatus({ status: 'sourcing' });
@@ -87,8 +86,6 @@ export async function runPipeline(
     }
     nextStep = pipeline.steps.find((s) => stepIds.includes(s.id));
   }
-
-  console.log(docs);
 
   onStatus({ status: 'done' });
 

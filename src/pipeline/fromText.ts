@@ -7,14 +7,10 @@ export async function pipelineFromText(
   litlytics: LitLytics,
   description: string
 ) {
-  console.log('pipe from text');
-  console.log(description);
-
   const steps = description
     .split('---')
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
-  console.log(steps);
 
   const resultSteps: ProcessingStep[] = [];
 
@@ -31,13 +27,11 @@ export async function pipelineFromText(
       input: stepJSON.input as StepInput,
       type: stepJSON.type,
     });
-    console.log({ step, stepJSON, newStep });
 
     // connect to previous
     resultSteps.at(-1)?.connectsTo.push(newStep.id);
     // push to list
     resultSteps.push(newStep);
   }
-  console.log(resultSteps);
   return resultSteps;
 }

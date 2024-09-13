@@ -29,7 +29,6 @@ export function BasicOutput({ data }: { data: OutputStep }) {
         });
         return d;
       });
-    console.log(res);
     return res;
   }, [config, pipeline]);
 
