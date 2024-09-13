@@ -1,6 +1,7 @@
 import { defaultModelName } from '@/src/llm/config';
 import { modelCosts } from '@/src/llm/costs';
 import { ProcessingStep, StepInputs } from '@/src/step/Step';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import {
   ChatBubbleBottomCenterIcon,
   ChevronDownIcon,
@@ -30,6 +31,7 @@ import { Input } from '~/components/catalyst/input';
 import { RadioH, RadioHGroup } from '~/components/catalyst/radiogroup';
 import { Select } from '~/components/catalyst/select';
 import { Textarea } from '~/components/catalyst/textarea';
+import { CustomMarkdown } from '~/components/markdown/Markdown';
 import { Spinner } from '~/components/Spinner';
 import { CodeEditor } from '~/components/step/CodeEditor';
 import { StepTest } from '~/components/step/StepTest';
@@ -296,12 +298,28 @@ export function StepNode({ data }: { data: ProcessingStep }) {
                 />
               </Field>
             ) : (
-              <Field>
-                <Label>Step code</Label>
-                <div className="h-[60vh] min-h-[60vh]">
-                  <CodeEditor code={data.code} onChange={updateCode} />
-                </div>
-              </Field>
+              <TabGroup>
+                <TabList className="flex gap-4">
+                  <Tab className="rounded-full py-1 px-3 text-sm/6 font-semibold text-white focus:outline-none data-[selected]:bg-white/10 data-[hover]:bg-white/5 data-[selected]:data-[hover]:bg-white/10 data-[focus]:outline-1 data-[focus]:outline-white">
+                    Code
+                  </Tab>
+                  <Tab className="rounded-full py-1 px-3 text-sm/6 font-semibold text-white focus:outline-none data-[selected]:bg-white/10 data-[hover]:bg-white/5 data-[selected]:data-[hover]:bg-white/10 data-[focus]:outline-1 data-[focus]:outline-white">
+                    Code explanation
+                  </Tab>
+                </TabList>
+                <TabPanels className="mt-3">
+                  <TabPanel className="rounded-xl bg-white/5 p-3">
+                    <div className="h-[60vh] min-h-[60vh]">
+                      <CodeEditor code={data.code} onChange={updateCode} />
+                    </div>
+                  </TabPanel>
+                  <TabPanel className="rounded-xl bg-white/5 p-3">
+                    <div className="prose dark:prose-invert max-w-full">
+                      <CustomMarkdown>{data.codeExplanation}</CustomMarkdown>
+                    </div>
+                  </TabPanel>
+                </TabPanels>
+              </TabGroup>
             )}
           </FieldGroup>
         </DialogBody>

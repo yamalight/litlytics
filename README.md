@@ -1,8 +1,6 @@
 # ToDo
 
-- [ ] Add function-to-text description for non-programmers
-
-- [ ] Add way to interate over steps (code and prompts)
+- [ ] Add way to iterate over steps (code and prompts)
 
 - [ ] Add new file source
 - [ ] Add new url source

@@ -47,6 +47,7 @@ export interface ProcessingStep extends BaseStep {
   input?: StepInput;
   prompt?: string;
   code?: string;
+  codeExplanation?: string;
 }
 
 export interface OutputStep extends BaseStep {

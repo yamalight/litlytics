@@ -1,6 +1,7 @@
 import { runPrompt } from '../engine/runPrompt';
 import { parseThinkingOutputResult } from '../pipeline/util';
 import { ProcessingStep, ProcessingStepTypes, StepInput } from './Step';
+import { generateCodeExplain } from './explain';
 import codeSystem from './prompts/code-step.txt?raw';
 import llmSystem from './prompts/llm-step.txt?raw';
 import { cleanResult } from './util';
@@ -35,6 +36,11 @@ Step description: ${description}`;
   const cleanedResult = cleanResult(step.result, type);
   const result = parseThinkingOutputResult(cleanedResult);
 
+  let explanation: string | undefined = undefined;
+  if (type === 'code') {
+    explanation = await generateCodeExplain({ code: result });
+  }
+
   const newStep: ProcessingStep = {
     id,
     name,
@@ -42,6 +48,7 @@ Step description: ${description}`;
     type,
     input,
     code: type === 'code' ? result : undefined,
+    codeExplanation: type === 'code' ? explanation : undefined,
     prompt: type === 'llm' ? result : undefined,
     connectsTo: [],
     expanded: true,
