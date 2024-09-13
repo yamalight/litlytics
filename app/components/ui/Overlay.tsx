@@ -29,6 +29,7 @@ import {
 } from '~/components/catalyst/dropdown';
 import {
   emptyPipeline,
+  litlyticsConfigStore,
   pipelineAtom,
   pipelineStatusAtom,
   pipelineUndoAtom,
@@ -63,6 +64,7 @@ export function OverlayUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const setStatus = useSetAtom(pipelineStatusAtom);
+  const litlyticsConfig = useAtomValue(litlyticsConfigStore);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
@@ -75,6 +77,13 @@ export function OverlayUI() {
       setIsHelpOpen(true);
     }
   }, [isHelpFirstTime]);
+
+  useEffect(() => {
+    // show settings if key not set
+    if (!litlyticsConfig.llmKey?.length) {
+      setIsSettingsOpen(true);
+    }
+  }, [litlyticsConfig]);
 
   const closeHelp = () => {
     setIsHelpOpen(false);
@@ -243,21 +252,6 @@ export function OverlayUI() {
         </DialogActions>
       </Dialog>
 
-      {/* Help dialog */}
-      <Dialog
-        size="2xl"
-        open={isHelpOpen}
-        onClose={closeHelp}
-        topClassName="z-20"
-      >
-        <DialogTitle className="!text-lg">
-          Welcome to 🔥 LitLytics – Your Automated Data Analytics Companion!
-        </DialogTitle>
-        <DialogBody className="w-full">
-          <Help close={() => setIsHelpOpen(false)} />
-        </DialogBody>
-      </Dialog>
-
       {/* Settings dialog */}
       <Dialog
         size="2xl"
@@ -268,6 +262,21 @@ export function OverlayUI() {
         <DialogTitle className="!text-lg">Settings</DialogTitle>
         <DialogBody className="w-full">
           <Settings />
+        </DialogBody>
+      </Dialog>
+
+      {/* Help dialog */}
+      <Dialog
+        size="2xl"
+        open={isHelpOpen}
+        onClose={closeHelp}
+        topClassName="z-40"
+      >
+        <DialogTitle className="!text-lg">
+          Welcome to 🔥 LitLytics – Your Automated Data Analytics Companion!
+        </DialogTitle>
+        <DialogBody className="w-full">
+          <Help close={() => setIsHelpOpen(false)} />
         </DialogBody>
       </Dialog>
 

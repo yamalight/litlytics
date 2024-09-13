@@ -1,6 +1,5 @@
 # ToDo
 
-- [ ] Show settings after help on first launch to make user set LLM
 - [ ] Implement client-side LLMs
 
 - [ ] Add new file source

@@ -1,4 +1,5 @@
 import { LLMProviders } from '@/src/litlytics';
+import { XCircleIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { litlyticsConfigStore } from '~/store/store';
@@ -7,6 +8,7 @@ import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
 
 const providers = [
+  // 'local',
   'openai',
   'ai21',
   'anthropic',
@@ -137,7 +139,7 @@ export function Settings() {
   const modelsList = useMemo(() => models[config.provider], [config]);
 
   return (
-    <div className="prose prose-sm dark:prose-invert max-w-full">
+    <div className="max-w-full">
       <FieldGroup>
         <Field>
           <Label>Provider</Label>
@@ -192,6 +194,25 @@ export function Settings() {
           />
         </Field>
       </FieldGroup>
+
+      {!config.llmKey?.length && (
+        <div className="rounded-md bg-red-50 dark:bg-red-900 p-4 mt-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <XCircleIcon
+                aria-hidden="true"
+                className="h-5 w-5 text-red-400 dark:text-red-200"
+              />
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+                Choose a provider, model and set a key for the provider of your
+                choice to get started!
+              </h3>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

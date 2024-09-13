@@ -46,8 +46,8 @@ export const litlyticsConfigStore = atomWithStorage<{
 }>(
   'litltyics.config',
   {
-    provider: 'local',
-    model: '',
+    provider: 'openai',
+    model: 'gpt-4o-mini',
     llmKey: '',
   },
   undefined,
