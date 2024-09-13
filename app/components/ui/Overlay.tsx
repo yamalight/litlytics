@@ -4,6 +4,7 @@ import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
   Bars3Icon,
+  Cog8ToothIcon,
   FolderIcon,
   QuestionMarkCircleIcon,
   TrashIcon,
@@ -35,6 +36,7 @@ import {
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
 import { Help } from './Help';
+import { Settings } from './Settings';
 
 // first time help display
 const helpAtom = atomWithStorage('litlytics.help.first', true, undefined, {
@@ -65,6 +67,7 @@ export function OverlayUI() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHelpFirstTime, setHelpFirstTime] = useAtom(helpAtom);
 
   useEffect(() => {
@@ -171,12 +174,12 @@ export function OverlayUI() {
                 <DropdownLabel>Redo</DropdownLabel>
               </DropdownItem>
 
-              {/* <DropdownDivider />
+              <DropdownDivider />
 
-              <DropdownItem>
+              <DropdownItem onClick={() => setIsSettingsOpen(true)}>
                 <Cog8ToothIcon />
                 <DropdownLabel>Settings</DropdownLabel>
-              </DropdownItem> */}
+              </DropdownItem>
 
               <DropdownDivider />
 
@@ -252,6 +255,19 @@ export function OverlayUI() {
         </DialogTitle>
         <DialogBody className="w-full">
           <Help close={() => setIsHelpOpen(false)} />
+        </DialogBody>
+      </Dialog>
+
+      {/* Settings dialog */}
+      <Dialog
+        size="2xl"
+        open={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        topClassName="z-20"
+      >
+        <DialogTitle className="!text-lg">Settings</DialogTitle>
+        <DialogBody className="w-full">
+          <Settings />
         </DialogBody>
       </Dialog>
 

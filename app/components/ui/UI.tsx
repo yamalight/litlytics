@@ -1,6 +1,9 @@
+import { LitLytics } from '@/src/litlytics';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { PipelineBuilder } from '~/components/pipeline/PipelineBuilder';
 import { OverlayUI } from '~/components/ui/Overlay';
+import { litlyticsConfigStore, litlyticsStore } from '~/store/store';
 import { Background } from '../Background';
 import { Spinner } from '../Spinner';
 
@@ -8,7 +11,19 @@ import { Spinner } from '../Spinner';
 // required since config is stored in localstorage so hydrating is guaranteed to fail
 // if user has data in localstorage
 function ClientOnly({ children }: { children: React.ReactNode }) {
+  const config = useAtomValue(litlyticsConfigStore);
+  const setLitlytics = useSetAtom(litlyticsStore);
   const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    const newLL = new LitLytics({
+      provider: config.provider,
+      model: config.model,
+      key: config.llmKey,
+    });
+    console.log(newLL);
+    setLitlytics(newLL);
+  }, [config, setLitlytics]);
 
   useEffect(() => {
     setHasMounted(true);

@@ -1,4 +1,3 @@
-import { generatePipeline } from '@/src/pipeline/generate';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SparklesIcon } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
@@ -13,11 +12,16 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
-import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
+import {
+  litlyticsStore,
+  pipelineAtom,
+  pipelineStatusAtom,
+} from '~/store/store';
 import { RefinePipeline } from './RefinePipeline';
 
 export default function GeneratePipeline() {
   const status = useAtomValue(pipelineStatusAtom);
+  const litlytics = useAtomValue(litlyticsStore);
   const [selectedTab, setSelectedTab] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,7 +34,7 @@ export default function GeneratePipeline() {
     setLoading(true);
 
     // generate plan from LLM
-    const plan = await generatePipeline({
+    const plan = await litlytics.generatePipeline({
       description: pipeline.pipelineDescription,
     });
     console.log(plan);

@@ -1,13 +1,15 @@
+import type { LitLytics } from '../litlytics';
 import { Pipeline } from '../pipeline/Pipeline';
 import { ProcessingStep } from '../step/Step';
 import { runCodeStep } from './step/runCodeStep';
-import { runLLMStep } from './step/runLLMStep';
 
 export async function testPipelineStep({
+  litlytics,
   pipeline,
   step,
   docId,
 }: {
+  litlytics: LitLytics;
   pipeline: Pipeline;
   step: ProcessingStep;
   docId: string;
@@ -23,7 +25,7 @@ export async function testPipelineStep({
 
   // llm execution
   if (step.type === 'llm') {
-    return runLLMStep({
+    return litlytics.runLLMStep({
       step,
       source: pipeline.source,
       allSteps: pipeline.steps,

@@ -1,13 +1,15 @@
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
-import { runPromptFromMessages } from '../engine/runPrompt';
+import type { LitLytics } from '../litlytics';
 import { Pipeline } from './Pipeline';
 import system from './prompts/pipeline.txt?raw';
 import { parseThinkingOutputResult } from './util';
 
 export const refinePipeline = async ({
+  litlytics,
   refineRequest,
   pipeline,
 }: {
+  litlytics: LitLytics;
   refineRequest: string;
   pipeline: Pipeline;
 }) => {
@@ -23,7 +25,7 @@ export const refinePipeline = async ({
   ];
 
   // generate plan from LLM
-  const plan = await runPromptFromMessages({ messages });
+  const plan = await litlytics.runPromptFromMessages({ messages });
   const result = plan.result
     ? parseThinkingOutputResult(plan.result)
     : plan.result;

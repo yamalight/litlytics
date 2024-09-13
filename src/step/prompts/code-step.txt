@@ -19,4 +19,4 @@ Do not use external libraries.
 
 Return only the code itself.
 
-Think the request through step-by-step inside `<thinking>` tags, and then provide your final response inside `<output>` tags.
+Think the request through step-by-step inside <thinking> tags, and then provide your final response inside <output> tags.

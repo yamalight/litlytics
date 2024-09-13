@@ -1,14 +1,13 @@
-import { pipelineFromText } from '@/src/pipeline/fromText';
-import { refinePipeline } from '@/src/pipeline/refine';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import { Textarea } from '~/components/catalyst/textarea';
 import { CustomMarkdown } from '~/components/markdown/Markdown';
 import { Spinner } from '~/components/Spinner';
-import { pipelineAtom } from '~/store/store';
+import { litlyticsStore, pipelineAtom } from '~/store/store';
 
 export function RefinePipeline({ hide }: { hide: () => void }) {
+  const litlytics = useAtomValue(litlyticsStore);
   const [status, setStatus] = useState<'refine-loading' | 'generating' | ''>(
     ''
   );
@@ -23,7 +22,10 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
     setStatus('refine-loading');
 
     // generate plan from LLM
-    const plan = await refinePipeline({ refineRequest: refine, pipeline });
+    const plan = await litlytics.refinePipeline({
+      refineRequest: refine,
+      pipeline,
+    });
 
     // save
     setPipeline({
@@ -40,7 +42,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
 
     // generate plan from LLM
     setStatus('generating');
-    const newSteps = await pipelineFromText(pipeline.pipelinePlan);
+    const newSteps = await litlytics.pipelineFromText(pipeline.pipelinePlan);
 
     // assign output to last step
     newSteps.at(-1)!.connectsTo = [pipeline.output.id];

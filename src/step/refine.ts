@@ -1,15 +1,16 @@
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
-import { runPromptFromMessages } from '../engine/runPrompt';
+import type { LitLytics } from '../litlytics';
 import { parseThinkingOutputResult } from '../pipeline/util';
-import { generateCodeExplain } from './explain';
 import codeSystem from './prompts/code-step.txt?raw';
 import llmSystem from './prompts/llm-step.txt?raw';
 import { ProcessingStep } from './Step';
 
 export const refineStep = async ({
+  litlytics,
   refineRequest,
   step,
 }: {
+  litlytics: LitLytics;
   refineRequest: string;
   step: ProcessingStep;
 }) => {
@@ -37,7 +38,7 @@ Step input: ${step.input}`;
   ];
 
   // generate plan from LLM
-  const plan = await runPromptFromMessages({ messages });
+  const plan = await litlytics.runPromptFromMessages({ messages });
   const res = plan.result
     ? parseThinkingOutputResult(plan.result)
     : plan.result;
@@ -50,7 +51,9 @@ Step input: ${step.input}`;
     newStep.prompt = res;
   } else {
     newStep.code = res;
-    newStep.codeExplanation = await generateCodeExplain({ code: res });
+    newStep.codeExplanation = await litlytics.generateCodeExplain({
+      code: res,
+    });
   }
   return newStep;
 };

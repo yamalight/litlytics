@@ -1,4 +1,3 @@
-import { runPipeline } from '@/src/engine/runPipeline';
 import { defaultModelName } from '@/src/llm/config';
 import { modelCosts } from '@/src/llm/costs';
 import { OutputType, OutputTypes } from '@/src/output/Output';
@@ -16,7 +15,7 @@ import {
   PlayIcon,
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import _ from 'lodash';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Badge } from '~/components/catalyst/badge';
@@ -37,7 +36,11 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
-import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
+import {
+  litlyticsStore,
+  pipelineAtom,
+  pipelineStatusAtom,
+} from '~/store/store';
 import { BasicOutput } from '../output/basic/Basic';
 import { BasicOutputConfig, OutputRender } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
@@ -47,6 +50,7 @@ const OUTPUT_RENDERERS: Partial<Record<OutputType, OutputRender>> = {
 };
 
 export function OutputNode() {
+  const litlytics = useAtomValue(litlyticsStore);
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [status, setStatus] = useAtom(pipelineStatusAtom);
@@ -112,7 +116,7 @@ export function OutputNode() {
   const doRunPipeline = async () => {
     setStatus((s) => ({ ...s, status: 'init' }));
     try {
-      const newPipeline = await runPipeline(pipeline, setStatus);
+      const newPipeline = await litlytics.runPipeline(pipeline, setStatus);
       console.log(newPipeline);
       setPipeline(structuredClone(newPipeline));
     } catch (err) {

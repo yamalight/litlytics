@@ -1,11 +1,12 @@
 import { Doc } from '../doc/Document';
+import type { LitLytics } from '../litlytics';
 import { Pipeline, PipelineStatus } from '../pipeline/Pipeline';
 import { getDocsListSourceDocuments } from '../source/docsList';
 import { SourceTypes } from '../source/Source';
 import { getTextSourceDocuments } from '../source/textSource';
-import { runStep } from './runStep';
 
 export async function runPipeline(
+  litlytics: LitLytics,
   pipeline: Pipeline,
   onStatus: (status: PipelineStatus) => void
 ) {
@@ -45,7 +46,7 @@ export async function runPipeline(
     if (nextStep.input === 'doc' || nextStep.input === 'result') {
       await Promise.all(
         docs.map((doc) =>
-          runStep({
+          litlytics.runStep({
             step: nextStep!,
             source,
             allSteps: pipeline.steps,
@@ -66,7 +67,7 @@ export async function runPipeline(
         content: '',
         processingResults: [],
       };
-      aggregateResult = (await runStep({
+      aggregateResult = (await litlytics.runStep({
         step: nextStep!,
         source,
         allSteps: pipeline.steps,

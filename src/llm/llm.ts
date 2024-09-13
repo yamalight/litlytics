@@ -1,43 +1,75 @@
-import OpenAI from 'openai';
-import type {
-  ChatCompletion,
-  ChatCompletionCreateParamsBase,
-} from 'openai/resources/chat/completions';
-import type { ChatCompletionMessageParam } from 'openai/resources/index';
-import { defaultModelArgs, defaultModelName } from './config';
+import { type CompletionResponse, TokenJS } from 'token.js';
+import { LLMProvider } from 'token.js/dist/chat';
+import { LLMRequest } from './types';
 
-export const openai = new OpenAI({
-  maxRetries: 3,
-  timeout: 180000, // 180s
-  apiKey: process.env.OPENAI_API_KEY ?? 'not-set',
-  // override default fetch function to make it mockable my MSW for tests
-  fetch: (...args) => fetch(...args),
-});
+// Create the Token.js client
+const tokenjs = new TokenJS();
+
+function setKey(provider: LLMProvider, key: string) {
+  // OpenAI
+  switch (provider) {
+    case 'openai':
+      process.env.OPENAI_API_KEY = key;
+      break;
+    case 'ai21':
+      process.env.AI21_API_KEY = key;
+      break;
+    case 'anthropic':
+      process.env.ANTHROPIC_API_KEY = key;
+      break;
+    case 'cohere':
+      process.env.COHERE_API_KEY = key;
+      break;
+    case 'gemini':
+      process.env.GEMINI_API_KEY = key;
+      break;
+    case 'groq':
+      process.env.GROQ_API_KEY = key;
+      break;
+    case 'mistral':
+      process.env.MISTRAL_API_KEY = key;
+      break;
+    case 'perplexity':
+      process.env.PERPLEXITY_API_KEY = key;
+      break;
+    case 'openrouter':
+      process.env.OPENROUTER_API_KEY = key;
+      break;
+    case 'bedrock': {
+      const [region, id, access] = key.split('||');
+      process.env.AWS_REGION_NAME = region.trim();
+      process.env.AWS_ACCESS_KEY_ID = id.trim();
+      process.env.AWS_SECRET_ACCESS_KEY = access.trim();
+      break;
+    }
+  }
+}
 
 /**
  * Executes LLM prompt and returns a single result
  */
 export async function executeOnLLM({
+  provider,
+  key,
+  model,
   messages,
-  modelName,
   modelArgs,
-}: {
-  messages: ChatCompletionMessageParam[];
-  modelName?: string | null;
-  modelArgs?: Partial<ChatCompletionCreateParamsBase>;
-}) {
-  const chatCompletion = (await openai.chat.completions.create({
-    ...defaultModelArgs,
+}: LLMRequest) {
+  // set key
+  setKey(provider, key);
+  // run llm
+  const chatCompletion = (await tokenjs.chat.completions.create({
+    provider,
+    model,
     ...modelArgs,
-    model: modelName ?? defaultModelName,
     messages,
-  })) as ChatCompletion;
+  })) as CompletionResponse;
   const answers = chatCompletion.choices;
   const usage = chatCompletion.usage;
   if (process.env.NODE_ENV != 'production' && process.env.NODE_ENV != 'test') {
     console.log('\n\n');
     console.log(
-      modelName ?? defaultModelName,
+      model,
       messages,
       answers.map((a) => a.message)
     );

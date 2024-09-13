@@ -50,4 +50,4 @@ Step type: llm/code
 Step input: doc/result/aggregate-docs/aggregate-results
 Step description: description here
 
-Think the request through step-by-step inside `<thinking>` tags, and then provide your final response inside `<output>` tags.
+Think the request through step-by-step inside <thinking> tags, and then provide your final response inside <output> tags.

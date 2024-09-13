@@ -1,20 +1,23 @@
+import type { LitLytics } from '@/src/litlytics';
 import { Doc } from '../../doc/Document';
 import { BaseStep, ProcessingStep, SourceStep } from '../../step/Step';
-import { runPrompt } from '../runPrompt';
 
-export async function runLLMStep({
-  step,
-  source,
-  allSteps,
-  doc,
-  allDocs,
-}: {
+export interface RunLLMStepArgs {
+  litlytics: LitLytics;
   step: ProcessingStep;
   source: SourceStep;
   allSteps: ProcessingStep[];
   doc: Doc;
   allDocs: Doc[];
-}) {
+}
+export async function runLLMStep({
+  litlytics,
+  step,
+  source,
+  allSteps,
+  doc,
+  allDocs,
+}: RunLLMStepArgs) {
   const system = step.prompt!;
   console.log({ step, source, allSteps, doc, allDocs });
 
@@ -76,7 +79,7 @@ export async function runLLMStep({
 
   const user = input;
   const startTime = performance.now();
-  const res = await runPrompt({ system, user });
+  const res = await litlytics.runPrompt({ system, user });
   const endTime = performance.now();
   // replace existing result if present
   const existingResult = doc?.processingResults.find(

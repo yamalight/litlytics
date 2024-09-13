@@ -1,6 +1,5 @@
 import { defaultModelName } from '@/src/llm/config';
 import { modelCosts } from '@/src/llm/costs';
-import { refineStep } from '@/src/step/refine';
 import { ProcessingStep, StepInputs } from '@/src/step/Step';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import {
@@ -36,12 +35,17 @@ import { Spinner } from '~/components/Spinner';
 import { CodeEditor } from '~/components/step/CodeEditor';
 import { StepTest } from '~/components/step/StepTest';
 import { stepInputLabels } from '~/components/step/util';
-import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
+import {
+  litlyticsStore,
+  pipelineAtom,
+  pipelineStatusAtom,
+} from '~/store/store';
 import { BasicOutputConfig } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function StepNode({ data }: { data: ProcessingStep }) {
   const status = useAtomValue(pipelineStatusAtom);
+  const litlytics = useAtomValue(litlyticsStore);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [refine, setRefine] = useState(``);
@@ -150,7 +154,10 @@ export function StepNode({ data }: { data: ProcessingStep }) {
     setLoading(true);
 
     // generate plan from LLM
-    const newStep = await refineStep({ refineRequest: refine, step: data });
+    const newStep = await litlytics.refineStep({
+      refineRequest: refine,
+      step: data,
+    });
     const newSteps = pipeline.steps.map((s) => {
       if (s.id === data.id) {
         return newStep;

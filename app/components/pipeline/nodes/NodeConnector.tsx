@@ -1,4 +1,3 @@
-import { generateStep } from '@/src/step/generate';
 import {
   ProcessingStep,
   ProcessingStepTypes,
@@ -8,7 +7,7 @@ import {
 } from '@/src/step/Step';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import { Checkbox } from '~/components/catalyst/checkbox';
@@ -26,7 +25,7 @@ import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
 import { CodeEditor } from '~/components/step/CodeEditor';
 import { stepInputLabels } from '~/components/step/util';
-import { pipelineAtom } from '~/store/store';
+import { litlyticsStore, pipelineAtom } from '~/store/store';
 import GeneratePipeline from '../GeneratePipeline';
 
 const defaultStep: ProcessingStep = {
@@ -48,6 +47,7 @@ export function NodeConnector({
   currentStep?: SourceStep | ProcessingStep;
   showAuto?: boolean;
 }) {
+  const litlytics = useAtomValue(litlyticsStore);
   const [step, setStep] = useState<ProcessingStep>(
     structuredClone(defaultStep)
   );
@@ -82,7 +82,7 @@ export function NodeConnector({
       newStep = structuredClone(step);
     } else {
       // generate new step
-      newStep = await generateStep({
+      newStep = await litlytics.generateStep({
         id: idStr,
         name: step.name,
         description: step.description,

@@ -1,14 +1,11 @@
 # ToDo
 
+- [ ] Show settings after help on first launch to make user set LLM
+- [ ] Implement client-side LLMs
+
 - [ ] Add new file source
 - [ ] Add new url source
 - [ ] Allow custom sources
-
-# After core
-
-- [ ] Use https://github.com/token-js/token.js for interfacing with llms
-- [ ] Add settings where user can pick LLM / set their key
-- [ ] Test on Gemini
 
 - [ ] Do a visual pass on light mode
 

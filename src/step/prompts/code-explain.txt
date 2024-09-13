@@ -8,4 +8,4 @@ Make sure the description is no longer than a couple of paragraphs.
 
 Return only the description itself.
 
-Think the request through step-by-step inside `<thinking>` tags, and then provide your final response inside `<output>` tags.
+Think the request through step-by-step inside <thinking> tags, and then provide your final response inside <output> tags.
