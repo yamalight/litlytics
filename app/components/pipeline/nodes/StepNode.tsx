@@ -1,5 +1,6 @@
 import { defaultModelName } from '@/src/llm/config';
 import { modelCosts } from '@/src/llm/costs';
+import { refineStep } from '@/src/step/refine';
 import { ProcessingStep, StepInputs } from '@/src/step/Step';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import {
@@ -23,7 +24,6 @@ import {
   Dialog,
   DialogActions,
   DialogBody,
-  DialogDescription,
   DialogTitle,
 } from '~/components/catalyst/dialog';
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
@@ -44,6 +44,8 @@ export function StepNode({ data }: { data: ProcessingStep }) {
   const status = useAtomValue(pipelineStatusAtom);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
+  const [refine, setRefine] = useState(``);
+  const [loading, setLoading] = useState(false);
 
   const { averageTiming, averagePrompt, averageCompletion, averageCost } =
     useMemo(() => {
@@ -138,6 +140,31 @@ export function StepNode({ data }: { data: ProcessingStep }) {
       ...pipeline,
       steps: newSteps,
     });
+  };
+
+  const doRefine = async () => {
+    if (!refine?.length) {
+      return;
+    }
+
+    setLoading(true);
+
+    // generate plan from LLM
+    const newStep = await refineStep({ refineRequest: refine, step: data });
+    const newSteps = pipeline.steps.map((s) => {
+      if (s.id === data.id) {
+        return newStep;
+      }
+      return s;
+    });
+    setPipeline({
+      ...pipeline,
+      steps: newSteps,
+    });
+    setRefine('');
+
+    // save
+    setLoading(false);
   };
 
   return (
@@ -274,9 +301,23 @@ export function StepNode({ data }: { data: ProcessingStep }) {
       {/* Edit step */}
       <Dialog size="3xl" open={isOpen} onClose={setIsOpen} topClassName="z-20">
         <DialogTitle>Step: {data.name}</DialogTitle>
-        <DialogDescription>Config for {data.name}.</DialogDescription>
         <DialogBody className="w-full">
           <FieldGroup>
+            <Field>
+              <div className="flex gap-1">
+                <Textarea
+                  rows={2}
+                  placeholder="Your request..."
+                  disabled={loading}
+                  value={refine}
+                  onChange={(e) => setRefine(e.target.value)}
+                />
+                <Button onClick={doRefine} disabled={loading}>
+                  {loading && <Spinner className="h-5 w-5" />}
+                  Refine
+                </Button>
+              </div>
+            </Field>
             <Field>
               <Label>Step description</Label>
               <Textarea
@@ -310,7 +351,11 @@ export function StepNode({ data }: { data: ProcessingStep }) {
                 <TabPanels className="mt-3">
                   <TabPanel className="rounded-xl bg-white/5 p-3">
                     <div className="h-[60vh] min-h-[60vh]">
-                      <CodeEditor code={data.code} onChange={updateCode} />
+                      {loading ? (
+                        <Spinner />
+                      ) : (
+                        <CodeEditor code={data.code} onChange={updateCode} />
+                      )}
                     </div>
                   </TabPanel>
                   <TabPanel className="rounded-xl bg-white/5 p-3">

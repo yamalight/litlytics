@@ -1,7 +1,5 @@
 # ToDo
 
-- [ ] Add way to iterate over steps (code and prompts)
-
 - [ ] Add new file source
 - [ ] Add new url source
 - [ ] Allow custom sources
