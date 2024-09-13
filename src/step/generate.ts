@@ -25,7 +25,8 @@ export const generateStep = async ({
 
   // create user prompt
   const user = `Step name: ${name}
-Step description: ${description}`;
+Step description: ${description}
+Step input: ${input}`;
 
   // determine system prompt based on step type
   const system = type === 'llm' ? llmSystem : codeSystem;
