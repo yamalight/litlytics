@@ -4,7 +4,7 @@ import { XCircleIcon } from '@heroicons/react/24/solid';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { litlyticsConfigStore } from '~/store/store';
-import { Field, FieldGroup, Label } from '../catalyst/fieldset';
+import { Description, Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
 
@@ -67,6 +67,12 @@ export function Settings() {
               }))
             }
           />
+          {Boolean(config.llmKey?.length) && (
+            <Description>
+              Your key is stored only in your browser and passed directly to API
+              provider.
+            </Description>
+          )}
         </Field>
       </FieldGroup>
 

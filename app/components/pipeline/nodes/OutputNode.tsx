@@ -1,4 +1,3 @@
-import { defaultModelName } from '@/src/llm/config';
 import { modelCosts } from '@/src/llm/costs';
 import { OutputType, OutputTypes } from '@/src/output/Output';
 import { OutputStep } from '@/src/step/Step';
@@ -37,6 +36,7 @@ import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
 import {
+  litlyticsConfigStore,
   litlyticsStore,
   pipelineAtom,
   pipelineStatusAtom,
@@ -51,6 +51,7 @@ const OUTPUT_RENDERERS: Partial<Record<OutputType, OutputRender>> = {
 
 export function OutputNode() {
   const litlytics = useAtomValue(litlyticsStore);
+  const litlyticsConfig = useAtomValue(litlyticsConfigStore);
   const [isOpen, setIsOpen] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [status, setStatus] = useAtom(pipelineStatusAtom);
@@ -78,12 +79,12 @@ export function OutputNode() {
     const prompt = promptTokens.reduce((acc, val) => acc + val, 0);
     const completion = completionTokens.reduce((acc, val) => acc + val, 0);
     const cost = _.round(
-      prompt * modelCosts[defaultModelName].input +
-        completion * modelCosts[defaultModelName].output,
+      prompt * modelCosts[litlyticsConfig.model].input +
+        completion * modelCosts[litlyticsConfig.model].output,
       3
     );
     return { timing, prompt, completion, cost };
-  }, [data]);
+  }, [data, litlyticsConfig.model]);
 
   const Render = useMemo(() => {
     if (!data) {

@@ -1,4 +1,3 @@
-import { defaultModelName } from '@/src/llm/config';
 import { modelCosts } from '@/src/llm/costs';
 import { ProcessingStep, StepInputs } from '@/src/step/Step';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
@@ -36,6 +35,7 @@ import { CodeEditor } from '~/components/step/CodeEditor';
 import { StepTest } from '~/components/step/StepTest';
 import { stepInputLabels } from '~/components/step/util';
 import {
+  litlyticsConfigStore,
   litlyticsStore,
   pipelineAtom,
   pipelineStatusAtom,
@@ -46,6 +46,7 @@ import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 export function StepNode({ data }: { data: ProcessingStep }) {
   const status = useAtomValue(pipelineStatusAtom);
   const litlytics = useAtomValue(litlyticsStore);
+  const litlyticsConfig = useAtomValue(litlyticsConfigStore);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [refine, setRefine] = useState(``);
@@ -84,12 +85,12 @@ export function StepNode({ data }: { data: ProcessingStep }) {
           completionTokens.length
       );
       const averageCost = _.round(
-        averagePrompt * modelCosts[defaultModelName].input +
-          averageCompletion * modelCosts[defaultModelName].output,
+        averagePrompt * modelCosts[litlyticsConfig.model].input +
+          averageCompletion * modelCosts[litlyticsConfig.model].output,
         3
       );
       return { averageTiming, averagePrompt, averageCompletion, averageCost };
-    }, [pipeline.output.config, data]);
+    }, [pipeline.output.config, data, litlyticsConfig.model]);
 
   const updateNodeByKey = (
     newVal: string | boolean | undefined,
