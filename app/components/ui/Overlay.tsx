@@ -33,6 +33,7 @@ import {
   pipelineAtom,
   pipelineStatusAtom,
   pipelineUndoAtom,
+  webllmAtom,
 } from '~/store/store';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
@@ -65,6 +66,7 @@ export function OverlayUI() {
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const setStatus = useSetAtom(pipelineStatusAtom);
   const litlyticsConfig = useAtomValue(litlyticsConfigStore);
+  const webllm = useAtomValue(webllmAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
@@ -80,10 +82,10 @@ export function OverlayUI() {
 
   useEffect(() => {
     // show settings if key not set
-    if (!litlyticsConfig.llmKey?.length) {
+    if (!litlyticsConfig.llmKey?.length && webllm.loadProgress !== 1) {
       setIsSettingsOpen(true);
     }
-  }, [litlyticsConfig]);
+  }, [litlyticsConfig, webllm]);
 
   const closeHelp = () => {
     setIsHelpOpen(false);
@@ -132,6 +134,14 @@ export function OverlayUI() {
       };
       reader.readAsText(file);
     }
+  };
+
+  const closeSettings = () => {
+    // disallow closing if no key set
+    if (!litlyticsConfig.llmKey?.length && webllm.loadProgress !== 1) {
+      return;
+    }
+    setIsSettingsOpen(false);
   };
 
   return (
@@ -256,12 +266,12 @@ export function OverlayUI() {
       <Dialog
         size="2xl"
         open={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
+        onClose={closeSettings}
         topClassName="z-20"
       >
         <DialogTitle className="!text-lg">Settings</DialogTitle>
         <DialogBody className="w-full">
-          <Settings />
+          <Settings close={closeSettings} />
         </DialogBody>
       </Dialog>
 

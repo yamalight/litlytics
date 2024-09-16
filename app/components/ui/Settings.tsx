@@ -14,7 +14,7 @@ import { Spinner } from '../Spinner';
 import { ProviderKeysHint } from './ProviderKeys';
 import { Recommended, recommendedForProvider } from './Recommended';
 
-export function Settings() {
+export function Settings({ close }: { close: () => void }) {
   const [webllm, setWebllm] = useAtom(webllmAtom);
   const [config, setConfig] = useAtom(litlyticsConfigStore);
   const [providers, setProviders] = useState<LLMProviders[]>([]);
@@ -76,6 +76,9 @@ export function Settings() {
         loadProgress: isFinished ? 1 : loadProgress,
         status: initProgress.text,
       });
+      if (isFinished) {
+        close();
+      }
     });
     engine.reload(config.model);
     setWebllm({ engine, fetchProgress: 0, loadProgress: 0, status: '' });
