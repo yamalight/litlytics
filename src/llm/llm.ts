@@ -1,8 +1,5 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
-import { createAzure } from '@ai-sdk/azure';
-import { createCohere } from '@ai-sdk/cohere';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { createMistral } from '@ai-sdk/mistral';
 import { createOpenAI } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 import { LLMModel, LLMProvider, LLMRequest } from './types';
@@ -26,35 +23,26 @@ function getModel(provider: LLMProvider, model: LLMModel, key: string) {
       const google = createGoogleGenerativeAI({
         apiKey: key,
       });
-      return google(model);
-    }
-    case 'azure': {
-      const azure = createAzure({
-        apiKey: key,
+      return google(model, {
+        safetySettings: [
+          {
+            category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+            threshold: 'BLOCK_NONE',
+          },
+          {
+            category: 'HARM_CATEGORY_HARASSMENT',
+            threshold: 'BLOCK_NONE',
+          },
+          {
+            category: 'HARM_CATEGORY_HATE_SPEECH',
+            threshold: 'BLOCK_NONE',
+          },
+          {
+            category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+            threshold: 'BLOCK_NONE',
+          },
+        ],
       });
-      return azure(model);
-    }
-    case 'cohere': {
-      const cohere = createCohere({ apiKey: key });
-      return cohere(model);
-    }
-    case 'mistral': {
-      const mistral = createMistral({ apiKey: key });
-      return mistral(model);
-    }
-    case 'groq': {
-      const groq = createOpenAI({
-        baseURL: 'https://api.groq.com/openai/v1',
-        apiKey: key,
-      });
-      return groq(model);
-    }
-    case 'perplexity': {
-      const perplexity = createOpenAI({
-        apiKey: key,
-        baseURL: 'https://api.perplexity.ai/',
-      });
-      return perplexity(model);
     }
   }
 }
