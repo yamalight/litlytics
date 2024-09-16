@@ -7,7 +7,6 @@ import {
   ChevronRightIcon,
   ClockIcon,
   CogIcon,
-  CurrencyDollarIcon,
   EllipsisHorizontalIcon,
   ExclamationCircleIcon,
   PencilSquareIcon,
@@ -35,6 +34,7 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
+import { CentIcon } from '~/components/ui/CentIcon';
 import {
   litlyticsConfigStore,
   litlyticsStore,
@@ -219,7 +219,7 @@ export function OutputNode() {
                   title="Total cost (US cents)"
                   className="flex items-center"
                 >
-                  <CurrencyDollarIcon className="w-3 h-3" />
+                  <CentIcon className="w-3 h-3" />
                   {cost}
                 </Badge>
               )}

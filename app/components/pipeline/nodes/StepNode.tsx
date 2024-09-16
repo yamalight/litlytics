@@ -8,7 +8,6 @@ import {
   ClockIcon,
   CodeBracketIcon,
   CogIcon,
-  CurrencyDollarIcon,
   PencilSquareIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
@@ -34,6 +33,7 @@ import { Spinner } from '~/components/Spinner';
 import { CodeEditor } from '~/components/step/CodeEditor';
 import { StepTest } from '~/components/step/StepTest';
 import { stepInputLabels } from '~/components/step/util';
+import { CentIcon } from '~/components/ui/CentIcon';
 import {
   litlyticsConfigStore,
   litlyticsStore,
@@ -286,7 +286,7 @@ export function StepNode({ data }: { data: ProcessingStep }) {
                     title="Average cost (US cents)"
                     className="flex items-center"
                   >
-                    <CurrencyDollarIcon className="w-3 h-3" />
+                    <CentIcon className="w-3 h-3" />
                     {averageCost}
                   </Badge>
                 )}
