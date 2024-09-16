@@ -14,7 +14,7 @@ const providerGuides: Record<LLMProvider, string> = {
 
 export function ProviderKeysHint({ provider }: { provider: LLMProvider }) {
   return (
-    <div className="mt-3 py-1">
+    <div className="mt-3 py-1 text-sm">
       Don&apos;t have API key?{' '}
       <a
         href={providerGuides[provider]}

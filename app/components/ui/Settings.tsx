@@ -1,11 +1,13 @@
 import { LLMProviders } from '@/src/litlytics';
+import { modelCosts } from '@/src/llm/costs';
 import { localModelSizes } from '@/src/llm/sizes';
 import { LLMModelsList, LLMProvidersList } from '@/src/llm/types';
-import { XCircleIcon } from '@heroicons/react/24/solid';
+import { CurrencyDollarIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { MLCEngine } from '@mlc-ai/web-llm';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import { litlyticsConfigStore, webllmAtom } from '~/store/store';
+import { Badge } from '../catalyst/badge';
 import { Button } from '../catalyst/button';
 import { Description, Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
@@ -13,6 +15,7 @@ import { Select } from '../catalyst/select';
 import { Spinner } from '../Spinner';
 import { ProviderKeysHint } from './ProviderKeys';
 import { Recommended, recommendedForProvider } from './Recommended';
+import _ from 'lodash';
 
 export function Settings({ close }: { close: () => void }) {
   const [webllm, setWebllm] = useAtom(webllmAtom);
@@ -131,6 +134,18 @@ export function Settings({ close }: { close: () => void }) {
               </option>
             ))}
           </Select>
+          {config.provider !== 'local' && (
+            <Description className="flex gap-2">
+              <Badge title="Input price (USD) per million tokens">
+                Input: <CurrencyDollarIcon className="w-3 h-3" />{' '}
+                {_.round(modelCosts[config.model].input * 10000, 2)} / MTok
+              </Badge>
+              <Badge title="Output price (USD) per million tokens">
+                Output: <CurrencyDollarIcon className="w-3 h-3" />{' '}
+                {_.round(modelCosts[config.model].output * 10000, 2)} / MTok
+              </Badge>
+            </Description>
+          )}
         </Field>
 
         {config.provider !== 'local' && (
