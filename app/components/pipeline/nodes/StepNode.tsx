@@ -140,10 +140,37 @@ export function StepNode({ data }: { data: ProcessingStep }) {
   };
 
   const deleteStep = () => {
-    const newSteps = pipeline.steps.filter((s) => s.id !== data.id);
+    const newSteps = pipeline.steps
+      // remove step
+      .filter((s) => s.id !== data.id)
+      // remove all links to step
+      .map((s) => {
+        let connectsTo = s.connectsTo.filter((id) => id !== data.id);
+        if (connectsTo.length === 0) {
+          connectsTo = [pipeline.output.id];
+        }
+        return {
+          ...s,
+          connectsTo,
+        };
+      });
+    let sourceConnect = pipeline.source.connectsTo.filter(
+      (id) => id !== data.id
+    );
+    const firstStep = newSteps.at(0);
+    if (sourceConnect.length === 0 && firstStep) {
+      sourceConnect = [firstStep.id];
+    }
     setPipeline({
       ...pipeline,
+      source: {
+        ...pipeline.source,
+        connectsTo: sourceConnect,
+      },
       steps: newSteps,
+      output: {
+        ...pipeline.output,
+      },
     });
   };
 

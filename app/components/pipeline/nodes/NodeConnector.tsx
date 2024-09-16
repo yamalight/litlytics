@@ -69,10 +69,10 @@ export function NodeConnector({
     setLoading(true);
     // generate new ID and double-check that it doesn't overlap with other steps
     let id = pipeline.steps.length;
-    let existingStep = pipeline.steps.find((s) => s.id === `${id}`);
+    let existingStep = pipeline.steps.find((s) => s.id === `step_${id}`);
     while (existingStep) {
       id += 1;
-      existingStep = pipeline.steps.find((s) => s.id === `${id}`);
+      existingStep = pipeline.steps.find((s) => s.id === `step_${id}`);
     }
     // generate final id
     const idStr = `step_${id}`;
@@ -80,6 +80,7 @@ export function NodeConnector({
     let newStep: ProcessingStep | undefined = undefined;
     if (manual) {
       newStep = structuredClone(step);
+      newStep.id = idStr;
     } else {
       // generate new step
       newStep = await litlytics.generateStep({
