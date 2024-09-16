@@ -11,6 +11,7 @@ import { Description, Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
 import { Spinner } from '../Spinner';
+import { Recommended, recommendedForProvider } from './Recommended';
 
 export function Settings() {
   const [webllm, setWebllm] = useAtom(webllmAtom);
@@ -84,23 +85,26 @@ export function Settings() {
       <FieldGroup>
         <Field>
           <Label>Provider</Label>
-          <Select
-            value={config.provider}
-            onChange={(e) =>
-              setConfig((c) => ({
-                ...c,
-                provider: e.target.value as LLMProviders,
-                model: LLMModelsList[e.target.value as LLMProviders][0],
-                llmKey: '',
-              }))
-            }
-          >
-            {providers.map((prov) => (
-              <option key={prov} value={prov}>
-                {prov}
-              </option>
-            ))}
-          </Select>
+          <div className="flex gap-2">
+            <Select
+              value={config.provider}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  provider: e.target.value as LLMProviders,
+                  model: LLMModelsList[e.target.value as LLMProviders][0],
+                  llmKey: '',
+                }))
+              }
+            >
+              {providers.map((prov) => (
+                <option key={prov} value={prov}>
+                  {prov}
+                </option>
+              ))}
+            </Select>
+            <Recommended />
+          </div>
         </Field>
 
         <Field>
@@ -116,7 +120,10 @@ export function Settings() {
           >
             {models.map((model) => (
               <option key={model} value={model}>
-                {model}
+                {model}{' '}
+                {recommendedForProvider[config.provider] === model
+                  ? '(recommended)'
+                  : ''}
               </option>
             ))}
           </Select>
