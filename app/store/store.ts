@@ -76,10 +76,12 @@ export const pipelineUndoAtom = atomWithUndo(pipelineAtom, 5);
 
 export const webllmAtom = atom<{
   engine?: MLCEngine;
-  progress: number;
+  fetchProgress: number;
+  loadProgress: number;
   status: string;
 }>({
   engine: undefined,
-  progress: -1,
+  fetchProgress: -1,
+  loadProgress: -1,
   status: '',
 });

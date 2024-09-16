@@ -56,21 +56,27 @@ export function Settings() {
     const engine = new MLCEngine();
     engine.setInitProgressCallback((initProgress) => {
       const textProgress = initProgress.text.split('[').at(1)?.split(']').at(0);
+      const isFetching = initProgress.text.includes('Fetching');
+      const isFinished = initProgress.text.includes('Finish');
       const [leftProgress, rightProgress] = textProgress?.split('/') ?? [
         '0',
         '1',
       ];
       const loadProgress = parseInt(leftProgress) / parseInt(rightProgress);
-      const progress =
-        initProgress.progress > 0 ? initProgress.progress : loadProgress;
+      console.log({
+        fetchProgress: isFetching ? initProgress.progress : 1,
+        loadProgress,
+        status: initProgress.text,
+      });
       setWebllm({
         engine,
-        progress: progress,
+        fetchProgress: isFetching ? initProgress.progress : 1,
+        loadProgress: isFinished ? 1 : loadProgress,
         status: initProgress.text,
       });
     });
     engine.reload(config.model);
-    setWebllm({ engine, progress: -1, status: '' });
+    setWebllm({ engine, fetchProgress: 0, loadProgress: 0, status: '' });
   };
 
   return (
@@ -138,19 +144,26 @@ export function Settings() {
           </Field>
         )}
 
-        {config.provider === 'local' && webllm.progress !== 1 && (
+        {config.provider === 'local' && (
           <Field className="flex flex-col">
             <div className="flex items-center gap-2">
               <Button
                 onClick={loadLocalModel}
                 title={webllm.status ?? ''}
-                disabled={webllm.progress === 1}
+                disabled={webllm.fetchProgress !== -1}
               >
-                {webllm.progress > -1 ? (
+                {webllm.fetchProgress > -1 && webllm.fetchProgress < 1 ? (
                   <>
                     <Spinner className="w-3 h-3" />
-                    Loading {Math.round(webllm.progress * 100)}%
+                    Fetching {Math.round(webllm.fetchProgress * 100)}%
                   </>
+                ) : webllm.loadProgress > -1 && webllm.loadProgress < 1 ? (
+                  <>
+                    <Spinner className="w-3 h-3" />
+                    Loading {Math.round(webllm.loadProgress * 100)}%
+                  </>
+                ) : webllm.loadProgress === 1 ? (
+                  'Model loaded'
                 ) : (
                   'Load model'
                 )}
