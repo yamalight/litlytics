@@ -1,8 +1,6 @@
 export function parseLLMJSON(input: string) {
   // replace comments before and after backticks if present (usually done by smaller models)
-  const cleaned = input
-    .replace(/^[\s\S]*?```(.+?)\n|```[\s\S]*$/gs, '$1')
-    .trim();
+  const cleaned = input.replace(/^[\s\S]*?```(.*?)\n|```[\s\S]*$/gs, '').trim();
   const json = JSON.parse(cleaned);
   return json;
 }
