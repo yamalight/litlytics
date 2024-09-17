@@ -8,6 +8,7 @@ RUN bun install --ci
 # build app
 FROM base AS build
 ENV NODE_ENV=production
+ENV DEPLOY_URL=https://ll-demo.codezen.dev
 
 WORKDIR /app
 COPY . .
