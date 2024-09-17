@@ -9,6 +9,8 @@ export interface Pipeline {
   output: OutputStep;
   steps: ProcessingStep[];
   testDocs: Doc[];
+  provider?: string;
+  model?: string;
 }
 
 export interface PipelineStatus {

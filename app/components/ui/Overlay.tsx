@@ -101,6 +101,10 @@ export function OverlayUI() {
   };
 
   const savePipeline = () => {
+    const pipelineToSave = structuredClone(pipeline);
+    // set model and provider
+    pipelineToSave.provider = litlyticsConfig.provider;
+    pipelineToSave.model = litlyticsConfig.model;
     // Convert the object to a JSON string
     const jsonString = JSON.stringify(pipeline, null, 2);
     // Create a Blob from the JSON string
