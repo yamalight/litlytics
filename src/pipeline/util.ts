@@ -5,7 +5,10 @@ export function parseLLMJSON(input: string) {
   return json;
 }
 
-export function parseThinkingOutputResult(input: string) {
+export function parseThinkingOutputResult(input?: string | null) {
+  if (!input) {
+    throw new Error('No input passed for parsing!');
+  }
   // if there's no thinking and output tags in input - just return as-is
   if (!input.includes('<thinking') && !input.includes('<output')) {
     return input;
