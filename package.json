@@ -8,7 +8,8 @@
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "test": "bun test"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.49",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@remix-run/dev": "^2.11.2",
     "@tailwindcss/typography": "^0.5.15",
+    "@types/bun": "^1.1.9",
     "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
