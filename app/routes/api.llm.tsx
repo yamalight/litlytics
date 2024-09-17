@@ -7,5 +7,3 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const response = await executeOnLLM(body);
   return json(response);
 };
-
-// existing code
