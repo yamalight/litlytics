@@ -11,6 +11,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
   const [status, setStatus] = useState<'refine-loading' | 'generating' | ''>(
     ''
   );
+  const [error, setError] = useState<Error>();
   const [refine, setRefine] = useState(``);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
@@ -19,21 +20,26 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       return;
     }
 
-    setStatus('refine-loading');
+    try {
+      setStatus('refine-loading');
 
-    // generate plan from LLM
-    const plan = await litlytics.refinePipeline({
-      refineRequest: refine,
-      pipeline,
-    });
+      // generate plan from LLM
+      const plan = await litlytics.refinePipeline({
+        refineRequest: refine,
+        pipeline,
+      });
 
-    // save
-    setPipeline({
-      ...pipeline,
-      pipelinePlan: plan ?? '',
-    });
-    setRefine('');
-    setStatus('');
+      // save
+      setPipeline({
+        ...pipeline,
+        pipelinePlan: plan ?? '',
+      });
+      setRefine('');
+      setStatus('');
+    } catch (err) {
+      setError(err as Error);
+      setStatus('');
+    }
   };
 
   const doCreate = async () => {
@@ -41,26 +47,31 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       return;
     }
 
-    // generate plan from LLM
-    setStatus('generating');
-    const newSteps = await litlytics.pipelineFromText(pipeline.pipelinePlan);
+    try {
+      // generate plan from LLM
+      setStatus('generating');
+      const newSteps = await litlytics.pipelineFromText(pipeline.pipelinePlan);
 
-    // assign output to last step
-    newSteps.at(-1)!.connectsTo = [pipeline.output.id];
+      // assign output to last step
+      newSteps.at(-1)!.connectsTo = [pipeline.output.id];
 
-    // save
-    setPipeline({
-      ...pipeline,
-      // assign input to first step
-      source: {
-        ...pipeline.source,
-        connectsTo: [newSteps.at(0)!.id],
-      },
-      // assign steps
-      steps: newSteps,
-    });
-    setStatus('');
-    hide();
+      // save
+      setPipeline({
+        ...pipeline,
+        // assign input to first step
+        source: {
+          ...pipeline.source,
+          connectsTo: [newSteps.at(0)!.id],
+        },
+        // assign steps
+        steps: newSteps,
+      });
+      setStatus('');
+      hide();
+    } catch (err) {
+      setError(err as Error);
+      setStatus('');
+    }
   };
 
   return (
@@ -86,6 +97,12 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
           Refine
         </Button>
       </div>
+
+      {error && (
+        <div className="flex items-center justify-between bg-red-500 dark:bg-red-600 rounded-xl py-1 px-2 mt-3">
+          Error generating: {error.message}
+        </div>
+      )}
 
       <div className="flex mt-8">
         <Button

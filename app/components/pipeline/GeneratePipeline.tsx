@@ -26,24 +26,32 @@ export default function GeneratePipeline() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
+  const [error, setError] = useState<Error>();
 
   const runPlan = async () => {
     if (!pipeline.pipelineDescription?.length) {
       return;
     }
-    setLoading(true);
 
-    // generate plan from LLM
-    const plan = await litlytics.generatePipeline({
-      description: pipeline.pipelineDescription,
-    });
+    try {
+      setLoading(true);
+      setError(undefined);
 
-    setPipeline({
-      ...pipeline,
-      pipelinePlan: plan ?? '',
-    });
-    setLoading(false);
-    setSelectedTab(1);
+      // generate plan from LLM
+      const plan = await litlytics.generatePipeline({
+        description: pipeline.pipelineDescription,
+      });
+
+      setPipeline({
+        ...pipeline,
+        pipelinePlan: plan ?? '',
+      });
+      setLoading(false);
+      setSelectedTab(1);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -107,6 +115,11 @@ export default function GeneratePipeline() {
                     Plan
                   </Button>
                 </div>
+                {error && (
+                  <div className="flex items-center justify-between bg-red-500 dark:bg-red-600 rounded-xl py-1 px-2 my-2">
+                    Error planning: {error.message}
+                  </div>
+                )}
               </TabPanel>
               <TabPanel className="rounded-xl bg-white/5 p-3">
                 <RefinePipeline hide={() => setIsOpen(false)} />
