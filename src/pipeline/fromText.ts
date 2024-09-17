@@ -5,7 +5,8 @@ import { parseLLMJSON } from './util';
 
 export async function pipelineFromText(
   litlytics: LitLytics,
-  description: string
+  description: string,
+  onStatus: ({ step, totalSteps }: { step: number; totalSteps: number }) => void
 ) {
   let steps = description
     .split('---')
@@ -23,7 +24,9 @@ export async function pipelineFromText(
 
   const resultSteps: ProcessingStep[] = [];
 
+  let currentStep = 1;
   for (const step of steps) {
+    onStatus({ step: currentStep, totalSteps: steps.length });
     const stepRes = await litlytics.runPrompt({
       system: systemToJSON,
       user: step,
@@ -41,6 +44,7 @@ export async function pipelineFromText(
     resultSteps.at(-1)?.connectsTo.push(newStep.id);
     // push to list
     resultSteps.push(newStep);
+    currentStep++;
   }
   return resultSteps;
 }

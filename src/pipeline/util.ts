@@ -13,5 +13,7 @@ export function parseThinkingOutputResult(input: string) {
 
   const [_chainOfThought, outputStart] = input.split('<output>');
   const [output] = outputStart.trim().split('</output>');
-  return output.trim();
+  const out = output.trim();
+  const cleaned = out.replace(/^"|"$/gs, '').trim();
+  return cleaned;
 }

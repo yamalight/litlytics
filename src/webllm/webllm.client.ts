@@ -28,7 +28,7 @@ export const runWithWebLLM = async ({
     promptTokens: reply.usage?.prompt_tokens ?? 0,
     totalTokens: reply.usage?.total_tokens ?? 0,
   };
-  console.log(answers);
+  console.log(answers.map((a) => a.message.content));
   const result = answers[0].message.content;
   return {
     result,

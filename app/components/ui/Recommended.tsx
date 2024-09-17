@@ -9,7 +9,7 @@ export const recommendedForProvider: Record<LLMProviders, LLMModel> = {
   // cohere: 'command-r-plus',
   gemini: 'gemini-1.5-flash-latest',
   // groq: 'llama-3.1-8b-instant',
-  local: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',
+  local: 'gemma-2-9b-it-q4f16_1-MLC',
   // mistral: 'mistral-medium-latest',
   openai: 'gpt-4o-mini',
   // perplexity: 'llama-3.1-8b-instruct',

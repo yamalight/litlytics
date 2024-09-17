@@ -97,8 +97,17 @@ export class LitLytics {
   /**
    * Pipeline
    */
-  async pipelineFromText(description: string) {
-    return await pipelineFromText(this, description);
+  async pipelineFromText(
+    description: string,
+    onStatus: ({
+      step,
+      totalSteps,
+    }: {
+      step: number;
+      totalSteps: number;
+    }) => void
+  ) {
+    return await pipelineFromText(this, description, onStatus);
   }
 
   async generatePipeline({ description }: { description: string }) {

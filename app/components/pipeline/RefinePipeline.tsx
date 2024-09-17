@@ -13,6 +13,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
   );
   const [error, setError] = useState<Error>();
   const [refine, setRefine] = useState(``);
+  const [progress, setProgress] = useState('');
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const doRefine = async () => {
@@ -50,7 +51,17 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
     try {
       // generate plan from LLM
       setStatus('generating');
-      const newSteps = await litlytics.pipelineFromText(pipeline.pipelinePlan);
+      const newSteps = await litlytics.pipelineFromText(
+        pipeline.pipelinePlan,
+        ({ step, totalSteps }) => {
+          if (step > totalSteps) {
+            setProgress('');
+            return;
+          }
+
+          setProgress(`Generating steps: ${step} / ${totalSteps}`);
+        }
+      );
 
       // assign output to last step
       newSteps.at(-1)!.connectsTo = [pipeline.output.id];
@@ -115,7 +126,9 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
             </div>
           )}
           {status === 'generating'
-            ? `Generating pipeline...`
+            ? progress.length > 0
+              ? progress
+              : `Generating pipeline...`
             : `Create described pipeline`}
         </Button>
       </div>
