@@ -9,8 +9,6 @@ import { atomWithUndo } from './atomWithUndo';
 export const emptyPipeline: Pipeline = {
   // project setup
   name: '',
-  // test docs
-  testDocs: [],
   // pipeline plan
   pipelinePlan: '',
   pipelineDescription: '',

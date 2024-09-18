@@ -1,33 +1,30 @@
-import { Doc } from '@/src/doc/Document';
-import { useAtom } from 'jotai';
-import { ChangeEvent, useCallback, useEffect, useMemo } from 'react';
+import type { Doc } from '@/src/doc/Document';
+import type { SourceStep } from '@/src/step/Step';
+import { type ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { Textarea } from '~/components/catalyst/textarea';
-import { pipelineAtom } from '~/store/store';
-import { TextSourceConfig } from '../types';
+import type { TextSourceConfig } from '../Source';
 
-export function TextSource() {
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const config = useMemo(
-    () => pipeline.source.config as TextSourceConfig,
-    [pipeline]
-  );
+export function TextSourceRender({
+  source,
+  setSource,
+}: {
+  source: SourceStep;
+  setSource: (newSource: SourceStep) => void;
+}) {
+  const config = useMemo(() => source.config as TextSourceConfig, [source]);
 
   const updateDoc = useCallback(
     (doc: Doc) => {
-      const newSource = structuredClone(pipeline.source);
+      const newSource = structuredClone(source);
       (newSource.config as TextSourceConfig).document = doc;
-      setPipeline({
-        ...pipeline,
-        testDocs: [doc],
-        source: newSource,
-      });
+      setSource(newSource);
     },
-    [pipeline, setPipeline]
+    [source, setSource]
   );
 
   const updateDocProp = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-    prop: Exclude<keyof Doc, 'processingResults'>
+    prop: Exclude<keyof Doc, 'processingResults' | 'test'>
   ) => {
     const newVal = e.target.value;
     const newDoc = structuredClone(config.document!);

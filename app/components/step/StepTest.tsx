@@ -10,32 +10,35 @@ import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
 import { Select } from '@/app/components/catalyst/select';
 import { Spinner } from '@/app/components/Spinner';
 import { litlyticsStore, pipelineAtom } from '@/app/store/store';
+import { setDocs } from '@/src/source/setDocs';
 import { ProcessingStep } from '@/src/step/Step';
 import { BeakerIcon } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import { CustomMarkdown } from '../markdown/Markdown';
+import { useDocs } from '../pipeline/source/useTestDocs';
 
 export function StepTest({ data }: { data: ProcessingStep }) {
   const litlytics = useAtomValue(litlyticsStore);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const [testDocId, setTestDocId] = useState(pipeline.testDocs.at(0)?.id ?? '');
+  const { testDocs, allDocs } = useDocs(pipeline);
+  const [testDocId, setTestDocId] = useState(testDocs.at(0)?.id ?? '');
   const [isTestOpen, setTestOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error>();
   const testResult = useMemo(() => {
-    return pipeline.testDocs
+    return testDocs
       .find((d) => d.id === testDocId)
       ?.processingResults.find((r) => r.stepId === data.id);
-  }, [pipeline.testDocs, testDocId, data]);
+  }, [testDocs, testDocId, data]);
 
   // update first test doc on docs changes
   useEffect(() => {
-    if (pipeline.testDocs.find((d) => d.id === testDocId)) {
+    if (testDocs.find((d) => d.id === testDocId)) {
       return;
     }
-    setTestDocId(pipeline.testDocs.at(0)?.id ?? '');
-  }, [pipeline.testDocs, testDocId]);
+    setTestDocId(testDocs.at(0)?.id ?? '');
+  }, [testDocs, testDocId]);
 
   const testStep = async () => {
     if (!testDocId.length) {
@@ -55,31 +58,35 @@ export function StepTest({ data }: { data: ProcessingStep }) {
       const endTime = performance.now();
 
       if (!doc) {
+        const newDocs = allDocs.map((d) => {
+          if (d.id === testDocId) {
+            d.processingResults.push({
+              result: undefined,
+              stepId: data.id,
+              timingMs: endTime - startTime,
+            });
+            return d;
+          }
+          return d;
+        });
+        const newSource = await setDocs(pipeline, newDocs);
         // update result manually with no execution
         setPipeline({
           ...pipeline,
-          testDocs: pipeline.testDocs.map((d) => {
-            if (d.id === testDocId) {
-              d.processingResults.push({
-                result: undefined,
-                stepId: data.id,
-                timingMs: endTime - startTime,
-              });
-              return d;
-            }
-            return d;
-          }),
+          source: newSource,
         });
       } else {
+        const newDocs = allDocs.map((d) => {
+          if (d.id === doc?.id) {
+            return doc;
+          }
+          return d;
+        });
+        const newSource = await setDocs(pipeline, newDocs);
         // update test doc results
         setPipeline({
           ...pipeline,
-          testDocs: pipeline.testDocs.map((d) => {
-            if (d.id === doc?.id) {
-              return doc;
-            }
-            return d;
-          }),
+          source: newSource,
         });
       }
     } catch (err) {
@@ -125,7 +132,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
                     value={testDocId}
                     onChange={(e) => setTestDocId(e.target.value)}
                   >
-                    {pipeline.testDocs.map((d) => (
+                    {testDocs.map((d) => (
                       <option key={d.id} value={d.id}>
                         {d.name}
                       </option>

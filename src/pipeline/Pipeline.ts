@@ -1,4 +1,3 @@
-import { Doc } from '../doc/Document';
 import { OutputStep, ProcessingStep, SourceStep } from '../step/Step';
 
 export interface Pipeline {
@@ -8,7 +7,6 @@ export interface Pipeline {
   source: SourceStep;
   output: OutputStep;
   steps: ProcessingStep[];
-  testDocs: Doc[];
   provider?: string;
   model?: string;
 }

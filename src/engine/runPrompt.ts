@@ -4,7 +4,6 @@ import type { LLMProviders } from '../litlytics';
 import { executeOnLLM } from '../llm/llm';
 import { LLMModel, LLMProvider, LLMRequest } from '../llm/types';
 import { runWithWebLLM } from '../webllm/webllm.client';
-// import { runWithWebLLM } from '../webllm/webllm.client';
 
 export interface RunPromptFromMessagesArgs {
   provider: LLMProviders;

@@ -1,7 +1,6 @@
 import { Doc } from '@/src/doc/Document';
 import { PencilIcon } from '@heroicons/react/24/solid';
-import { useAtom } from 'jotai';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import { Checkbox } from '~/components/catalyst/checkbox';
 import {
@@ -14,7 +13,6 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Input } from '~/components/catalyst/input';
 import { Textarea } from '~/components/catalyst/textarea';
-import { pipelineAtom } from '~/store/store';
 
 export function DocItem({
   doc,
@@ -23,32 +21,17 @@ export function DocItem({
   doc: Doc;
   updateDoc: (doc: Doc) => void;
 }) {
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
-  const testDocs = useMemo(() => pipeline.testDocs, [pipeline]);
-  const inTest = useMemo(
-    () => testDocs.find((d) => d.id === doc.id) !== undefined,
-    [doc, testDocs]
-  );
 
-  const toggleTest = () => {
-    if (inTest) {
-      const newTestDocs = testDocs.filter((d) => d.id !== doc.id);
-      setPipeline({
-        ...pipeline,
-        testDocs: newTestDocs,
-      });
-    } else {
-      setPipeline({
-        ...pipeline,
-        testDocs: pipeline.testDocs.concat(doc),
-      });
-    }
+  const toggleTest = async () => {
+    const newDoc = structuredClone(doc);
+    newDoc.test = !newDoc.test;
+    updateDoc(newDoc);
   };
 
   const updateDocProp = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-    prop: Exclude<keyof Doc, 'processingResults'>
+    prop: Exclude<keyof Doc, 'processingResults' | 'test'>
   ) => {
     const newVal = e.target.value;
     const newDoc = structuredClone(doc);
@@ -61,7 +44,7 @@ export function DocItem({
       <div className="flex items-center justify-between gap-2">
         <span>{doc.name}</span>
         <div className="flex items-center gap-1">
-          <Checkbox checked={inTest} onClick={toggleTest} /> Use as test
+          <Checkbox checked={doc.test} onClick={toggleTest} /> Use as test
           <Button plain onClick={() => setIsOpen(true)} className="ml-6">
             <PencilIcon />
           </Button>

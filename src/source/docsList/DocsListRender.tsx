@@ -1,20 +1,21 @@
-import { Doc } from '@/src/doc/Document';
-import { useAtom } from 'jotai';
+import type { Doc } from '@/src/doc/Document';
+import { SourceStep } from '@/src/step/Step';
 import { useMemo } from 'react';
-import { DocItem } from '~/components/docs/DocItem';
-import { pipelineAtom } from '~/store/store';
-import { DocsListSourceConfig } from '../types';
+import type { DocsListSourceConfig } from '../Source';
 import AddDoc from './AddDoc';
+import { DocItem } from './DocItem';
 
-export function DocsListSource() {
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const config = useMemo(
-    () => pipeline.source.config as DocsListSourceConfig,
-    [pipeline]
-  );
+export function DocsListSourceRender({
+  source,
+  setSource,
+}: {
+  source: SourceStep;
+  setSource: (newSource: SourceStep) => void;
+}) {
+  const config = useMemo(() => source.config as DocsListSourceConfig, [source]);
 
   const updateDoc = (doc: Doc) => {
-    const newSource = structuredClone(pipeline.source);
+    const newSource = structuredClone(source);
     (newSource.config as DocsListSourceConfig).documents =
       config.documents?.map((d) => {
         if (d.id === doc.id) {
@@ -22,10 +23,7 @@ export function DocsListSource() {
         }
         return d;
       });
-    setPipeline({
-      ...pipeline,
-      source: newSource,
-    });
+    setSource(newSource);
   };
 
   return (
@@ -41,7 +39,7 @@ export function DocsListSource() {
           <>No documents</>
         )}
       </div>
-      <AddDoc data={pipeline.source} />
+      <AddDoc source={source} setSource={setSource} />
     </div>
   );
 }

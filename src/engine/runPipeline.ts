@@ -1,9 +1,7 @@
 import { Doc } from '../doc/Document';
 import type { LitLytics } from '../litlytics';
 import { Pipeline, PipelineStatus } from '../pipeline/Pipeline';
-import { getDocsListSourceDocuments } from '../source/docsList';
-import { SourceTypes } from '../source/Source';
-import { getTextSourceDocuments } from '../source/textSource';
+import { getDocs } from '../source/getDocs';
 
 export async function runPipeline(
   litlytics: LitLytics,
@@ -21,17 +19,7 @@ export async function runPipeline(
   onStatus({ status: 'sourcing' });
 
   // get all documents from the source
-  let docs: Doc[] = [];
-  switch (source.sourceType) {
-    case SourceTypes.DOCS:
-      docs = await getDocsListSourceDocuments(source);
-      break;
-    case SourceTypes.TEXT:
-      docs = await getTextSourceDocuments(source);
-      break;
-    default:
-      throw new Error('Unknown source type! Cannot get documents');
-  }
+  let docs: Doc[] = await getDocs(pipeline);
 
   // get all connections to source
   let stepIds = source.connectsTo;

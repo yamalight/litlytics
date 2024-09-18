@@ -1,5 +1,6 @@
 import type { LitLytics } from '../litlytics';
 import { Pipeline } from '../pipeline/Pipeline';
+import { getDocs } from '../source/getDocs';
 import { ProcessingStep } from '../step/Step';
 import { runCodeStep } from './step/runCodeStep';
 
@@ -14,7 +15,9 @@ export async function testPipelineStep({
   step: ProcessingStep;
   docId: string;
 }) {
-  const doc = pipeline.testDocs.find((d) => d.id === docId);
+  const allDocs = await getDocs(pipeline);
+  const testDocs = allDocs.filter((d) => d.test);
+  const doc = testDocs.find((d) => d.id === docId);
   if (
     !doc &&
     step.input !== 'aggregate-docs' &&
@@ -30,7 +33,7 @@ export async function testPipelineStep({
       source: pipeline.source,
       allSteps: pipeline.steps,
       doc: doc!,
-      allDocs: pipeline.testDocs,
+      allDocs: testDocs,
     });
   }
 
@@ -39,6 +42,6 @@ export async function testPipelineStep({
     source: pipeline.source,
     allSteps: pipeline.steps,
     doc: doc!,
-    allDocs: pipeline.testDocs,
+    allDocs: testDocs,
   });
 }

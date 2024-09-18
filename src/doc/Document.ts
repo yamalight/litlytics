@@ -4,5 +4,6 @@ export interface Doc {
   id: string;
   name: string;
   content: string;
+  test?: boolean;
   processingResults: StepResult[];
 }

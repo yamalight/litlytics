@@ -1,6 +1,5 @@
 import { SourceStep } from '@/src/step/Step';
 import { DocumentIcon } from '@heroicons/react/16/solid';
-import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
@@ -13,20 +12,24 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Input } from '~/components/catalyst/input';
 import { Textarea } from '~/components/catalyst/textarea';
-import { pipelineAtom } from '~/store/store';
-import { DocsListSourceConfig } from '../types';
+import { DocsListSourceConfig } from '../Source';
 
-export default function AddDoc({ data }: { data: SourceStep }) {
+export default function AddDoc({
+  source,
+  setSource,
+}: {
+  source: SourceStep;
+  setSource: (newSource: SourceStep) => void;
+}) {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const addDoc = () => {
     const content = contentInputRef.current?.value;
     const name = nameInputRef.current?.value;
     if (content?.length && name?.length) {
-      const newConfig = structuredClone(data.config) as DocsListSourceConfig;
+      const newConfig = structuredClone(source.config) as DocsListSourceConfig;
       if (!newConfig.documents) {
         newConfig.documents = [];
       }
@@ -36,12 +39,9 @@ export default function AddDoc({ data }: { data: SourceStep }) {
         content,
         processingResults: [],
       });
-      setPipeline({
-        ...pipeline,
-        source: {
-          ...pipeline.source,
-          config: newConfig,
-        },
+      setSource({
+        ...source,
+        config: newConfig,
       });
       setIsOpen(false);
     }

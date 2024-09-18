@@ -1,4 +1,5 @@
-import { SourceType, SourceTypes } from '@/src/source/Source';
+import { SourceTypes } from '@/src/source/Source';
+import { sourceProviders } from '@/src/source/sources';
 import { SourceStep } from '@/src/step/Step';
 import {
   ChevronDownIcon,
@@ -27,16 +28,14 @@ import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
 import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
-import { DocsListSource } from '../source/docs/DocsList';
-import { TextSource } from '../source/text/TextSource';
-import { SourceRender } from '../source/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
-const SOURCE_RENDERERS: Partial<Record<SourceType, SourceRender>> = {
-  [SourceTypes.DOCS]: DocsListSource,
-  [SourceTypes.TEXT]: TextSource,
-  // [SourceTypes.FILES]: DocsListSource,
-};
+const UnknownSource = ({
+  source: _data,
+}: {
+  source: SourceStep;
+  setSource: (n: SourceStep) => void;
+}) => <span>Unknown source type! Cannot get render</span>;
 
 export function SourceNode() {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +47,14 @@ export function SourceNode() {
     if (!data) {
       return;
     }
-    return SOURCE_RENDERERS[data.sourceType];
+
+    // get all documents from the source
+    const Source = sourceProviders[data.sourceType];
+    if (!Source) {
+      return UnknownSource;
+    }
+    const src = new Source(data);
+    return src.render;
   }, [data]);
 
   const updateNodeByKey = (
@@ -66,7 +72,6 @@ export function SourceNode() {
     // clear docs when changing source type
     if (prop === 'sourceType') {
       newData.config = {};
-      newPipeline.testDocs = [];
     }
 
     setPipeline(newPipeline);
@@ -78,6 +83,13 @@ export function SourceNode() {
   ) => {
     const newVal = e.target.value;
     updateNodeByKey(newVal, prop);
+  };
+
+  const updateSource = (newSource: SourceStep) => {
+    setPipeline({
+      ...pipeline,
+      source: newSource,
+    });
   };
 
   if (!data) {
@@ -122,7 +134,7 @@ export function SourceNode() {
         </NodeHeader>
         {data.expanded ? (
           <NodeContent className="h-[calc(100%-2rem)]">
-            {Render && <Render data={data} />}
+            {Render && <Render source={data} setSource={updateSource} />}
           </NodeContent>
         ) : (
           <></>
