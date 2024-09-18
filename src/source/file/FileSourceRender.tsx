@@ -8,6 +8,7 @@ import {
 import { useCallback, useMemo, useState } from 'react';
 import * as reactDropzone from 'react-dropzone';
 import { Button } from '~/components/catalyst/button';
+import { Checkbox } from '~/components/catalyst/checkbox';
 import { Dialog, DialogBody, DialogTitle } from '~/components/catalyst/dialog';
 import { CustomMarkdown } from '~/components/markdown/Markdown';
 import { Spinner } from '~/components/Spinner';
@@ -37,6 +38,17 @@ export function FileSourceRender({
 
   const deleteDoc = (doc: Doc) => {
     const newDocs = (config.documents ?? []).filter((d) => d.id !== doc.id);
+    updateDocs(newDocs);
+  };
+
+  const toggleTest = async (doc: Doc) => {
+    const newDocs = (config.documents ?? []).map((d) => {
+      if (d.id === doc.id) {
+        doc.test = !doc.test;
+        return doc;
+      }
+      return d;
+    });
     updateDocs(newDocs);
   };
 
@@ -151,11 +163,18 @@ export function FileSourceRender({
             <div className="flex flex-col gap-1 mb-2">
               {config.documents.map((doc) => (
                 <div
-                  className="p-2 flex justify-between bg-zinc-100 dark:bg-zinc-900 rounded-lg shadow-sm"
+                  className="p-2 flex items-center justify-between bg-zinc-100 dark:bg-zinc-900 rounded-lg shadow-sm"
                   key={doc.id}
                 >
                   <span>{doc.name}</span>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2 min-w-fit">
+                    <div className="flex items-center gap-1 min-w-fit">
+                      <Checkbox
+                        checked={doc.test}
+                        onClick={() => toggleTest(doc)}
+                      />
+                      <span>Use as test</span>
+                    </div>
                     <Button
                       icon
                       title="Preview"

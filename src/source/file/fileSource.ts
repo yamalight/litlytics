@@ -13,9 +13,9 @@ export class FileSource implements SourceProvider {
   }
 
   async getDocs(): Promise<Doc[]> {
-    if (this.source.sourceType !== SourceTypes.TEXT) {
+    if (this.source.sourceType !== SourceTypes.FILE) {
       throw new Error(
-        'Not text source passed when trying to get text source doc!'
+        'Not file source passed when trying to get file source doc!'
       );
     }
 
@@ -25,9 +25,9 @@ export class FileSource implements SourceProvider {
   }
 
   async setDocs(docs: Doc[]) {
-    if (this.source.sourceType !== SourceTypes.TEXT) {
+    if (this.source.sourceType !== SourceTypes.FILE) {
       throw new Error(
-        'Not text doc source passed when trying to set text source doc!'
+        'Not file source passed when trying to set file source doc!'
       );
     }
 
