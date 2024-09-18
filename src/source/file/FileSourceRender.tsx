@@ -131,8 +131,10 @@ export function FileSourceRender({
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">
                   {supportedFileTypes.join(', ')}
+                  <br />
+                  CSVs assume header row
                 </p>
               </div>
               <input
@@ -145,27 +147,30 @@ export function FileSourceRender({
             </label>
           </div>
 
-          {config.documents &&
-            config.documents.map((doc) => (
-              <div
-                className="p-2 flex justify-between bg-zinc-100 dark:bg-zinc-900 rounded-lg shadow-md"
-                key={doc.id}
-              >
-                <span>{doc.name}</span>
-                <div className="flex items-center gap-1">
-                  <Button
-                    icon
-                    title="Preview"
-                    onClick={() => setCurrentDoc(doc)}
-                  >
-                    <MagnifyingGlassIcon />
-                  </Button>
-                  <Button icon title="Delete" onClick={() => deleteDoc(doc)}>
-                    <XMarkIcon />
-                  </Button>
+          {config.documents && (
+            <div className="flex flex-col gap-1 mb-2">
+              {config.documents.map((doc) => (
+                <div
+                  className="p-2 flex justify-between bg-zinc-100 dark:bg-zinc-900 rounded-lg shadow-sm"
+                  key={doc.id}
+                >
+                  <span>{doc.name}</span>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      icon
+                      title="Preview"
+                      onClick={() => setCurrentDoc(doc)}
+                    >
+                      <MagnifyingGlassIcon />
+                    </Button>
+                    <Button icon title="Delete" onClick={() => deleteDoc(doc)}>
+                      <XMarkIcon />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
