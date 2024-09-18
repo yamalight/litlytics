@@ -2,7 +2,7 @@ import type { Doc } from '@/src/doc/Document';
 import type { SourceStep } from '@/src/step/Step';
 import { type ChangeEvent, useCallback, useEffect, useMemo } from 'react';
 import { Textarea } from '~/components/catalyst/textarea';
-import type { TextSourceConfig } from '../Source';
+import type { TextSourceConfig } from './types';
 
 export function TextSourceRender({
   source,

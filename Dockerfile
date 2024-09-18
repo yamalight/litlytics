@@ -1,6 +1,9 @@
 # install deps
 FROM oven/bun:slim AS base
 
+# install code dep for pdf.js
+RUN sudo apt-get install libgif-dev
+
 WORKDIR /app
 ADD package.json bun.lockb ./
 RUN bun install --ci

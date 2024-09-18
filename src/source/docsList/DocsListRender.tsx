@@ -1,9 +1,9 @@
 import type { Doc } from '@/src/doc/Document';
 import { SourceStep } from '@/src/step/Step';
 import { useMemo } from 'react';
-import type { DocsListSourceConfig } from '../Source';
 import AddDoc from './AddDoc';
 import { DocItem } from './DocItem';
+import type { DocsListSourceConfig } from './types';
 
 export function DocsListSourceRender({
   source,

@@ -2,10 +2,10 @@ import { Doc } from '@/src/doc/Document';
 import { SourceStep } from '@/src/step/Step';
 import React from 'react';
 import { SourceProvider, SourceTypes } from '../Source';
-import { TextSourceRender } from './TextSourceRender';
-import type { TextSourceConfig } from './types';
+import { FileSourceRender } from './FileSourceRender';
+import { FileSourceConfig } from './types';
 
-export class TextSource implements SourceProvider {
+export class FileSource implements SourceProvider {
   source: SourceStep;
 
   constructor(source: SourceStep) {
@@ -19,8 +19,8 @@ export class TextSource implements SourceProvider {
       );
     }
 
-    const config = this.source.config as TextSourceConfig;
-    const docs = [config.document!];
+    const config = this.source.config as FileSourceConfig;
+    const docs = config.documents ?? [];
     return docs;
   }
 
@@ -31,7 +31,7 @@ export class TextSource implements SourceProvider {
       );
     }
 
-    (this.source.config as TextSourceConfig).document = docs[0];
+    (this.source.config as FileSourceConfig).documents = docs;
     return this.source;
   }
 
@@ -42,6 +42,6 @@ export class TextSource implements SourceProvider {
     source: SourceStep;
     setSource: (newSource: SourceStep) => void;
   }) {
-    return React.createElement(TextSourceRender, { source, setSource });
+    return React.createElement(FileSourceRender, { source, setSource });
   }
 }

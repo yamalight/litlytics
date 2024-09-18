@@ -1,8 +1,9 @@
 import React from 'react';
 import { Doc } from '../../doc/Document';
 import { SourceStep } from '../../step/Step';
-import { DocsListSourceConfig, SourceProvider, SourceTypes } from '../Source';
+import { SourceProvider, SourceTypes } from '../Source';
 import { DocsListSourceRender } from './DocsListRender';
+import { DocsListSourceConfig } from './types';
 
 export class DocsListSource implements SourceProvider {
   source: SourceStep;

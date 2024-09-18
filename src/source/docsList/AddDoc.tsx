@@ -12,7 +12,7 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Input } from '~/components/catalyst/input';
 import { Textarea } from '~/components/catalyst/textarea';
-import { DocsListSourceConfig } from '../Source';
+import { DocsListSourceConfig } from './types';
 
 export default function AddDoc({
   source,

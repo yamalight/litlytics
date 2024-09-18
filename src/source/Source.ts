@@ -4,7 +4,7 @@ import { SourceStep } from '../step/Step';
 export class SourceTypes {
   static TEXT = 'text' as const;
   static DOCS = 'docs' as const;
-  // static FILES = 'files' as const;
+  static FILE = 'file' as const;
 }
 
 type SourceTypeList = (typeof SourceTypes)[keyof typeof SourceTypes];
@@ -25,11 +25,3 @@ export abstract class SourceProvider {
     setSource: (newSource: SourceStep) => void;
   }) => React.ReactElement;
 }
-
-export type DocsListSourceConfig = {
-  documents?: Doc[];
-};
-
-export type TextSourceConfig = {
-  document?: Doc;
-};
