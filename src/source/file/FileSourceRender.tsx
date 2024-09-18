@@ -177,10 +177,11 @@ export function FileSourceRender({
       <Dialog
         open={currentDoc !== undefined}
         onClose={() => setCurrentDoc(undefined)}
+        size="3xl"
         topClassName="z-20"
       >
         <DialogTitle>Preview {currentDoc?.name}</DialogTitle>
-        <DialogBody className="prose dark:prose-invert">
+        <DialogBody className="prose dark:prose-invert max-w-full">
           <CustomMarkdown>{currentDoc?.content}</CustomMarkdown>
         </DialogBody>
       </Dialog>
