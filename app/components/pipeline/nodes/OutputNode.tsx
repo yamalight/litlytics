@@ -1,5 +1,7 @@
 import { modelCosts } from '@/src/llm/costs';
-import { OutputType, OutputTypes } from '@/src/output/Output';
+import { BasicOutputConfig } from '@/src/output/basic/types';
+import { OutputTypes } from '@/src/output/Output';
+import { outputProviders } from '@/src/output/outputs';
 import { OutputStep } from '@/src/step/Step';
 import {
   CheckIcon,
@@ -41,13 +43,7 @@ import {
   pipelineAtom,
   pipelineStatusAtom,
 } from '~/store/store';
-import { BasicOutput } from '../output/basic/Basic';
-import { BasicOutputConfig, OutputRender } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
-
-const OUTPUT_RENDERERS: Partial<Record<OutputType, OutputRender>> = {
-  [OutputTypes.BASIC]: BasicOutput,
-};
 
 export function OutputNode() {
   const litlytics = useAtomValue(litlyticsStore);
@@ -57,10 +53,15 @@ export function OutputNode() {
   const [status, setStatus] = useAtom(pipelineStatusAtom);
 
   const data = useMemo(() => pipeline.output, [pipeline]);
+  const output = useMemo(() => {
+    const Output = outputProviders[pipeline.output.outputType];
+    const output = new Output(pipeline);
+    return output;
+  }, [pipeline]);
 
   const { timing, prompt, completion, cost } = useMemo(() => {
     // const timings = data.
-    const cfg = data.config as BasicOutputConfig;
+    const cfg = output.getConfig();
     const results = Array.isArray(cfg.results) ? cfg.results : [cfg.results];
     const res = results.filter((doc) => doc);
     if (!res.length) {
@@ -84,14 +85,14 @@ export function OutputNode() {
       3
     );
     return { timing, prompt, completion, cost };
-  }, [data, litlyticsConfig.model]);
+  }, [output, litlyticsConfig.model]);
 
   const Render = useMemo(() => {
-    if (!data) {
+    if (!output) {
       return;
     }
-    return OUTPUT_RENDERERS[data.outputType];
-  }, [data]);
+    return output.render;
+  }, [output]);
 
   const updateNodeByKey = (
     newVal: string | boolean | undefined,
@@ -224,7 +225,7 @@ export function OutputNode() {
                 </Badge>
               )}
             </div>
-            {Render && <Render data={data} />}
+            {Render && <Render pipeline={pipeline} setPipeline={setPipeline} />}
           </NodeContent>
         ) : (
           <></>

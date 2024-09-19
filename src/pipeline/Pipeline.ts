@@ -1,3 +1,4 @@
+import { Result } from '../output/Output';
 import { OutputStep, ProcessingStep, SourceStep } from '../step/Step';
 
 export interface Pipeline {
@@ -6,6 +7,7 @@ export interface Pipeline {
   pipelinePlan?: string;
   source: SourceStep;
   output: OutputStep;
+  results?: Result[];
   steps: ProcessingStep[];
   provider?: string;
   model?: string;

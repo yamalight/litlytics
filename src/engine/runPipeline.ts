@@ -1,5 +1,6 @@
 import { Doc } from '../doc/Document';
 import type { LitLytics } from '../litlytics';
+import { outputProviders } from '../output/outputs';
 import { Pipeline, PipelineStatus } from '../pipeline/Pipeline';
 import { getDocs } from '../source/getDocs';
 
@@ -67,9 +68,13 @@ export async function runPipeline(
     stepIds = nextStep.connectsTo;
     // if we're at the output - handle results and break
     if (stepIds.includes(pipeline.output.id)) {
-      pipeline.output.config = {
-        results: docs,
-      };
+      // construct output
+      const Output = outputProviders[pipeline.output.outputType];
+      const output = new Output(pipeline);
+      // save result docs
+      output.saveResults(docs);
+      // process and store final results
+      pipeline.results = output.getResult();
       break;
     }
     nextStep = pipeline.steps.find((s) => stepIds.includes(s.id));

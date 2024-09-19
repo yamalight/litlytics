@@ -1,4 +1,5 @@
 import { modelCosts } from '@/src/llm/costs';
+import { outputProviders } from '@/src/output/outputs';
 import { ProcessingStep, StepInputs } from '@/src/step/Step';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import {
@@ -40,7 +41,6 @@ import {
   pipelineAtom,
   pipelineStatusAtom,
 } from '~/store/store';
-import { BasicOutputConfig } from '../output/types';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function StepNode({ data }: { data: ProcessingStep }) {
@@ -52,10 +52,16 @@ export function StepNode({ data }: { data: ProcessingStep }) {
   const [refine, setRefine] = useState(``);
   const [loading, setLoading] = useState(false);
 
+  const output = useMemo(() => {
+    const Output = outputProviders[pipeline.output.outputType];
+    const output = new Output(pipeline);
+    return output;
+  }, [pipeline]);
+
   const { averageTiming, averagePrompt, averageCompletion, averageCost } =
     useMemo(() => {
       // const timings = data.
-      const cfg = pipeline.output.config as BasicOutputConfig;
+      const cfg = output.getConfig();
       const results = Array.isArray(cfg.results) ? cfg.results : [cfg.results];
       const res = results.filter((doc) => doc);
       if (!res.length) {
@@ -90,7 +96,7 @@ export function StepNode({ data }: { data: ProcessingStep }) {
         3
       );
       return { averageTiming, averagePrompt, averageCompletion, averageCost };
-    }, [pipeline.output.config, data, litlyticsConfig.model]);
+    }, [output, data, litlyticsConfig.model]);
 
   const updateNodeByKey = (
     newVal: string | boolean | undefined,
