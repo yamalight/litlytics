@@ -1,25 +1,14 @@
 import {
-  json,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from '@remix-run/react';
 import { Provider } from 'jotai';
 import './tailwind.css';
 
-export async function loader() {
-  return json({
-    ENV: {
-      DEPLOY_URL: process.env.DEPLOY_URL,
-    },
-  });
-}
-
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useLoaderData<typeof loader>();
   return (
     <Provider>
       <html
@@ -35,13 +24,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <body>
           {children}
           <ScrollRestoration />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.process = {
-                env: ${JSON.stringify(data.ENV)}
-              };`,
-            }}
-          />
           <Scripts />
         </body>
       </html>
