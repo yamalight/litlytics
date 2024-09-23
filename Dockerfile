@@ -3,8 +3,6 @@ FROM oven/bun:slim AS base
 
 # install code dep for pdf.js
 RUN apt update && apt install -y build-essential python3 libpixman-1-dev libcairo2-dev libpango1.0-dev libgif-dev
-# install bun (we're using it to install deps)
-RUN curl -fsSL https://bun.sh/install | bash
 
 WORKDIR /app
 # install deps
@@ -33,6 +31,5 @@ COPY . .
 EXPOSE 3000
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
-ENV DEPLOY_URL=http://localhost:3000
 
 CMD ["npm", "run", "start"]
