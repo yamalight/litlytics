@@ -36,7 +36,10 @@ export const runPromptFromMessages = async ({
     },
   };
   // generate plan from LLM
-  const baseUrl = process.env.DEPLOY_URL ? process.env.DEPLOY_URL : '';
+  const baseUrl =
+    typeof process !== 'undefined' && process?.env?.DEPLOY_URL
+      ? process.env.DEPLOY_URL
+      : '';
   const result = await fetch(`${baseUrl}/api/llm`, {
     method: 'POST',
     body: JSON.stringify(req),
