@@ -5,12 +5,12 @@ import { useEffect, useMemo, useState } from 'react';
 
 export function useDocs(pipeline: Pipeline) {
   const [allDocs, setDocs] = useState<Doc[]>([]);
-  const testDocs = useMemo(() => allDocs.filter((d) => d.test), [allDocs]);
+  const testDocs = useMemo(() => allDocs.filter((d) => d?.test), [allDocs]);
 
   useEffect(() => {
     async function getTestDocs() {
       const newAllDocs = await getDocs(pipeline);
-      setDocs(newAllDocs);
+      setDocs(newAllDocs ?? []);
     }
     getTestDocs();
   }, [pipeline]);

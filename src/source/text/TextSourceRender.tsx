@@ -41,6 +41,7 @@ export function TextSourceRender({
       id: 'textdoc',
       name: 'Default document',
       content: '',
+      test: true,
       processingResults: [],
     };
     updateDoc(doc);

@@ -1,5 +1,5 @@
 import { Doc } from '@/src/doc/Document';
-import { PencilIcon } from '@heroicons/react/24/solid';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { ChangeEvent, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import { Checkbox } from '~/components/catalyst/checkbox';
@@ -17,9 +17,11 @@ import { Textarea } from '~/components/catalyst/textarea';
 export function DocItem({
   doc,
   updateDoc,
+  deleteDoc,
 }: {
   doc: Doc;
   updateDoc: (doc: Doc) => void;
+  deleteDoc: (docId: string) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,6 +49,9 @@ export function DocItem({
           <Checkbox checked={doc.test} onClick={toggleTest} /> Use as test
           <Button plain onClick={() => setIsOpen(true)} className="ml-6">
             <PencilIcon />
+          </Button>
+          <Button plain onClick={() => deleteDoc(doc.id)} className="ml-1">
+            <TrashIcon />
           </Button>
         </div>
       </div>

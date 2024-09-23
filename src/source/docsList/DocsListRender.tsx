@@ -26,13 +26,30 @@ export function DocsListSourceRender({
     setSource(newSource);
   };
 
+  const deleteDoc = (docId: string) => {
+    const newSource = structuredClone(source);
+    (newSource.config as DocsListSourceConfig).documents =
+      config.documents?.filter((d) => {
+        if (d.id === docId) {
+          return false;
+        }
+        return true;
+      });
+    setSource(newSource);
+  };
+
   return (
-    <div className="flex flex-col w-full h-full overflow-auto">
+    <div className="flex flex-col w-full h-full overflow-auto p-1 max-w-full">
       <div className="flex flex-col">
         {config.documents?.length ? (
           <>
             {config.documents?.map((doc) => (
-              <DocItem doc={doc} key={doc.id} updateDoc={updateDoc} />
+              <DocItem
+                doc={doc}
+                key={doc.id}
+                updateDoc={updateDoc}
+                deleteDoc={deleteDoc}
+              />
             ))}
           </>
         ) : (
