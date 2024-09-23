@@ -21,6 +21,7 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    console.log('newLL', config);
     const newLL = new LitLytics({
       provider: config.provider,
       model: config.model,

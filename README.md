@@ -1,15 +1,11 @@
 # ToDo
 
-- [ ] Add new file source
+- [ ] Do a refactoring pass
+- [ ] Add tests
+
 - [ ] Add new url source
+
 - [ ] Allow custom sources
-
-- [ ] Do a visual pass in Edge
-- [ ] Do a visual pass on light mode
-
-# Planned
-
-- [ ] use case: compare N things
 
 ## Logic:
 

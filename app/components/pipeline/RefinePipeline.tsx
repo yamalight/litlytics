@@ -110,7 +110,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
       </div>
 
       {error && (
-        <div className="flex items-center justify-between bg-red-500 dark:bg-red-600 rounded-xl py-1 px-2 mt-3">
+        <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 mt-3">
           Error generating: {error.message}
         </div>
       )}

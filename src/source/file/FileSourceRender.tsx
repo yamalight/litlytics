@@ -109,7 +109,7 @@ export function FileSourceRender({
       <div className="flex flex-col w-full h-full overflow-auto">
         <div className="flex flex-col gap-2">
           {error && (
-            <div className="flex items-center justify-between bg-red-500 dark:bg-red-600 rounded-xl py-1 px-2 my-2">
+            <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 my-2">
               Error loading file: {error.message}
             </div>
           )}

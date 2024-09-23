@@ -1,5 +1,6 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SparklesIcon } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
 import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
@@ -18,6 +19,14 @@ import {
   pipelineStatusAtom,
 } from '~/store/store';
 import { RefinePipeline } from './RefinePipeline';
+
+const tabClass = clsx(
+  `rounded-full py-1 px-3 text-sm/6 font-semibold`,
+  `text-zinc-900 dark:text-zinc-50 focus:outline-none`,
+  `data-[selected]:bg-zinc-900/10 dark:data-[selected]:bg-zinc-50/10`,
+  `data-[hover]:bg-zinc-900/5 dark:data-[hover]:bg-zinc-50/5 data-[selected]:data-[hover]:bg-zinc-900/10 dark:data-[selected]:data-[hover]:bg-zinc-50/10`,
+  `data-[focus]:outline-1 data-[focus]:outline-black dark:data-[focus]:outline-white`
+);
 
 export default function GeneratePipeline() {
   const status = useAtomValue(pipelineStatusAtom);
@@ -75,17 +84,13 @@ export default function GeneratePipeline() {
         <DialogBody>
           <TabGroup selectedIndex={selectedTab} onChange={setSelectedTab}>
             <TabList className="flex gap-4">
-              <Tab className="rounded-full py-1 px-3 text-sm/6 font-semibold text-white focus:outline-none data-[selected]:bg-white/10 data-[hover]:bg-white/5 data-[selected]:data-[hover]:bg-white/10 data-[focus]:outline-1 data-[focus]:outline-white">
-                Plan
-              </Tab>
+              <Tab className={tabClass}>Plan</Tab>
               {Boolean(pipeline.pipelinePlan?.length) && (
-                <Tab className="rounded-full py-1 px-3 text-sm/6 font-semibold text-white focus:outline-none data-[selected]:bg-white/10 data-[hover]:bg-white/5 data-[selected]:data-[hover]:bg-white/10 data-[focus]:outline-1 data-[focus]:outline-white">
-                  Refine plan
-                </Tab>
+                <Tab className={tabClass}>Refine plan</Tab>
               )}
             </TabList>
             <TabPanels className="mt-3">
-              <TabPanel className="rounded-xl bg-white/5 p-3">
+              <TabPanel className="rounded-xl bg-zinc-900/5 dark:bg-zinc-50/5 p-3">
                 <FieldGroup>
                   <Field>
                     <Label>Describe your task</Label>
@@ -116,12 +121,12 @@ export default function GeneratePipeline() {
                   </Button>
                 </div>
                 {error && (
-                  <div className="flex items-center justify-between bg-red-500 dark:bg-red-600 rounded-xl py-1 px-2 my-2">
+                  <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 my-2">
                     Error planning: {error.message}
                   </div>
                 )}
               </TabPanel>
-              <TabPanel className="rounded-xl bg-white/5 p-3">
+              <TabPanel className="rounded-xl bg-zinc-900/5 dark:bg-zinc-50/5 p-3">
                 <RefinePipeline hide={() => setIsOpen(false)} />
               </TabPanel>
             </TabPanels>
