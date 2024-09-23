@@ -58,7 +58,7 @@ function NodeError({ error }: { error: Error }) {
       <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
         <DialogTitle>Error during step execution</DialogTitle>
         <DialogBody>
-          <pre>{error.message}</pre>
+          <pre>{`${error.message}\n\n\n${error.stack}`}</pre>
         </DialogBody>
       </Dialog>
     </>
