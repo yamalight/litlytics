@@ -39,12 +39,12 @@ export function Recommended() {
               <br /> <Badge>Anthropic</Badge> claude-3-5-sonnet
             </li>
             <li>
-              <span className="text-sm opacity-60">Best free:</span>
+              <span className="text-sm opacity-60">Best free tier:</span>
               <br /> <Badge>Gemini</Badge> gemini-1.5-flash
             </li>
             <li>
               <span className="text-sm opacity-60">Best for privacy:</span>
-              <br /> <Badge>Local</Badge> Llama-3.1-8B-Instruct
+              <br /> <Badge>Local</Badge> gemma-2-9b-it
             </li>
           </ul>
         </div>
