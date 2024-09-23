@@ -5,6 +5,7 @@ import { LLMModelsList, LLMProvidersList } from '@/src/llm/types';
 import { CurrencyDollarIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { MLCEngine } from '@mlc-ai/web-llm';
 import { useAtom } from 'jotai';
+import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { litlyticsConfigStore, webllmAtom } from '~/store/store';
 import { Badge } from '../catalyst/badge';
@@ -15,7 +16,6 @@ import { Select } from '../catalyst/select';
 import { Spinner } from '../Spinner';
 import { ProviderKeysHint } from './ProviderKeys';
 import { Recommended, recommendedForProvider } from './Recommended';
-import _ from 'lodash';
 
 export function Settings({ close }: { close: () => void }) {
   const [webllm, setWebllm] = useAtom(webllmAtom);
@@ -199,6 +199,10 @@ export function Settings({ close }: { close: () => void }) {
                 <strong>{localModelSizes[config.model]}mb</strong>
               </Description>
             </div>
+            <Description className="mt-4 mx-1 !text-xs">
+              Please note that local model are worse at generating pipelines
+              that their larger counterparts.
+            </Description>
           </Field>
         )}
       </FieldGroup>
