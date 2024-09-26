@@ -3,8 +3,12 @@ import { UI } from '~/components/ui/UI';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: '🔥 LitLytics' },
-    { name: 'description', content: 'Welcome to 🔥 LitLytics!' },
+    { title: 'LitLytics' },
+    {
+      name: 'description',
+      content:
+        'LitLytics is an affordable, simple analytics platform for everyone',
+    },
   ];
 };
 
