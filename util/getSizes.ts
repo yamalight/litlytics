@@ -79,6 +79,8 @@ const urls = [
   'mlc-ai/gemma-2-9b-it-q3f16_1-MLC',
   'mlc-ai/gemma-2-9b-it-q4f16_1-MLC',
   'mlc-ai/gemma-2-9b-it-q4f32_1-MLC',
+  'mlc-ai/Llama-3.2-1B-Instruct-q4f16_1-MLC',
+  'mlc-ai/Llama-3.2-3B-Instruct-q4f16_1-MLC',
 ];
 
 for (const model of urls) {

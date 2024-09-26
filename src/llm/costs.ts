@@ -19,11 +19,11 @@ const gpt4oMini = {
 
 export const modelCosts: Record<LLMModel, { input: number; output: number }> = {
   // local
-  'Llama-3.1-8B-Instruct-q4f16_1-MLC': {
+  'Llama-3.2-1B-Instruct-q4f16_1-MLC': {
     input: 0, // 0, local
     output: 0, // 0, local
   },
-  'Hermes-3-Llama-3.1-8B-q4f16_1-MLC': {
+  'Llama-3.2-3B-Instruct-q4f16_1-MLC': {
     input: 0, // 0, local
     output: 0, // 0, local
   },
@@ -32,10 +32,6 @@ export const modelCosts: Record<LLMModel, { input: number; output: number }> = {
     output: 0, // 0, local
   },
   'Mistral-7B-Instruct-v0.3-q4f16_0-MLC': {
-    input: 0, // 0, local
-    output: 0, // 0, local
-  },
-  'gemma-2-27b-it-q4f32_1-MLC': {
     input: 0, // 0, local
     output: 0, // 0, local
   },

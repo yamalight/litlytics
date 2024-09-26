@@ -14,11 +14,11 @@ export type LLMProvider = (typeof LLMProvidersList)[number];
 
 export const LLMModelsList = {
   local: [
-    'gemma-2-9b-it-q4f16_1-MLC',
-    'Llama-3.1-8B-Instruct-q4f16_1-MLC',
+    'Llama-3.2-3B-Instruct-q4f16_1-MLC',
+    'Llama-3.2-1B-Instruct-q4f16_1-MLC',
     'Phi-3.5-mini-instruct-q4f16_1-MLC',
     'Mistral-7B-Instruct-v0.3-q4f16_1-MLC',
-    // 'gemma-2-27b-it-q4f16_1-MLC', // TODO: re-enable after webllm is updated with it
+    'gemma-2-9b-it-q4f16_1-MLC',
   ],
   anthropic: [
     'claude-3-5-sonnet-20240620',

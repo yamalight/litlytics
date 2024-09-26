@@ -6,13 +6,9 @@ import { Badge } from '../catalyst/badge';
 
 export const recommendedForProvider: Record<LLMProviders, LLMModel> = {
   anthropic: 'claude-3-5-sonnet-20240620',
-  // cohere: 'command-r-plus',
   gemini: 'gemini-1.5-flash-latest',
-  // groq: 'llama-3.1-8b-instant',
-  local: 'gemma-2-9b-it-q4f16_1-MLC',
-  // mistral: 'mistral-medium-latest',
+  local: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
   openai: 'gpt-4o-mini',
-  // perplexity: 'llama-3.1-8b-instruct',
 };
 
 export function Recommended() {
