@@ -21,7 +21,7 @@ export function Recommended() {
         anchor="left"
         className="flex flex-col z-50 bg-zinc-100 dark:bg-zinc-800 rounded-xl shadow-md"
       >
-        <div className="prose dark:prose-invert py-2 px-6">
+        <div className="prose dark:prose-invert py-2 px-6 mb-2">
           <h4>Recommended providers and models</h4>
           <ul>
             <li>
@@ -40,9 +40,15 @@ export function Recommended() {
             </li>
             <li>
               <span className="text-sm opacity-60">Best for privacy:</span>
-              <br /> <Badge>Local</Badge> gemma-2-9b-it
+              <br /> <Badge>Local</Badge> Llama-3.2-3B-Instruct
             </li>
           </ul>
+
+          <p className="text-xs">
+            Check out{' '}
+            <a href="https://artificialanalysis.ai/">ArtificialAnalysis</a> for
+            more in-depth comparisons.
+          </p>
         </div>
       </PopoverPanel>
     </Popover>
