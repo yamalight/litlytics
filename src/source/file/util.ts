@@ -7,14 +7,7 @@ import { TextItem } from 'pdfjs-dist/types/src/display/api';
 const src = new URL('pdfjs-dist/build/pdf.worker.mjs', import.meta.url);
 pdfjs.GlobalWorkerOptions.workerSrc = src.toString();
 
-export const supportedFileTypes = [
-  '.csv',
-  '.doc',
-  '.docx',
-  '.pdf',
-  '.txt',
-  '.xlsx',
-];
+export const supportedFileTypes = ['.csv', '.doc', '.docx', '.pdf', '.txt'];
 
 const parseCsvFile = (file: File): Promise<string[]> =>
   new Promise((resolve, reject) => {
