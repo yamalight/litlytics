@@ -63,6 +63,18 @@ export default function GeneratePipeline() {
     }
   };
 
+  const closeDialog = () => {
+    if (
+      loading ||
+      status.status === 'refine' ||
+      status.status === 'step' ||
+      status.status === 'sourcing'
+    ) {
+      return;
+    }
+    setIsOpen(false);
+  };
+
   return (
     <>
       <Button
@@ -76,7 +88,7 @@ export default function GeneratePipeline() {
         Auto-generate
       </Button>
 
-      <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
+      <Dialog open={isOpen} onClose={closeDialog} topClassName="z-20">
         <DialogTitle>Generate your pipeline</DialogTitle>
         <DialogDescription>
           Let us generate your data processing pipeline based on your task.
@@ -127,7 +139,7 @@ export default function GeneratePipeline() {
                 )}
               </TabPanel>
               <TabPanel className="rounded-xl bg-zinc-900/5 dark:bg-zinc-50/5 p-3">
-                <RefinePipeline hide={() => setIsOpen(false)} />
+                <RefinePipeline hide={closeDialog} />
               </TabPanel>
             </TabPanels>
           </TabGroup>

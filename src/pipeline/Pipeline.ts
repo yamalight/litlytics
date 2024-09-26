@@ -14,7 +14,7 @@ export interface Pipeline {
 }
 
 export interface PipelineStatus {
-  status: 'init' | 'sourcing' | 'step' | 'done' | 'error';
+  status: 'init' | 'refine' | 'sourcing' | 'step' | 'done' | 'error';
   currentStep?: ProcessingStep;
   error?: Error;
 }
