@@ -79,13 +79,17 @@ export function OutputNode() {
     const timing = _.round(timings.reduce((acc, val) => acc + val, 0));
     const prompt = promptTokens.reduce((acc, val) => acc + val, 0);
     const completion = completionTokens.reduce((acc, val) => acc + val, 0);
-    const cost = _.round(
-      prompt * modelCosts[litlyticsConfig.model].input +
-        completion * modelCosts[litlyticsConfig.model].output,
-      3
-    );
+    const inputCost =
+      litlyticsConfig.provider === 'ollama'
+        ? 0
+        : modelCosts[litlyticsConfig.model].input;
+    const outputCost =
+      litlyticsConfig.provider === 'ollama'
+        ? 0
+        : modelCosts[litlyticsConfig.model].output;
+    const cost = _.round(prompt * inputCost + completion * outputCost, 3);
     return { timing, prompt, completion, cost };
-  }, [output, litlyticsConfig.model]);
+  }, [output, litlyticsConfig]);
 
   const Render = useMemo(() => {
     if (!output) {

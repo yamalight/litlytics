@@ -32,8 +32,11 @@ export async function pipelineFromText(
       user: step,
     });
     const stepJSON = parseLLMJSON(stepRes.result!) as ProcessingStep;
+    // generate id manually if LLM didn't do it for us (mostly happens with smaller LLMs)
+    const id = stepJSON.id.length > 0 ? stepJSON.id : `step_${currentStep}`;
+    // generate step
     const newStep: ProcessingStep = await litlytics.generateStep({
-      id: stepJSON.id,
+      id,
       description: stepJSON.description,
       name: stepJSON.name,
       input: stepJSON.input as StepInput,

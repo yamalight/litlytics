@@ -90,13 +90,20 @@ export function StepNode({ data }: { data: ProcessingStep }) {
         completionTokens.reduce((acc, val) => acc + val, 0) /
           completionTokens.length
       );
+      const inputCost =
+        litlyticsConfig.provider === 'ollama'
+          ? 0
+          : modelCosts[litlyticsConfig.model].input;
+      const outputCost =
+        litlyticsConfig.provider === 'ollama'
+          ? 0
+          : modelCosts[litlyticsConfig.model].output;
       const averageCost = _.round(
-        averagePrompt * modelCosts[litlyticsConfig.model].input +
-          averageCompletion * modelCosts[litlyticsConfig.model].output,
+        averagePrompt * inputCost + averageCompletion * outputCost,
         3
       );
       return { averageTiming, averagePrompt, averageCompletion, averageCost };
-    }, [output, data, litlyticsConfig.model]);
+    }, [output, data, litlyticsConfig]);
 
   const updateNodeByKey = (
     newVal: string | boolean | undefined,

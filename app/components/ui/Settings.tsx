@@ -116,25 +116,38 @@ export function Settings({ close }: { close: () => void }) {
 
         <Field>
           <Label>Model</Label>
-          <Select
-            value={config.model}
-            onChange={(e) =>
-              setConfig((c) => ({
-                ...c,
-                model: e.target.value,
-              }))
-            }
-          >
-            {models.map((model) => (
-              <option key={model} value={model}>
-                {model}{' '}
-                {recommendedForProvider[config.provider] === model
-                  ? '(recommended)'
-                  : ''}
-              </option>
-            ))}
-          </Select>
-          {config.provider !== 'local' && (
+          {config.provider === 'ollama' && (
+            <Input
+              value={config.model}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  model: e.target.value,
+                }))
+              }
+            />
+          )}
+          {config.provider !== 'ollama' && (
+            <Select
+              value={config.model}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  model: e.target.value,
+                }))
+              }
+            >
+              {models.map((model) => (
+                <option key={model} value={model}>
+                  {model}{' '}
+                  {recommendedForProvider[config.provider] === model
+                    ? '(recommended)'
+                    : ''}
+                </option>
+              ))}
+            </Select>
+          )}
+          {config.provider !== 'local' && config.provider !== 'ollama' && (
             <Description className="flex gap-2">
               <Badge title="Input price (USD) per million tokens">
                 Input: <CurrencyDollarIcon className="w-3 h-3" />{' '}
@@ -148,7 +161,24 @@ export function Settings({ close }: { close: () => void }) {
           )}
         </Field>
 
-        {config.provider !== 'local' && (
+        {config.provider === 'ollama' && (
+          <Field>
+            <Label>Ollama URL</Label>
+            <Input
+              type="text"
+              placeholder="http://localhost:11434"
+              value={config.llmKey}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  llmKey: e.target.value,
+                }))
+              }
+            />
+          </Field>
+        )}
+
+        {config.provider !== 'local' && config.provider !== 'ollama' && (
           <Field>
             <Label>API Key</Label>
             <Input
@@ -207,27 +237,29 @@ export function Settings({ close }: { close: () => void }) {
         )}
       </FieldGroup>
 
-      {!config.llmKey?.length && config.provider !== 'local' && (
-        <>
-          <ProviderKeysHint provider={config.provider} />
-          <div className="rounded-md bg-red-50 dark:bg-red-900 p-4 mt-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <XCircleIcon
-                  aria-hidden="true"
-                  className="h-5 w-5 text-red-400 dark:text-red-200"
-                />
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
-                  Choose a provider, model and set a key for the provider of
-                  your choice to get started!
-                </h3>
+      {!config.llmKey?.length &&
+        config.provider !== 'local' &&
+        config.provider !== 'ollama' && (
+          <>
+            <ProviderKeysHint provider={config.provider} />
+            <div className="rounded-md bg-red-50 dark:bg-red-900 p-4 mt-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <XCircleIcon
+                    aria-hidden="true"
+                    className="h-5 w-5 text-red-400 dark:text-red-200"
+                  />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+                    Choose a provider, model and set a key for the provider of
+                    your choice to get started!
+                  </h3>
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
     </div>
   );
 }

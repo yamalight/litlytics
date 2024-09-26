@@ -4,11 +4,7 @@ export const LLMProvidersList = [
   'openai',
   'anthropic',
   'gemini',
-  // 'azure',
-  // 'cohere',
-  // 'mistral',
-  // 'groq',
-  // 'perplexity',
+  'ollama',
 ] as const;
 export type LLMProvider = (typeof LLMProvidersList)[number];
 
@@ -40,6 +36,7 @@ export const LLMModelsList = {
     'o1-mini',
     'o1-preview',
   ],
+  ollama: ['*'],
 };
 export type LLMModel =
   (typeof LLMModelsList)[keyof typeof LLMModelsList][number];

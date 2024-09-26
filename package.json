@@ -32,6 +32,7 @@
     "jotai": "^2.10.0",
     "lodash": "^4.17.21",
     "mammoth": "^1.8.0",
+    "ollama-ai-provider": "^0.15.1",
     "openai": "^4.64.0",
     "papaparse": "^5.4.1",
     "pdfjs-dist": "^4.6.82",

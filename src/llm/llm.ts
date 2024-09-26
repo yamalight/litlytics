@@ -2,9 +2,18 @@ import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
 import { generateText } from 'ai';
+import { createOllama } from 'ollama-ai-provider';
 import { LLMModel, LLMProvider, LLMRequest } from './types';
 
-function getModel(provider: LLMProvider, model: LLMModel, key: string) {
+function getModel({
+  provider,
+  model,
+  key,
+}: {
+  provider: LLMProvider;
+  model: LLMModel;
+  key: string;
+}) {
   // OpenAI
   switch (provider) {
     case 'openai': {
@@ -44,6 +53,12 @@ function getModel(provider: LLMProvider, model: LLMModel, key: string) {
         ],
       });
     }
+    case 'ollama': {
+      const ollama = createOllama({
+        baseURL: `${key}${key.endsWith('/') ? '' : '/'}api`,
+      });
+      return ollama(model);
+    }
   }
 }
 
@@ -58,7 +73,7 @@ export async function executeOnLLM({
   modelArgs,
 }: LLMRequest) {
   // set key
-  const modelObj = getModel(provider, model, key);
+  const modelObj = getModel({ provider, model, key });
   const { text, usage } = await generateText({
     maxTokens: 4096,
     ...modelArgs,

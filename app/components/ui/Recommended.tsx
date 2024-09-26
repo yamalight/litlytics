@@ -9,6 +9,7 @@ export const recommendedForProvider: Record<LLMProviders, LLMModel> = {
   gemini: 'gemini-1.5-flash-latest',
   local: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
   openai: 'gpt-4o-mini',
+  ollama: '',
 };
 
 export function Recommended() {

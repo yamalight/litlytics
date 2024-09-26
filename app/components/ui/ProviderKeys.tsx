@@ -4,12 +4,14 @@ const providerNames: Record<LLMProvider, string> = {
   anthropic: 'Anthropic',
   gemini: 'Gemini',
   openai: 'OpenAI',
+  ollama: 'Ollama',
 };
 
 const providerGuides: Record<LLMProvider, string> = {
   anthropic: 'https://docs.anthropic.com/en/api/getting-started',
   gemini: 'https://ai.google.dev/gemini-api/docs/api-key',
   openai: 'https://platform.openai.com/docs/quickstart',
+  ollama: '',
 };
 
 export function ProviderKeysHint({ provider }: { provider: LLMProvider }) {
