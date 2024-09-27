@@ -68,11 +68,11 @@ export function Settings({ close }: { close: () => void }) {
         '1',
       ];
       const loadProgress = parseInt(leftProgress) / parseInt(rightProgress);
-      console.log({
-        fetchProgress: isFetching ? initProgress.progress : 1,
-        loadProgress,
-        status: initProgress.text,
-      });
+      // console.log({
+      //   fetchProgress: isFetching ? initProgress.progress : 1,
+      //   loadProgress,
+      //   status: initProgress.text,
+      // });
       setWebllm({
         engine,
         fetchProgress: isFetching ? initProgress.progress : 1,
