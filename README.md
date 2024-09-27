@@ -2,11 +2,10 @@
 
 - [ ] Do a refactoring pass
 - [ ] Add tests
+- [ ] Extract analytics into separate config (to allow deploy-time setup)
 
-- [ ] Add new url source
+## Roadmap:
 
-- [ ] Allow custom sources
-
-## Logic:
-
+- Add new url source
+- Allow custom sources
 - Parallel execution (allow merging nodes)
