@@ -25,11 +25,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
           <ScrollRestoration />
           <Scripts />
-          <script
-            defer
-            src="https://analytics.codezen.dev/script.js"
-            data-website-id="e9efe893-74e1-421d-bbf4-3096b58033ec"
-          ></script>
+          {process.env.NODE_ENV === 'production' && (
+            <script
+              defer
+              src="https://analytics.codezen.dev/script.js"
+              data-website-id="e9efe893-74e1-421d-bbf4-3096b58033ec"
+            ></script>
+          )}
         </body>
       </html>
     </Provider>
