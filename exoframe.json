@@ -1,5 +1,6 @@
 {
   "name": "litlytics",
+  "image": "ghcr.io/yamalight/litlytics:latest",
   "domain": "Host(`litlytics.codezen.dev`, `ll-demo.codezen.dev`)",
   "env": {
     "UMAMI_SRC": "https://analytics.codezen.dev/script.js",

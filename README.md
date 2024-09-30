@@ -2,7 +2,6 @@
 
 - [ ] Add tests
 - [ ] Add API docs
-- [ ] Setup github CI for demo deployment (from docker image)
 - [ ] Make first release (v0.1)
 
 ---
