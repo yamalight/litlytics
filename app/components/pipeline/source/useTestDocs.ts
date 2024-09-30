@@ -3,7 +3,7 @@ import { Pipeline } from '@/src/pipeline/Pipeline';
 import { getDocs } from '@/src/source/getDocs';
 import { useEffect, useMemo, useState } from 'react';
 
-export function useDocs(pipeline: Pipeline) {
+export function useTestDocs(pipeline: Pipeline) {
   const [allDocs, setDocs] = useState<Doc[]>([]);
   const testDocs = useMemo(() => allDocs.filter((d) => d?.test), [allDocs]);
 

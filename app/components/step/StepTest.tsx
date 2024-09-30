@@ -16,12 +16,12 @@ import { BeakerIcon } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import { CustomMarkdown } from '../markdown/Markdown';
-import { useDocs } from '../pipeline/source/useTestDocs';
+import { useTestDocs } from '../pipeline/source/useTestDocs';
 
 export function StepTest({ data }: { data: ProcessingStep }) {
   const litlytics = useAtomValue(litlyticsStore);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const { testDocs, allDocs } = useDocs(pipeline);
+  const { testDocs, allDocs } = useTestDocs(pipeline);
   const [testDocId, setTestDocId] = useState(testDocs.at(0)?.id ?? '');
   const [isTestOpen, setTestOpen] = useState(false);
   const [loading, setLoading] = useState(false);

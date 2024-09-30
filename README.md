@@ -1,7 +1,6 @@
 # ToDo
 
 - [ ] Do a refactoring pass
-  - [ ] Remove unused components
 - [ ] Add tests
 - [ ] Extract analytics into separate config (to allow deploy-time setup)
 

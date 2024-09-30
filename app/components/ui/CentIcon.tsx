@@ -1,4 +1,8 @@
-//* <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--> */
+/**
+ * Font Awesome Free 6.6.0 by @fontawesome
+ *  https://fontawesome.com License
+ *  https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.
+ */
 export function CentIcon({ className }: { className?: string }) {
   return (
     <svg
