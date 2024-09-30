@@ -64,5 +64,5 @@ jobs:
           context: .
           tags: ${{ env.TAGS }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{ env.TAGS }}
+          cache-to: type=inline
