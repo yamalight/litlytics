@@ -19,7 +19,7 @@ Watch [the demo video](https://youtu.be/GHXn0l5qcr0) for more detailed intro.
 
 Make sure you have [Docker](https://www.docker.com/) installed.
 
-Then, start LitLytics from image by running following command:
+Then, start LitLytics from [image](https://github.com/yamalight/litlytics/pkgs/container/litlytics) by running following command:
 
 ```bash
 docker run -d -p 5173:5173 ghcr.io/yamalight/litlytics:latest
