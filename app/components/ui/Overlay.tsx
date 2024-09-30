@@ -271,6 +271,9 @@ export function OverlayUI() {
         size="2xl"
         open={isSettingsOpen}
         onClose={closeSettings}
+        canClose={
+          Boolean(litlyticsConfig.llmKey?.length) || webllm.loadProgress === 1
+        }
         topClassName="z-20"
       >
         <DialogTitle className="!text-lg">Settings</DialogTitle>
