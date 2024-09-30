@@ -1,9 +1,9 @@
 # LitLytics
 
 **LitLytics** is an affordable, simple analytics platform that leverages LLMs to automate data analysis.
-It was designed to help small and medium-sized businesses without dedicated data science teams gain insights from their data.
+It was designed to help teams without dedicated data scientists gain insights from their data.
 
-[Try LitLtyics](https://litlytics.codezen.dev)
+[Try LitLytics](https://litlytics.codezen.dev)
 
 ## Key Features
 
