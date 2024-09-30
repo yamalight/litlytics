@@ -1,10 +1,3 @@
-# Road to OSS:
-
-- [ ] Add tests
-- [ ] Make first release (v0.1)
-
----
-
 # LitLytics
 
 **LitLytics** is an affordable, simple analytics platform that leverages LLMs to automate data analysis.
