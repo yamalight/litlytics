@@ -5,7 +5,6 @@
 
 ## Road to OSS:
 
-- [ ] Add a changelog
 - [ ] Add API docs
 - [ ] Setup github CI with docker builds
 - [ ] Update docker image name
