@@ -61,7 +61,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: .
           tags: ${{ env.TAGS }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.TAGS }}

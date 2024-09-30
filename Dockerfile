@@ -2,7 +2,7 @@
 FROM oven/bun:slim AS base
 
 # install code dep for pdf.js
-RUN apt update && apt install -y build-essential python3 libpixman-1-dev libcairo2-dev libpango1.0-dev libgif-dev
+RUN apt update && apt install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 WORKDIR /app
 # install deps
