@@ -94,4 +94,4 @@ This license ensures that the software remains free and open, even when used as 
 
 ### Commercial/Enterprise Licensing
 
-If your use case requires a proprietary license (for example, you do not wish to open-source your modifications or need a more flexible licensing arrangement), we offer **commercial and enterprise licenses**. Please [contact us](mailto:tim@codezen.dev) to discuss licensing options tailored to your needs.
+If your use case requires a proprietary license (for example, you do not wish to open-source your modifications or need a more flexible licensing arrangement), we offer **commercial and enterprise licenses**. Please [contact us](mailto:tim@codezen.dev?subject=LitLytics%20License) to discuss licensing options tailored to your needs.
