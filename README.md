@@ -29,7 +29,7 @@ Make sure you have [Docker](https://www.docker.com/) installed.
 Then, start LitLytics from image by running following command:
 
 ```bash
-docker run -d -p 5173:5173 ghcr.io/yamalight/litlytics:nightly
+docker run -d -p 5173:5173 ghcr.io/yamalight/litlytics:latest
 ```
 
 This will launch the platform inside the docker container, and you will be able to interact with it on [http://localhost:5173](http://localhost:5173).
