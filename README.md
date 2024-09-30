@@ -10,7 +10,7 @@ It was designed to help teams without dedicated data scientists gain insights fr
 - **No Data Science Expertise Required:** LitLytics simplifies the entire analytics process, making it accessible to anyone.
 - **Automatic Pipeline Generation:** Describe your analytics task in plain language, and LitLytics will generate a custom pipeline for you.
 - **Customizable Pipelines:** You can review, update, or modify each step in the analytics pipeline to suit your specific needs.
-- **Cost-Efficient:** Leveraging modern LLMs allows LitLytics to keep the cost of processing data incredibly low — typically fractions of a cent per document.z
+- **Cost-Efficient:** Leveraging modern LLMs allows LitLytics to keep the cost of processing data incredibly low — typically fractions of a cent per document.
 - **Scalable & Flexible:** Works with various data formats including CSV, PDF, and plain text.
 
 Watch [the demo video](https://youtu.be/GHXn0l5qcr0) for more detailed intro.
@@ -25,13 +25,13 @@ Then, start LitLytics from [image](https://github.com/yamalight/litlytics/pkgs/c
 docker run -d -p 3000:3000 ghcr.io/yamalight/litlytics:latest
 ```
 
-This will launch the platform inside the docker container, and you will be able to interact with it on [http://localhost:3000](http://localhost:3000).
+This will launch the platform inside a docker container, and you will be able to interact with it in your browser: [http://localhost:3000](http://localhost:3000).
 
 ## Running locally in development mode
 
 Make sure you have [Bun](https://bun.sh/) (>=1.1.0) installed.
 
-Then, clone this repository:
+Clone this repository:
 
 ```bash
 git clone https://github.com/yamalight/litlytics.git
@@ -50,7 +50,7 @@ And finally start the LitLytics platform:
 bun run dev
 ```
 
-This will launch the platform, and you will be able to interact with it on [http://localhost:5173](http://localhost:5173).
+This will launch the platform, and you will be able to interact with it in your browser: [http://localhost:5173](http://localhost:5173).
 
 ## Running pipelines via API
 
