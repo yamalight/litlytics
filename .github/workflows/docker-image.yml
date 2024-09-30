@@ -26,6 +26,8 @@ jobs:
 
       - name: Install bun for deployment
         uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       # Login against a Docker registry
       # https://github.com/docker/login-action
@@ -72,8 +74,6 @@ jobs:
       # deploy nightly
       - name: Deploy docker image to staging
         if: github.event_name != 'release'
-        with:
-          bun-version: latest
         env:
           EXO_TOKEN: ${{ secrets.EXO_TOKEN }}
         run: bunx exoframe -u -c exoframe-nightly.json -e https://exoframe.codezen.net -t $EXO_TOKEN
@@ -81,8 +81,6 @@ jobs:
       # deploy to prod
       - name: Deploy docker image to production
         if: github.event_name == 'release'
-        with:
-          bun-version: latest
         env:
           EXO_TOKEN: ${{ secrets.EXO_TOKEN }}
         run: bunx exoframe -u -e https://exoframe.codezen.net -t $EXO_TOKEN
