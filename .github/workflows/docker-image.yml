@@ -53,7 +53,7 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "release" ]]; then
             # Tag as `latest` and `vX.X.X` for releases
-            echo "TAGS=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:v${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            echo "TAGS=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           else
             # Tag as `nightly` for pushes to main
             echo "TAGS=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:nightly" >> $GITHUB_ENV
