@@ -3,8 +3,8 @@ import { LLMModel, LLMProvider } from '@/src/llm/types';
 import { Pipeline, PipelineStatus } from '@/src/pipeline/Pipeline';
 import { MLCEngine } from '@mlc-ai/web-llm';
 import { atom } from 'jotai';
+import { withUndo } from 'jotai-history';
 import { atomWithStorage } from 'jotai/utils';
-import { atomWithUndo } from './atomWithUndo';
 
 export const emptyPipeline: Pipeline = {
   // project setup
@@ -70,7 +70,7 @@ export const pipelineAtom = atomWithStorage<Pipeline>(
   undefined,
   { getOnInit: true }
 );
-export const pipelineUndoAtom = atomWithUndo(pipelineAtom, 5);
+export const pipelineUndoAtom = withUndo(pipelineAtom, 10);
 
 export const webllmAtom = atom<{
   engine?: MLCEngine;
