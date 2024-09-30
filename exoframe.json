@@ -1,7 +1,4 @@
 {
   "name": "litlytics",
-  "domain": "ll-demo.codezen.dev",
-  "env": {
-    "DEPLOY_URL": "https://ll-demo.codezen.dev"
-  }
+  "domain": "Host(`litlytics.codezen.dev`, `ll-demo.codezen.dev`)"
 }
