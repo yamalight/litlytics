@@ -1,10 +1,6 @@
-# ToDo
+# Road to OSS:
 
 - [ ] Add tests
-- [ ] Extract analytics into separate config (to allow deploy-time setup)
-
-## Road to OSS:
-
 - [ ] Add API docs
 - [ ] Setup github CI for demo deployment (from docker image)
 - [ ] Make first release (v0.1)

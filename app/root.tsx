@@ -1,14 +1,26 @@
 import {
+  json,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from '@remix-run/react';
 import { Provider } from 'jotai';
 import './tailwind.css';
 
+// Load the GA tracking id from the .env
+export const loader = async () => {
+  return json({
+    umamiSrc: process.env.UMAMI_SRC,
+    umamiId: process.env.UMAMI_ID,
+  });
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { umamiSrc, umamiId } = useLoaderData<typeof loader>();
+
   return (
     <Provider>
       <html
@@ -25,13 +37,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
           <ScrollRestoration />
           <Scripts />
-          {process.env.NODE_ENV === 'production' && (
-            <script
-              defer
-              src="https://analytics.codezen.dev/script.js"
-              data-website-id="e9efe893-74e1-421d-bbf4-3096b58033ec"
-            ></script>
-          )}
+          {process.env.NODE_ENV === 'production' &&
+            Boolean(umamiSrc?.length) &&
+            Boolean(umamiId?.length) && (
+              <script defer src={umamiSrc} data-website-id={umamiId}></script>
+            )}
         </body>
       </html>
     </Provider>

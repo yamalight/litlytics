@@ -1,4 +1,8 @@
 {
   "name": "litlytics",
-  "domain": "Host(`litlytics.codezen.dev`, `ll-demo.codezen.dev`)"
+  "domain": "Host(`litlytics.codezen.dev`, `ll-demo.codezen.dev`)",
+  "env": {
+    "UMAMI_SRC": "https://analytics.codezen.dev/script.js",
+    "UMAMI_ID": "e9efe893-74e1-421d-bbf4-3096b58033ec"
+  }
 }
