@@ -175,6 +175,10 @@ export function Settings({ close }: { close: () => void }) {
                 }))
               }
             />
+            <Description className="mt-4 mx-1 !text-xs">
+              Please note that your Ollama instance must have CORS enabled for
+              LitLytics to work correctly in browser environment.
+            </Description>
           </Field>
         )}
 

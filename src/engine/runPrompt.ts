@@ -35,19 +35,7 @@ export const runPromptFromMessages = async ({
       ...(args ?? {}),
     },
   };
-  // generate plan from LLM
-  const baseUrl =
-    typeof process !== 'undefined' && process?.env?.DEPLOY_URL
-      ? process.env.DEPLOY_URL
-      : '';
-  const result = await fetch(`${baseUrl}/api/llm`, {
-    method: 'POST',
-    body: JSON.stringify(req),
-  });
-  if (!result.ok) {
-    throw new Error('Error executing query: ' + (await result.text()));
-  }
-  const res = (await result.json()) as ReturnType<typeof executeOnLLM>;
+  const res = await executeOnLLM(req);
   return res;
 };
 

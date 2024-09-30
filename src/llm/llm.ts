@@ -25,6 +25,9 @@ function getModel({
     case 'anthropic': {
       const anthropic = createAnthropic({
         apiKey: key,
+        headers: {
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
       });
       return anthropic(model);
     }
