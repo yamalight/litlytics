@@ -5,14 +5,6 @@
 - [ ] Setup github CI for demo deployment (from docker image)
 - [ ] Make first release (v0.1)
 
-## Roadmap:
-
-- Evaluate using https://github.com/xenova/transformers.js as local executor or fallback for when webgpu is not available
-- Keybindings for undo-redo
-- Add new url source
-- Allow custom sources
-- Parallel execution (allow merging nodes)
-
 ---
 
 # LitLytics
