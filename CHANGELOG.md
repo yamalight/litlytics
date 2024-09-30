@@ -1,3 +1,3 @@
-# 0.1.0 / 2024-10-TBD
+# 0.1.0 / 2024-09-30
 
 Initial LitLytics release
