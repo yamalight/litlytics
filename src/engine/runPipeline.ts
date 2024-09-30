@@ -20,11 +20,14 @@ export async function runPipeline(
   onStatus({ status: 'sourcing' });
 
   // get all documents from the source
-  let docs: Doc[] = await getDocs(pipeline);
+  const docs: Doc[] = await getDocs(pipeline);
   // validate docs
   if (!docs?.length) {
     throw new Error('At least one document is required!');
   }
+
+  // clone docs for execution
+  let newDocs: Doc[] = structuredClone(docs);
 
   // get all connections to source
   let stepIds = source.connectsTo;
@@ -37,7 +40,7 @@ export async function runPipeline(
     // if it's a basic doc/result step - process all docs with it
     if (nextStep.input === 'doc' || nextStep.input === 'result') {
       await Promise.all(
-        docs.map((doc) =>
+        newDocs.map((doc) =>
           litlytics.runStep({
             step: nextStep!,
             source,
@@ -47,7 +50,7 @@ export async function runPipeline(
           })
         )
       );
-      docs = docs.filter((d) => d !== undefined);
+      newDocs = newDocs.filter((d) => d !== undefined);
       // if it's an aggregate step - only run it once
     } else if (
       nextStep.input === 'aggregate-docs' ||
@@ -66,7 +69,7 @@ export async function runPipeline(
         doc: aggregateResult,
         allDocs: docs,
       })) as Doc;
-      docs.push(aggregateResult);
+      newDocs.push(aggregateResult);
     }
     // get next step and continue
     stepIds = nextStep.connectsTo;
@@ -76,7 +79,7 @@ export async function runPipeline(
       const Output = outputProviders[pipeline.output.outputType];
       const output = new Output(pipeline);
       // save result docs
-      output.saveResults(docs);
+      output.saveResults(newDocs);
       // process and store final results
       pipeline.results = output.getResult();
       break;
