@@ -1,16 +1,16 @@
 # install deps
 FROM oven/bun:slim AS base
-
-# install code dep for pdf.js
-RUN apt update && apt install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+ENV CI=true
+ENV NODE_ENV=production
 
 WORKDIR /app
 # install deps
-ADD package.json bun.lockb ./
-RUN bun install --ci
+ADD bunfig.toml package.json bun.lockb ./
+RUN bun install --frozen-lockfile --ignore-scripts
 
 # build app
 FROM base AS build
+ENV CI=true
 ENV NODE_ENV=production
 
 WORKDIR /app
@@ -19,6 +19,7 @@ RUN bun run build
 
 # run app
 FROM node:22-slim AS runner
+ENV CI=true
 ENV NODE_ENV=production
 
 WORKDIR /app
