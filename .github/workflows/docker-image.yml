@@ -51,6 +51,7 @@ jobs:
           else
             # Tag as `nightly` for pushes to main
             echo "TAGS=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:nightly" >> $GITHUB_ENV
+          fi
         shell: bash
 
       # Build and push Docker image with Buildx
