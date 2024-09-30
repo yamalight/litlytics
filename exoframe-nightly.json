@@ -1,0 +1,9 @@
+{
+  "name": "litlytics-dev",
+  "image": "ghcr.io/yamalight/litlytics:nightly",
+  "domain": "Host(`litlytics-dev.codezen.dev`)",
+  "env": {
+    "UMAMI_SRC": "https://analytics.codezen.dev/script.js",
+    "UMAMI_ID": "e9efe893-74e1-421d-bbf4-3096b58033ec"
+  }
+}

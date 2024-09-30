@@ -66,6 +66,17 @@ jobs:
           cache-from: type=registry,ref=${{ env.TAGS }}
           cache-to: type=inline
 
+      # deploy nightly
+      - name: Deploy docker image to staging
+        uses: oven-sh/setup-bun@v2
+        if: github.event_name != 'release'
+        with:
+          bun-version: latest
+        env:
+          EXO_TOKEN: ${{ secrets.EXO_TOKEN }}
+        run: bunx exoframe -u -c exoframe-nightly.json -e https://exoframe.codezen.net -t $EXO_TOKEN
+
+      # deploy to prod
       - name: Deploy docker image to production
         uses: oven-sh/setup-bun@v2
         if: github.event_name == 'release'
