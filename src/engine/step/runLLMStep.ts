@@ -74,7 +74,7 @@ export async function runLLMStep({
   }
 
   if (!input.length) {
-    throw new Error('No input for step!');
+    throw new Error('Received no input during LLM step execution!');
   }
 
   const user = input;

@@ -26,6 +26,7 @@ function getModel({
       const anthropic = createAnthropic({
         apiKey: key,
         headers: {
+          // allow in-browser execution
           'anthropic-dangerous-direct-browser-access': 'true',
         },
       });
@@ -36,6 +37,7 @@ function getModel({
         apiKey: key,
       });
       return google(model, {
+        // disable all safety blockers as they tend to mess with data analysis
         safetySettings: [
           {
             category: 'HARM_CATEGORY_DANGEROUS_CONTENT',

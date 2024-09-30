@@ -20,7 +20,6 @@ export async function pipelineFromText(
       .filter((s) => s.length > 0)
       .map((s) => `Step name: ${s}`.trim());
   }
-  console.log({ steps });
 
   const resultSteps: ProcessingStep[] = [];
 

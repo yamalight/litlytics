@@ -11,7 +11,7 @@ export async function runPipeline(
 ) {
   // get source
   const source = pipeline.source;
-  // validate
+  // validate source
   if (!source) {
     throw new Error('Source is required!');
   }
@@ -21,6 +21,10 @@ export async function runPipeline(
 
   // get all documents from the source
   let docs: Doc[] = await getDocs(pipeline);
+  // validate docs
+  if (!docs?.length) {
+    throw new Error('At least one document is required!');
+  }
 
   // get all connections to source
   let stepIds = source.connectsTo;

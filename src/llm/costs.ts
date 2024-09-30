@@ -73,7 +73,6 @@ export const modelCosts: Record<LLMModel, { input: number; output: number }> = {
   'o1-preview': gpto1pre,
   'o1-mini': gpto1mini,
   'gpt-4o': gpt4o,
-  'gpt-4o-2024-05-13': gpt4o,
   'gpt-4o-2024-08-06': gpt4o,
   'gpt-4o-mini': gpt4oMini,
   'gpt-4o-mini-2024-07-18': gpt4oMini,

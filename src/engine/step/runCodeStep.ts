@@ -24,7 +24,6 @@ export async function runCodeStep({
     allSteps.find((s) => s.connectsTo.includes(step.id)) ??
     (source.connectsTo.includes(step.id) ? source : undefined);
   if (!prevStep) {
-    // console.log('No prev step:', step, allSteps, source);
     throw new Error('Previous step not found!');
   }
   switch (step.input) {
@@ -48,6 +47,9 @@ export async function runCodeStep({
         )
         ?.filter((r) => r?.length > 0);
       break;
+  }
+  if (!input.length) {
+    throw new Error('Received no input during code step execution!');
   }
   const startTime = performance.now();
   const res = await mod(input);

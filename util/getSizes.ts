@@ -87,7 +87,7 @@ for (const model of urls) {
   const url = `https://huggingface.co/api/models/${model}?blobs=true`;
   const res = await fetch(url).then((r) => r.json());
   const totalSizeBytes = res.siblings
-    .map((s: any) => s.size)
+    .map((s: { size: number }) => s.size)
     .reduce((acc: number, val: number) => acc + val, 0);
   const totalSizeMb = Math.ceil(totalSizeBytes / 1024 / 1024);
   console.log(model, ' - ', totalSizeMb);

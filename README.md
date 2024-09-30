@@ -1,6 +1,5 @@
 # ToDo
 
-- [ ] Do a refactoring pass
 - [ ] Add tests
 - [ ] Extract analytics into separate config (to allow deploy-time setup)
 
@@ -20,6 +19,8 @@
 
 ## Roadmap:
 
+- Evaluate using https://github.com/xenova/transformers.js as local executor or fallback for when webgpu is not available
+- Keybindings for undo-redo
 - Add new url source
 - Allow custom sources
 - Parallel execution (allow merging nodes)

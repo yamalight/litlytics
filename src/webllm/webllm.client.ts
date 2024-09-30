@@ -1,10 +1,6 @@
 import { ChatCompletionMessageParam, MLCEngine } from '@mlc-ai/web-llm';
 import { CoreMessage, LanguageModelUsage } from 'ai';
 
-// TODO: ??? use
-// https://github.com/xenova/transformers.js
-// as fallback for when webgpu is not available
-
 export const runWithWebLLM = async ({
   engine,
   messages,
