@@ -24,6 +24,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install bun for deployment
+        uses: oven-sh/setup-bun@v2
+
       # Login against a Docker registry
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
@@ -68,7 +71,6 @@ jobs:
 
       # deploy nightly
       - name: Deploy docker image to staging
-        uses: oven-sh/setup-bun@v2
         if: github.event_name != 'release'
         with:
           bun-version: latest
@@ -78,7 +80,6 @@ jobs:
 
       # deploy to prod
       - name: Deploy docker image to production
-        uses: oven-sh/setup-bun@v2
         if: github.event_name == 'release'
         with:
           bun-version: latest
