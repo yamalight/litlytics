@@ -69,8 +69,6 @@ jobs:
           push: true
           tags: ${{ env.TAGS }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.TAGS }}
-          cache-to: type=inline
 
       # deploy nightly
       - name: Deploy docker image to staging
