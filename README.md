@@ -1,7 +1,6 @@
 # Road to OSS:
 
 - [ ] Add tests
-- [ ] Add API docs
 - [ ] Make first release (v0.1)
 
 ---
@@ -59,6 +58,31 @@ bun run dev
 ```
 
 This will launch the platform, and you will be able to interact with it on [http://localhost:5173](http://localhost:5173).
+
+## Running pipelines via API
+
+`POST /api/execute` endpoint executes pipeline using given LLM provider and model.  
+The body should be a JSON object with the following fields:
+
+- **provider**: The language model provider you wish to use.
+- **model** (`LLMModel`): The specific model to use, based on the selected provider.
+- **key** (`string`): The API key to authenticate with the specified provider.
+- **pipeline** (`Pipeline`): The configuration for the processing pipeline.
+
+Example request:
+
+```json
+{
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "key": "sk-your-api-key",
+  "pipeline": {
+    // your pipeline configuration
+  }
+}
+```
+
+A response will include new pipeline config that includes results of the task execution.
 
 ## Contributing
 
