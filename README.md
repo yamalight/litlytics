@@ -6,8 +6,6 @@
 ## Road to OSS:
 
 - [ ] Add API docs
-- [ ] Setup github CI with docker builds
-- [ ] Update docker image name
 - [ ] Setup github CI for demo deployment (from docker image)
 - [ ] Make first release (v0.1)
 
@@ -45,7 +43,7 @@ Make sure you have [Docker](https://www.docker.com/) installed.
 Then, start LitLytics from image by running following command:
 
 ```bash
-docker run -d -p 5173:5173 litlytics/litlytics
+docker run -d -p 5173:5173 ghcr.io/yamalight/litlytics:nightly
 ```
 
 This will launch the platform inside the docker container, and you will be able to interact with it on [http://localhost:5173](http://localhost:5173).
