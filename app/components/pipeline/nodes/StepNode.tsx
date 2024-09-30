@@ -49,8 +49,8 @@ export function StepNode({ data }: { data: ProcessingStep }) {
   const litlyticsConfig = useAtomValue(litlyticsConfigStore);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [isOpen, setIsOpen] = useState(false);
-  const [refine, setRefine] = useState(``);
   const [loading, setLoading] = useState(false);
+  const [refine, setRefine] = useState('');
 
   const output = useMemo(() => {
     const Output = outputProviders[pipeline.output.outputType];

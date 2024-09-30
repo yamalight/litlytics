@@ -6,8 +6,8 @@ export const meta: MetaFunction = () => {
     { title: 'LitLytics' },
     {
       name: 'description',
-      content:
-        'LitLytics is an affordable, simple analytics platform for everyone',
+      content: `LitLytics is an affordable, simple analytics platform for everyone designed to streamline the process of working with complex datasets.
+By combining LLMs with javascript, LitLytics allows you to generate complete data processing pipelines based on natural language descriptions.`,
     },
   ];
 };

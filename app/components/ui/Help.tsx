@@ -19,7 +19,7 @@ export function Help({ close }: { close: () => void }) {
   return (
     <div className="prose prose-sm dark:prose-invert max-w-full">
       <CustomMarkdown>
-        {`LitLytics is an automated data analytics tool designed to streamline the process of working with complex datasets.
+        {`LitLytics is an affordable, simple analytics platform for everyone designed to streamline the process of working with complex datasets.
 By combining LLMs with javascript, LitLytics allows you to generate complete data processing pipelines based on natural language descriptions.
 
 With LitLytics, you can transform data, extract insights, and automate routine tasks without having to write any code.
