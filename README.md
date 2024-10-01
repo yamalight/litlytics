@@ -6,7 +6,7 @@ It was designed to help teams without dedicated data scientists gain insights fr
 [Try Live Demo](https://litlytics.codezen.dev)
 
 <p align="center">
-  <a href="https://litlytics.codezen.dev" target="_blank"><img src="./public/litlytics-screenshot.png" alt="LitLytics screenshot" style="max-width:400px; border-radius: 20px;" /></a>
+  <a href="https://litlytics.codezen.dev" target="_blank"><img src="./public/litlytics-screenshot.png" alt="LitLytics screenshot" width="400" /></a>
 </p>
 
 ## Key Features
