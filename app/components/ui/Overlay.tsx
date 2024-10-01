@@ -12,6 +12,7 @@ import {
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useEffect, useRef, useState } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
@@ -26,6 +27,7 @@ import {
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
+  DropdownShortcut,
 } from '~/components/catalyst/dropdown';
 import {
   emptyPipeline,
@@ -149,6 +151,10 @@ export function OverlayUI() {
     setIsSettingsOpen(false);
   };
 
+  // add hotkeys hooks
+  useHotkeys('ctrl+z, command+z', undo, [undo]);
+  useHotkeys('ctrl+y, command+y', redo, [redo]);
+
   return (
     <div className="fixed pointer-events-none my-6 px-4 z-10 h-screen w-screen bg-transparent">
       <div className="flex justify-between w-full h-fit">
@@ -187,6 +193,7 @@ export function OverlayUI() {
               >
                 <ArrowUturnLeftIcon aria-hidden="true" className="h-5 w-5" />
                 <DropdownLabel>Undo</DropdownLabel>
+                <DropdownShortcut keys="⌃Z" />
               </DropdownItem>
 
               <DropdownItem
@@ -196,6 +203,7 @@ export function OverlayUI() {
               >
                 <ArrowUturnRightIcon aria-hidden="true" className="h-5 w-5" />
                 <DropdownLabel>Redo</DropdownLabel>
+                <DropdownShortcut keys="⌃Y" />
               </DropdownItem>
 
               <DropdownDivider />
