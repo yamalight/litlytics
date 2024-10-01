@@ -3,6 +3,8 @@ name: Docker Images
 on:
   push:
     branches: ['main']
+    paths-ignore:
+      - '**/*.md' # Ignore changes to markdown files
   release:
     types: [created]
 
