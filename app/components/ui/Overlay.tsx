@@ -37,6 +37,7 @@ import {
 } from '~/store/store';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
+import { GithubIcon } from './GithubIcon';
 import { Help } from './Help';
 import { Settings } from './Settings';
 
@@ -205,6 +206,14 @@ export function OverlayUI() {
               </DropdownItem>
 
               <DropdownDivider />
+
+              <DropdownItem
+                href="https://github.com/yamalight/litlytics"
+                target="_blank"
+              >
+                <GithubIcon className="w-3 h-3" />
+                <DropdownLabel>Github</DropdownLabel>
+              </DropdownItem>
 
               <DropdownItem onClick={() => setIsHelpOpen(true)}>
                 <QuestionMarkCircleIcon />
