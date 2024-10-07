@@ -1,0 +1,144 @@
+{
+  "name": "etsy-product",
+  "pipelinePlan": "Step name: Generate Title and Description\nStep type: llm\nStep input: doc\nStep description: Generate an Etsy product title and description based on the provided document describing the product.\n\n---\n\nStep name: Check for Copyrighted Terms\nStep type: llm\nStep input: result\nStep description: Analyze the generated title and description for possible copyrighted terms and suggest edits.\n\n---\n\nStep name: Proofread and Optimize for SEO\nStep type: llm\nStep input: result\nStep description: Proofread the edited description and update it for better SEO performance.",
+  "pipelineDescription": "I need to generate an Etsy product title and description.\nFirst - generate title and description from given document describing what is being sold.\nThen - check the generated title and description for possible copyrighted terms and edit them.\nFinally - proof-read and update the description for better SEO.",
+  "source": {
+    "id": "source_0",
+    "name": "Source",
+    "description": "Primary source",
+    "type": "source",
+    "sourceType": "text",
+    "config": {
+      "document": {
+        "id": "textdoc",
+        "name": "Default document",
+        "content": "I am selling a life-sized Mickey Mouse plushy.\nMade from silk.\nVery cuddly.",
+        "test": true,
+        "processingResults": []
+      }
+    },
+    "connectsTo": [
+      "generate-title-and-description"
+    ],
+    "expanded": true
+  },
+  "output": {
+    "id": "output_0",
+    "name": "Output",
+    "description": "Primary output",
+    "type": "output",
+    "outputType": "basic",
+    "config": {
+      "results": [
+        {
+          "id": "textdoc",
+          "name": "Default document",
+          "content": "I am selling a life-sized Mickey Mouse plushy.\nMade from silk.\nVery cuddly.",
+          "test": true,
+          "processingResults": [
+            {
+              "stepId": "generate-title-and-description",
+              "result": "**Title:** Life-Sized Mickey Mouse Plush Toy - Luxurious Silk Cuddly Companion\n\n**Description:**\nBring the magic of Disney into your home with our Life-Sized Mickey Mouse Plush Toy! Crafted from the finest silk, this plushy is not only a delightful addition to your decor but also an incredibly cuddly companion for all ages. \n\n**Key Features:**\n- **Life-Sized Design:** Standing at an impressive height, this Mickey Mouse plushy is perfect for hugs, playtime, or as a charming display piece in your child's room or your own collection.\n- **Luxurious Silk Material:** Made from high-quality silk, this plush toy is soft to the touch, providing a luxurious feel that enhances your cuddling experience. It's perfect for snuggling up during movie nights or as a comforting friend during bedtime.\n- **Cuddly and Adorable:** With its iconic design and friendly smile, this Mickey Mouse plushy is sure to bring joy and nostalgia to Disney fans of all ages. It's a great gift for birthdays, holidays, or just because!\n- **Versatile Use:** Whether you're decorating a nursery, adding to your Disney collection, or looking for the perfect gift, this plushy fits seamlessly into any setting.\n\n**Dimensions:** [Insert dimensions here]\n\n**Care Instructions:** Spot clean only to maintain the plush's luxurious silk texture.\n\nAdd a touch of whimsy and comfort to your life with our Life-Sized Mickey Mouse Plush Toy. Order yours today and let the cuddles begin!",
+              "usage": {
+                "completionTokens": 305,
+                "promptTokens": 187,
+                "totalTokens": 492
+              },
+              "timingMs": 21519
+            },
+            {
+              "stepId": "check-for-copyrighted-terms",
+              "result": "The title and description contain terms that may infringe on copyright, particularly the use of \"Mickey Mouse,\" which is a trademarked character owned by Disney. Additionally, phrases like \"Bring the magic of Disney\" and \"Disney fans\" also reference the brand directly. \n\nHere are the suggested edits to avoid copyright issues while maintaining the original meaning:\n\n**Revised Title:** Life-Sized Classic Mouse Plush Toy - Luxurious Silk Cuddly Companion\n\n**Revised Description:**\nBring a touch of magic into your home with our Life-Sized Classic Mouse Plush Toy! Crafted from the finest silk, this plushy is not only a delightful addition to your decor but also an incredibly cuddly companion for all ages.\n\n**Key Features:**\n- **Life-Sized Design:** Standing at an impressive height, this classic mouse plushy is perfect for hugs, playtime, or as a charming display piece in your child's room or your own collection.\n- **Luxurious Silk Material:** Made from high-quality silk, this plush toy is soft to the touch, providing a luxurious feel that enhances your cuddling experience. It's perfect for snuggling up during movie nights or as a comforting friend during bedtime.\n- **Cuddly and Adorable:** With its friendly smile and classic design, this plushy is sure to bring joy and nostalgia to fans of all ages. It's a great gift for birthdays, holidays, or just because!\n- **Versatile Use:** Whether you're decorating a nursery, adding to your plush collection, or looking for the perfect gift, this plushy fits seamlessly into any setting.\n\n**Dimensions:** [Insert dimensions here]\n\n**Care Instructions:** Spot clean only to maintain the plush's luxurious silk texture.\n\nAdd a touch of whimsy and comfort to your life with our Life-Sized Classic Mouse Plush Toy. Order yours today and let the cuddles begin!\n\n**Changes Made:**\n1. Changed \"Mickey Mouse\" to \"Classic Mouse\" to avoid trademark infringement.\n2. Removed references to \"Disney\" and \"Disney fans\" to eliminate direct brand mentions.\n3. Adjusted phrases to maintain the overall theme without infringing on copyright.",
+              "usage": {
+                "completionTokens": 433,
+                "promptTokens": 382,
+                "totalTokens": 815
+              },
+              "timingMs": 5665
+            },
+            {
+              "stepId": "proofread-optimize-seo",
+              "result": "**Proofread and Revised Text:**\n\n**Revised Title:** Life-Sized Classic Mouse Plush Toy - Luxurious Silk Cuddly Companion\n\n**Revised Description:**\nAdd a touch of whimsy to your home with our Life-Sized Classic Mouse Plush Toy! Crafted from the finest silk, this plush toy is not only a delightful addition to your decor but also an incredibly cuddly companion for all ages.\n\n**Key Features:**\n- **Life-Sized Design:** Standing at an impressive height, this classic mouse plush toy is perfect for hugs, playtime, or as a charming display piece in your child's room or your own collection.\n- **Luxurious Silk Material:** Made from high-quality silk, this plush toy is soft to the touch, providing a luxurious feel that enhances your cuddling experience. It's perfect for snuggling up during movie nights or as a comforting friend during bedtime.\n- **Cuddly and Adorable:** With its friendly smile and classic design, this plush toy is sure to bring joy and nostalgia to fans of all ages. It's a great gift for birthdays, holidays, or just because!\n- **Versatile Use:** Whether you're decorating a nursery, adding to your plush collection, or looking for the perfect gift, this plush toy fits seamlessly into any setting.\n\n**Dimensions:** [Insert dimensions here]\n\n**Care Instructions:** Spot clean only to maintain the plush's luxurious silk texture.\n\nAdd a touch of whimsy and comfort to your life with our Life-Sized Classic Mouse Plush Toy. Order yours today and let the cuddles begin!\n\n---\n\n**SEO Performance Analysis and Suggestions:**\n\n1. **Keyword Optimization:**\n   - Incorporate relevant keywords such as \"plush toy,\" \"luxurious plush,\" \"soft toy,\" \"gift for kids,\" and \"decorative plush\" throughout the title and description. \n   - Example: \"Life-Sized Classic Mouse Plush Toy - Luxurious Silk Soft Toy for Kids and Collectors.\"\n\n2. **Enhanced Readability:**\n   - Use bullet points and short paragraphs to improve readability. The current structure is good, but consider adding subheadings for each section (e.g., \"Why Choose Our Plush Toy?\" or \"Perfect Gift Ideas\").\n\n3. **Effective Structuring:**\n   - Start with a strong opening sentence that includes primary keywords. For example: \"Discover the ultimate cuddly companion with our Life-Sized Classic Mouse Plush Toy, crafted from luxurious silk.\"\n   - Include a call-to-action (CTA) at the end of the description that encourages immediate purchase, such as \"Shop now to bring home your new favorite plush companion!\"\n\n4. **Meta Description:**\n   - Create a concise meta description that includes primary keywords and entices clicks. For example: \"Shop our Life-Sized Classic Mouse Plush Toy made from luxurious silk. Perfect for cuddles, playtime, and as a charming decor piece. Order yours today!\"\n\n5. **Image Alt Text:**\n   - Ensure that images of the plush toy include alt text with relevant keywords, such as \"Life-Sized Classic Mouse Plush Toy in luxurious silk.\"\n\nBy implementing these SEO strategies, the content will not only be polished and clear but also optimized for better visibility and engagement in search engine results.",
+              "usage": {
+                "completionTokens": 653,
+                "promptTokens": 506,
+                "totalTokens": 1159
+              },
+              "timingMs": 11723
+            }
+          ]
+        }
+      ]
+    },
+    "connectsTo": [],
+    "expanded": true
+  },
+  "steps": [
+    {
+      "id": "generate-title-and-description",
+      "name": "Generate Title and Description",
+      "description": "Generate an Etsy product title and description based on the provided document describing the product.",
+      "type": "llm",
+      "input": "doc",
+      "prompt": "You are tasked with generating an Etsy product title and description based on the provided document. \n\n1. **Read the Document**: Carefully analyze the content of the document to understand the product's features, benefits, and unique selling points.\n\n2. **Generate a Title**: Create a catchy and descriptive title that encapsulates the essence of the product. The title should be engaging and suitable for Etsy's marketplace, appealing to potential buyers.\n\n3. **Craft a Description**: Write a detailed product description that highlights the key attributes of the product, including its uses, materials, dimensions, and any special features. Ensure the description is informative and persuasive, encouraging customers to make a purchase.\n\nRemember to consider the target audience on Etsy and incorporate relevant keywords that may enhance visibility in search results.",
+      "connectsTo": [
+        "check-for-copyrighted-terms"
+      ],
+      "expanded": true
+    },
+    {
+      "id": "check-for-copyrighted-terms",
+      "name": "Check for Copyrighted Terms",
+      "description": "Analyze the generated title and description for possible copyrighted terms and suggest edits.",
+      "type": "llm",
+      "input": "result",
+      "prompt": "Analyze the provided title and description for any terms that may be copyrighted. Identify specific words or phrases that could potentially infringe on copyright, such as brand names or proprietary terms. After identifying these terms, suggest alternative edits that maintain the original meaning while avoiding copyright issues. Present the revised title and description clearly, indicating the changes made.",
+      "connectsTo": [
+        "proofread-optimize-seo"
+      ],
+      "expanded": true
+    },
+    {
+      "id": "proofread-optimize-seo",
+      "name": "Proofread and Optimize for SEO",
+      "description": "Proofread the edited description and update it for better SEO performance.",
+      "type": "llm",
+      "input": "result",
+      "prompt": "Please carefully proofread the provided text for any grammatical errors, spelling mistakes, and clarity issues. After proofreading, analyze the content for SEO performance. Suggest improvements that include relevant keywords, enhanced readability, and effective structuring for search engines. Ensure that the final output is both polished and optimized for better SEO performance.",
+      "connectsTo": [
+        "output_0"
+      ],
+      "expanded": true
+    }
+  ],
+  "results": [
+    {
+      "stepId": "proofread-optimize-seo",
+      "result": "**Proofread and Revised Text:**\n\n**Revised Title:** Life-Sized Classic Mouse Plush Toy - Luxurious Silk Cuddly Companion\n\n**Revised Description:**\nAdd a touch of whimsy to your home with our Life-Sized Classic Mouse Plush Toy! Crafted from the finest silk, this plush toy is not only a delightful addition to your decor but also an incredibly cuddly companion for all ages.\n\n**Key Features:**\n- **Life-Sized Design:** Standing at an impressive height, this classic mouse plush toy is perfect for hugs, playtime, or as a charming display piece in your child's room or your own collection.\n- **Luxurious Silk Material:** Made from high-quality silk, this plush toy is soft to the touch, providing a luxurious feel that enhances your cuddling experience. It's perfect for snuggling up during movie nights or as a comforting friend during bedtime.\n- **Cuddly and Adorable:** With its friendly smile and classic design, this plush toy is sure to bring joy and nostalgia to fans of all ages. It's a great gift for birthdays, holidays, or just because!\n- **Versatile Use:** Whether you're decorating a nursery, adding to your plush collection, or looking for the perfect gift, this plush toy fits seamlessly into any setting.\n\n**Dimensions:** [Insert dimensions here]\n\n**Care Instructions:** Spot clean only to maintain the plush's luxurious silk texture.\n\nAdd a touch of whimsy and comfort to your life with our Life-Sized Classic Mouse Plush Toy. Order yours today and let the cuddles begin!\n\n---\n\n**SEO Performance Analysis and Suggestions:**\n\n1. **Keyword Optimization:**\n   - Incorporate relevant keywords such as \"plush toy,\" \"luxurious plush,\" \"soft toy,\" \"gift for kids,\" and \"decorative plush\" throughout the title and description. \n   - Example: \"Life-Sized Classic Mouse Plush Toy - Luxurious Silk Soft Toy for Kids and Collectors.\"\n\n2. **Enhanced Readability:**\n   - Use bullet points and short paragraphs to improve readability. The current structure is good, but consider adding subheadings for each section (e.g., \"Why Choose Our Plush Toy?\" or \"Perfect Gift Ideas\").\n\n3. **Effective Structuring:**\n   - Start with a strong opening sentence that includes primary keywords. For example: \"Discover the ultimate cuddly companion with our Life-Sized Classic Mouse Plush Toy, crafted from luxurious silk.\"\n   - Include a call-to-action (CTA) at the end of the description that encourages immediate purchase, such as \"Shop now to bring home your new favorite plush companion!\"\n\n4. **Meta Description:**\n   - Create a concise meta description that includes primary keywords and entices clicks. For example: \"Shop our Life-Sized Classic Mouse Plush Toy made from luxurious silk. Perfect for cuddles, playtime, and as a charming decor piece. Order yours today!\"\n\n5. **Image Alt Text:**\n   - Ensure that images of the plush toy include alt text with relevant keywords, such as \"Life-Sized Classic Mouse Plush Toy in luxurious silk.\"\n\nBy implementing these SEO strategies, the content will not only be polished and clear but also optimized for better visibility and engagement in search engine results.",
+      "usage": {
+        "completionTokens": 653,
+        "promptTokens": 506,
+        "totalTokens": 1159
+      },
+      "timingMs": 11723,
+      "doc": {
+        "id": "textdoc",
+        "name": "Default document",
+        "content": "I am selling a life-sized Mickey Mouse plushy.\nMade from silk.\nVery cuddly.",
+        "test": true,
+        "processingResults": [
+          {
+            "stepId": "proofread-optimize-seo",
+            "result": "**Proofread and Revised Text:**\n\n**Revised Title:** Life-Sized Classic Mouse Plush Toy - Luxurious Silk Cuddly Companion\n\n**Revised Description:**\nAdd a touch of whimsy to your home with our Life-Sized Classic Mouse Plush Toy! Crafted from the finest silk, this plush toy is not only a delightful addition to your decor but also an incredibly cuddly companion for all ages.\n\n**Key Features:**\n- **Life-Sized Design:** Standing at an impressive height, this classic mouse plush toy is perfect for hugs, playtime, or as a charming display piece in your child's room or your own collection.\n- **Luxurious Silk Material:** Made from high-quality silk, this plush toy is soft to the touch, providing a luxurious feel that enhances your cuddling experience. It's perfect for snuggling up during movie nights or as a comforting friend during bedtime.\n- **Cuddly and Adorable:** With its friendly smile and classic design, this plush toy is sure to bring joy and nostalgia to fans of all ages. It's a great gift for birthdays, holidays, or just because!\n- **Versatile Use:** Whether you're decorating a nursery, adding to your plush collection, or looking for the perfect gift, this plush toy fits seamlessly into any setting.\n\n**Dimensions:** [Insert dimensions here]\n\n**Care Instructions:** Spot clean only to maintain the plush's luxurious silk texture.\n\nAdd a touch of whimsy and comfort to your life with our Life-Sized Classic Mouse Plush Toy. Order yours today and let the cuddles begin!\n\n---\n\n**SEO Performance Analysis and Suggestions:**\n\n1. **Keyword Optimization:**\n   - Incorporate relevant keywords such as \"plush toy,\" \"luxurious plush,\" \"soft toy,\" \"gift for kids,\" and \"decorative plush\" throughout the title and description. \n   - Example: \"Life-Sized Classic Mouse Plush Toy - Luxurious Silk Soft Toy for Kids and Collectors.\"\n\n2. **Enhanced Readability:**\n   - Use bullet points and short paragraphs to improve readability. The current structure is good, but consider adding subheadings for each section (e.g., \"Why Choose Our Plush Toy?\" or \"Perfect Gift Ideas\").\n\n3. **Effective Structuring:**\n   - Start with a strong opening sentence that includes primary keywords. For example: \"Discover the ultimate cuddly companion with our Life-Sized Classic Mouse Plush Toy, crafted from luxurious silk.\"\n   - Include a call-to-action (CTA) at the end of the description that encourages immediate purchase, such as \"Shop now to bring home your new favorite plush companion!\"\n\n4. **Meta Description:**\n   - Create a concise meta description that includes primary keywords and entices clicks. For example: \"Shop our Life-Sized Classic Mouse Plush Toy made from luxurious silk. Perfect for cuddles, playtime, and as a charming decor piece. Order yours today!\"\n\n5. **Image Alt Text:**\n   - Ensure that images of the plush toy include alt text with relevant keywords, such as \"Life-Sized Classic Mouse Plush Toy in luxurious silk.\"\n\nBy implementing these SEO strategies, the content will not only be polished and clear but also optimized for better visibility and engagement in search engine results.",
+            "usage": {
+              "completionTokens": 653,
+              "promptTokens": 506,
+              "totalTokens": 1159
+            },
+            "timingMs": 11723
+          }
+        ]
+      }
+    }
+  ]
+}
