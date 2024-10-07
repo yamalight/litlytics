@@ -310,7 +310,7 @@ export function OverlayUI() {
           Welcome to 🔥 LitLytics – Your Automated Data Analytics Companion!
         </DialogTitle>
         <DialogBody className="w-full">
-          <Help close={() => setIsHelpOpen(false)} />
+          <Help />
         </DialogBody>
       </Dialog>
 
