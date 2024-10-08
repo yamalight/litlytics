@@ -39,6 +39,7 @@ import {
 } from '~/store/store';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
+import { Textarea } from '../catalyst/textarea';
 import { GithubIcon } from './GithubIcon';
 import { Help } from './Help';
 import { Settings } from './Settings';
@@ -66,6 +67,7 @@ function MenuHolder({
 
 export function OverlayUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const loadInputRef = useRef<HTMLTextAreaElement>(null);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const setStatus = useSetAtom(pipelineStatusAtom);
   const litlyticsConfig = useAtomValue(litlyticsConfigStore);
@@ -73,6 +75,7 @@ export function OverlayUI() {
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
+  const [isLoadOpen, setIsLoadOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHelpFirstTime, setHelpFirstTime] = useAtom(helpAtom);
@@ -145,6 +148,26 @@ export function OverlayUI() {
     }
   };
 
+  const loadFromFile = () => fileInputRef.current?.click();
+
+  const loadFromString = () => {
+    setError(undefined);
+    const inputStr = loadInputRef.current?.value;
+    if (!inputStr?.length) {
+      setError(new Error('Input string is required!'));
+      return;
+    }
+    try {
+      const pipelineJson = JSON.parse(inputStr);
+      setPipeline(pipelineJson);
+      setStatus({ status: 'init' });
+      loadInputRef.current!.value = '';
+      setIsLoadOpen(false);
+    } catch (err) {
+      setError(err as Error);
+    }
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -154,6 +177,7 @@ export function OverlayUI() {
           const json = JSON.parse(e.target?.result as string) as Pipeline;
           setPipeline(json);
           setStatus({ status: 'init' });
+          setIsLoadOpen(false);
         } catch (error) {
           console.error('Error parsing JSON:', error);
         }
@@ -193,7 +217,7 @@ export function OverlayUI() {
 
               <DropdownDivider />
 
-              <DropdownItem onClick={() => fileInputRef.current?.click()}>
+              <DropdownItem onClick={() => setIsLoadOpen(true)}>
                 <FolderIcon aria-hidden="true" className="h-5 w-5" />
                 <DropdownLabel>Open pipeline</DropdownLabel>
               </DropdownItem>
@@ -268,6 +292,43 @@ export function OverlayUI() {
         </DialogActions>
       </Dialog>
 
+      {/* Pipeline open dialog */}
+      <Dialog
+        size="xl"
+        open={isLoadOpen}
+        onClose={setIsLoadOpen}
+        topClassName="z-20"
+      >
+        <DialogTitle>Load pipeline</DialogTitle>
+        <DialogBody className="w-full">
+          <FieldGroup>
+            <Field>
+              <Label>Pipeline JSON</Label>
+              <Textarea
+                name="pipeline-json"
+                placeholder="Pipeline JSON"
+                autoFocus
+                ref={loadInputRef}
+              />
+            </Field>
+          </FieldGroup>
+          {error && (
+            <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 my-2">
+              Error loading pipeline: {error.message}
+            </div>
+          )}
+        </DialogBody>
+        <DialogActions className="flex justify-between">
+          <Button plain onClick={() => setIsLoadOpen(false)}>
+            Close
+          </Button>
+          <Button onClick={loadFromString}>Load from string</Button>
+          <Button color="green" onClick={loadFromFile}>
+            Load from file
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {/* Pipeline save dialog */}
       <Dialog
         size="xl"
@@ -293,7 +354,7 @@ export function OverlayUI() {
           </FieldGroup>
           {error && (
             <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 my-2">
-              Error saving pipleine: {error.message}
+              Error saving pipeline: {error.message}
             </div>
           )}
         </DialogBody>
