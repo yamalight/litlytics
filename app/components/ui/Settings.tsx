@@ -14,7 +14,7 @@ import { Description, Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
 import { Select } from '../catalyst/select';
 import { Spinner } from '../Spinner';
-import { ProviderKeysHint } from './ProviderKeys';
+import { ProviderKeysHint, providerNames } from './ProviderKeys';
 import { Recommended, recommendedForProvider } from './Recommended';
 
 export function Settings({ close }: { close: () => void }) {
@@ -106,13 +106,56 @@ export function Settings({ close }: { close: () => void }) {
             >
               {providers.map((prov) => (
                 <option key={prov} value={prov}>
-                  {prov}
+                  {prov == 'local' ? 'local' : providerNames[prov]}
                 </option>
               ))}
             </Select>
             <Recommended />
           </div>
         </Field>
+
+        {config.provider === 'ollama' && (
+          <Field>
+            <Label>Ollama URL</Label>
+            <Input
+              type="text"
+              placeholder="http://localhost:11434"
+              value={config.llmKey}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  llmKey: e.target.value,
+                }))
+              }
+            />
+            <Description className="mt-4 mx-1 !text-xs">
+              Please note that your Ollama instance must have CORS enabled for
+              LitLytics to work correctly in browser environment.
+            </Description>
+          </Field>
+        )}
+
+        {config.provider !== 'local' && config.provider !== 'ollama' && (
+          <Field>
+            <Label>API Key</Label>
+            <Input
+              type="password"
+              value={config.llmKey}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  llmKey: e.target.value,
+                }))
+              }
+            />
+            {Boolean(config.llmKey?.length) && (
+              <Description>
+                Your key is stored only in your browser and passed directly to
+                API provider.
+              </Description>
+            )}
+          </Field>
+        )}
 
         <Field>
           <Label>Model</Label>
@@ -160,49 +203,6 @@ export function Settings({ close }: { close: () => void }) {
             </Description>
           )}
         </Field>
-
-        {config.provider === 'ollama' && (
-          <Field>
-            <Label>Ollama URL</Label>
-            <Input
-              type="text"
-              placeholder="http://localhost:11434"
-              value={config.llmKey}
-              onChange={(e) =>
-                setConfig((c) => ({
-                  ...c,
-                  llmKey: e.target.value,
-                }))
-              }
-            />
-            <Description className="mt-4 mx-1 !text-xs">
-              Please note that your Ollama instance must have CORS enabled for
-              LitLytics to work correctly in browser environment.
-            </Description>
-          </Field>
-        )}
-
-        {config.provider !== 'local' && config.provider !== 'ollama' && (
-          <Field>
-            <Label>API Key</Label>
-            <Input
-              type="password"
-              value={config.llmKey}
-              onChange={(e) =>
-                setConfig((c) => ({
-                  ...c,
-                  llmKey: e.target.value,
-                }))
-              }
-            />
-            {Boolean(config.llmKey?.length) && (
-              <Description>
-                Your key is stored only in your browser and passed directly to
-                API provider.
-              </Description>
-            )}
-          </Field>
-        )}
 
         {config.provider === 'local' && (
           <Field className="flex flex-col">

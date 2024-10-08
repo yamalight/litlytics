@@ -1,6 +1,6 @@
 import { LLMProvider } from '@/src/llm/types';
 
-const providerNames: Record<LLMProvider, string> = {
+export const providerNames: Record<LLMProvider, string> = {
   anthropic: 'Anthropic',
   gemini: 'Gemini',
   openai: 'OpenAI',
