@@ -1,5 +1,5 @@
-import { LLMProviders } from '@/src/litlytics';
-import { LLMModel } from '@/src/llm/types';
+import { LLMProviders } from '@/packages/src/litlytics';
+import { LLMModel } from '@/packages/src/llm/types';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 import { Badge } from '../catalyst/badge';

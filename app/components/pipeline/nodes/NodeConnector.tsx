@@ -4,7 +4,7 @@ import {
   SourceStep,
   StepInput,
   StepInputs,
-} from '@/src/step/Step';
+} from '@/packages/litlytics';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { useAtom, useAtomValue } from 'jotai';

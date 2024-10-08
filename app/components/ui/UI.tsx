@@ -1,4 +1,4 @@
-import { LitLytics } from '@/src/litlytics';
+import { LitLytics } from '@/packages/src/litlytics';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import { PipelineBuilder } from '~/components/pipeline/PipelineBuilder';

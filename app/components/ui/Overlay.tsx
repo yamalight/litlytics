@@ -1,4 +1,4 @@
-import { Pipeline } from '@/src/pipeline/Pipeline';
+import { Pipeline } from '@/packages/src/pipeline/Pipeline';
 import {
   ArrowDownTrayIcon,
   ArrowUturnLeftIcon,

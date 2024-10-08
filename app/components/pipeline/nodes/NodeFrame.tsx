@@ -1,4 +1,4 @@
-import { ProcessingStep, SourceStep } from '@/src/step/Step';
+import { ProcessingStep, SourceStep } from '@/packages/src/step/Step';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import { useState } from 'react';

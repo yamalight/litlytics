@@ -1,6 +1,6 @@
-import { Doc } from '@/src/doc/Document';
-import { Pipeline } from '@/src/pipeline/Pipeline';
-import { getDocs } from '@/src/source/getDocs';
+import { Doc } from '@/packages/src/doc/Document';
+import { Pipeline } from '@/packages/src/pipeline/Pipeline';
+import { getDocs } from '@/packages/src/source/getDocs';
 import { useEffect, useMemo, useState } from 'react';
 
 export function useTestDocs(pipeline: Pipeline) {

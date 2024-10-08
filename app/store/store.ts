@@ -1,7 +1,11 @@
-import { LitLytics } from '@/src/litlytics';
-import { LLMModel, LLMProvider } from '@/src/llm/types';
-import { Pipeline, PipelineStatus } from '@/src/pipeline/Pipeline';
-import { MLCEngine } from '@mlc-ai/web-llm';
+import {
+  LitLytics,
+  type LLMModel,
+  type LLMProvider,
+  type MLCEngine,
+  type Pipeline,
+  type PipelineStatus,
+} from '@/packages/litlytics';
 import { atom } from 'jotai';
 import { withUndo } from 'jotai-history';
 import { atomWithStorage } from 'jotai/utils';

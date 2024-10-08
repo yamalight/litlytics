@@ -12,12 +12,8 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^0.0.51",
-    "@ai-sdk/google": "^0.0.51",
-    "@ai-sdk/openai": "^0.0.63",
     "@headlessui/react": "^2.1.8",
     "@heroicons/react": "^2.1.5",
-    "@mlc-ai/web-llm": "^0.2.71",
     "@monaco-editor/react": "^4.6.0",
     "@remix-run/node": "^2.12.1",
     "@remix-run/react": "^2.12.1",
@@ -30,7 +26,6 @@
     "jotai-history": "^0.2.1",
     "lodash": "^4.17.21",
     "mammoth": "^1.8.0",
-    "ollama-ai-provider": "^0.15.1",
     "openai": "^4.65.0",
     "papaparse": "^5.4.1",
     "pdfjs-dist": "^4.6.82",

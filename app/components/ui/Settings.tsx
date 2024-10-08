@@ -1,7 +1,7 @@
-import { LLMProviders } from '@/src/litlytics';
-import { modelCosts } from '@/src/llm/costs';
-import { localModelSizes } from '@/src/llm/sizes';
-import { LLMModelsList, LLMProvidersList } from '@/src/llm/types';
+import { LLMProviders } from '@/packages/src/litlytics';
+import { modelCosts } from '@/packages/src/llm/costs';
+import { localModelSizes } from '@/packages/src/llm/sizes';
+import { LLMModelsList, LLMProvidersList } from '@/packages/src/llm/types';
 import { CurrencyDollarIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { MLCEngine } from '@mlc-ai/web-llm';
 import { useAtom } from 'jotai';

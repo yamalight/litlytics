@@ -1,0 +1,32 @@
+{
+  "name": "litlytics",
+  "module": "litlytics.js",
+  "types": "./types/litlytics.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "bun run build:js && bun run build:types",
+    "build:js": "bun build litlytics.ts --outfile=litlytics.js",
+    "build:types": "tsc litlytics.ts --declaration --emitDeclarationOnly --outDir types",
+    "typecheck": "tsc",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "@headlessui/react": "^2.1.8",
+    "@heroicons/react": "^2.1.5",
+    "react-dropzone": "^14.2.3",
+    "react": "^18.3.1",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^0.0.51",
+    "@ai-sdk/google": "^0.0.51",
+    "@ai-sdk/openai": "^0.0.66",
+    "@mlc-ai/web-llm": "^0.2.73",
+    "ai": "^3.4.9",
+    "ollama-ai-provider": "^0.15.1",
+    "turndown": "^7.2.0"
+  }
+}

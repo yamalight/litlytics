@@ -1,6 +1,6 @@
-import { SourceTypes } from '@/src/source/Source';
-import { sourceProviders } from '@/src/source/sources';
-import { SourceStep } from '@/src/step/Step';
+import { SourceTypes } from '@/packages/src/source/Source';
+import { sourceProviders } from '@/packages/src/source/sources';
+import { SourceStep } from '@/packages/src/step/Step';
 import {
   ChevronDownIcon,
   ChevronRightIcon,
