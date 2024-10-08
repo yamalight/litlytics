@@ -1,15 +1,14 @@
-import { LLMProviders } from '@/src/litlytics';
-import { LLMModel } from '@/src/llm/types';
+import { LLMModel, LLMProvider } from '@/src/llm/types';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 import { Badge } from '../catalyst/badge';
 
-export const recommendedForProvider: Record<LLMProviders, LLMModel> = {
+export const recommendedForProvider: Record<LLMProvider, LLMModel> = {
   anthropic: 'claude-3-5-sonnet-20240620',
   gemini: 'gemini-1.5-flash-latest',
   local: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
   openai: 'gpt-4o-mini',
-  ollama: '',
+  ollama: 'llama3.2',
 };
 
 export function Recommended() {

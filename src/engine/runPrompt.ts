@@ -1,58 +1,37 @@
-import { MLCEngine } from '@mlc-ai/web-llm';
 import { CoreMessage, CoreTool } from 'ai';
-import type { LLMProviders } from '../litlytics';
 import { executeOnLLM } from '../llm/llm';
-import { LLMModel, LLMProvider, LLMRequest } from '../llm/types';
+import { ModelConfig } from '../llm/types';
 import { runWithWebLLM } from '../webllm/webllm.client';
 
 export interface RunPromptFromMessagesArgs {
-  provider: LLMProviders;
-  key: string;
-  model: LLMModel;
-  engine?: MLCEngine;
   messages: CoreMessage[];
+  modelConfig: ModelConfig;
   args?: Record<string, CoreTool>;
 }
 export const runPromptFromMessages = async ({
-  provider,
-  key,
-  model,
-  engine,
   messages,
+  modelConfig,
   args,
 }: RunPromptFromMessagesArgs) => {
   // execute locally
-  if (provider === 'local') {
-    return runWithWebLLM({ engine, messages, args });
-  }
+  if (modelConfig.provider === 'local')
+    return runWithWebLLM({ engine: modelConfig.engine, messages, args });
 
-  const req: LLMRequest = {
-    provider: provider as LLMProvider,
-    key,
-    model,
+  return await executeOnLLM({
     messages,
-    modelArgs: {
-      ...(args ?? {}),
-    },
-  };
-  const res = await executeOnLLM(req);
-  return res;
+    modelConfig,
+    modelArgs: args ?? {},
+  });
 };
 
 export interface RunPromptArgs {
-  provider: LLMProviders;
-  key: string;
-  model: LLMModel;
-  engine?: MLCEngine;
+  modelConfig: ModelConfig;
   system: string;
   user: string;
   args?: Record<string, CoreTool>;
 }
 export const runPrompt = async ({
-  provider,
-  key,
-  model,
-  engine,
+  modelConfig,
   system,
   user,
   args,
@@ -65,10 +44,7 @@ export const runPrompt = async ({
   // return runWithWebLLM({ messages, args });
   // run on LLM
   return runPromptFromMessages({
-    provider,
-    key,
-    model,
-    engine,
+    modelConfig,
     messages,
     args,
   });

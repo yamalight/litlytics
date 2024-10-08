@@ -1,7 +1,6 @@
-import { LLMProviders } from '@/src/litlytics';
 import { modelCosts } from '@/src/llm/costs';
 import { localModelSizes } from '@/src/llm/sizes';
-import { LLMModelsList, LLMProvidersList } from '@/src/llm/types';
+import { LLMModelsList, LLMProvider, LLMProvidersList } from '@/src/llm/types';
 import { CurrencyDollarIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { MLCEngine } from '@mlc-ai/web-llm';
 import { useAtom } from 'jotai';
@@ -20,15 +19,18 @@ import { Recommended, recommendedForProvider } from './Recommended';
 export function Settings({ close }: { close: () => void }) {
   const [webllm, setWebllm] = useAtom(webllmAtom);
   const [config, setConfig] = useAtom(litlyticsConfigStore);
-  const [providers, setProviders] = useState<LLMProviders[]>([]);
+  const [providers, setProviders] = useState<LLMProvider[]>([]);
 
-  const models = useMemo(() => LLMModelsList[config.provider], [config]);
+  const models = useMemo(
+    () => LLMModelsList[config.modelConfig.provider],
+    [config]
+  );
 
   useEffect(() => {
     async function loadProviders() {
-      const prov: LLMProviders[] = structuredClone(
+      const prov: LLMProvider[] = structuredClone(
         LLMProvidersList
-      ) as unknown as LLMProviders[];
+      ) as unknown as LLMProvider[];
       try {
         if (!navigator.gpu) {
           setProviders(prov);
@@ -83,7 +85,7 @@ export function Settings({ close }: { close: () => void }) {
         close();
       }
     });
-    engine.reload(config.model);
+    engine.reload(config.modelConfig.model);
     setWebllm({ engine, fetchProgress: 0, loadProgress: 0, status: '' });
   };
 
@@ -94,12 +96,12 @@ export function Settings({ close }: { close: () => void }) {
           <Label>Provider</Label>
           <div className="flex gap-2">
             <Select
-              value={config.provider}
+              value={config.modelConfig.provider}
               onChange={(e) =>
                 setConfig((c) => ({
                   ...c,
-                  provider: e.target.value as LLMProviders,
-                  model: LLMModelsList[e.target.value as LLMProviders][0],
+                  provider: e.target.value as LLMProvider,
+                  model: LLMModelsList[e.target.value as LLMProvider][0],
                   llmKey: '',
                 }))
               }
@@ -116,9 +118,9 @@ export function Settings({ close }: { close: () => void }) {
 
         <Field>
           <Label>Model</Label>
-          {config.provider === 'ollama' && (
+          {config.modelConfig.provider === 'ollama' && (
             <Input
-              value={config.model}
+              value={config.modelConfig.model}
               onChange={(e) =>
                 setConfig((c) => ({
                   ...c,
@@ -127,9 +129,9 @@ export function Settings({ close }: { close: () => void }) {
               }
             />
           )}
-          {config.provider !== 'ollama' && (
+          {config.modelConfig.provider !== 'ollama' && (
             <Select
-              value={config.model}
+              value={config.modelConfig.model}
               onChange={(e) =>
                 setConfig((c) => ({
                   ...c,
@@ -140,34 +142,43 @@ export function Settings({ close }: { close: () => void }) {
               {models.map((model) => (
                 <option key={model} value={model}>
                   {model}{' '}
-                  {recommendedForProvider[config.provider] === model
+                  {recommendedForProvider[config.modelConfig.provider] === model
                     ? '(recommended)'
                     : ''}
                 </option>
               ))}
             </Select>
           )}
-          {config.provider !== 'local' && config.provider !== 'ollama' && (
-            <Description className="flex gap-2">
-              <Badge title="Input price (USD) per million tokens">
-                Input: <CurrencyDollarIcon className="w-3 h-3" />{' '}
-                {_.round(modelCosts[config.model].input * 10000, 2)} / MTok
-              </Badge>
-              <Badge title="Output price (USD) per million tokens">
-                Output: <CurrencyDollarIcon className="w-3 h-3" />{' '}
-                {_.round(modelCosts[config.model].output * 10000, 2)} / MTok
-              </Badge>
-            </Description>
-          )}
+          {config.modelConfig.provider !== 'local' &&
+            config.modelConfig.provider !== 'ollama' && (
+              <Description className="flex gap-2">
+                <Badge title="Input price (USD) per million tokens">
+                  Input: <CurrencyDollarIcon className="w-3 h-3" />{' '}
+                  {_.round(
+                    modelCosts[config.modelConfig.model].input * 10000,
+                    2
+                  )}{' '}
+                  / MTok
+                </Badge>
+                <Badge title="Output price (USD) per million tokens">
+                  Output: <CurrencyDollarIcon className="w-3 h-3" />{' '}
+                  {_.round(
+                    modelCosts[config.modelConfig.model].output * 10000,
+                    2
+                  )}{' '}
+                  / MTok
+                </Badge>
+              </Description>
+            )}
         </Field>
 
-        {config.provider === 'ollama' && (
+        {config.modelConfig.provider === 'ollama' && (
           <Field>
             <Label>Ollama URL</Label>
             <Input
               type="text"
               placeholder="http://localhost:11434"
-              value={config.llmKey}
+              value={config.modelConfig.apiKey}
               onChange={(e) =>
                 setConfig((c) => ({
                   ...c,
@@ -182,29 +193,30 @@ export function Settings({ close }: { close: () => void }) {
           </Field>
         )}
 
-        {config.provider !== 'local' && config.provider !== 'ollama' && (
-          <Field>
-            <Label>API Key</Label>
-            <Input
-              type="password"
-              value={config.llmKey}
-              onChange={(e) =>
-                setConfig((c) => ({
-                  ...c,
-                  llmKey: e.target.value,
-                }))
-              }
-            />
-            {Boolean(config.llmKey?.length) && (
-              <Description>
-                Your key is stored only in your browser and passed directly to
-                API provider.
-              </Description>
-            )}
-          </Field>
-        )}
+        {config.modelConfig.provider !== 'local' &&
+          config.modelConfig.provider !== 'ollama' && (
+            <Field>
+              <Label>API Key</Label>
+              <Input
+                type="password"
+                value={config.modelConfig.apiKey}
+                onChange={(e) =>
+                  setConfig((c) => ({
+                    ...c,
+                    llmKey: e.target.value,
+                  }))
+                }
+              />
+              {Boolean(config.modelConfig.apiKey?.length) && (
+                <Description>
+                  Your key is stored only in your browser and passed directly to
+                  API provider.
+                </Description>
+              )}
+            </Field>
+          )}
 
-        {config.provider === 'local' && (
+        {config.modelConfig.provider === 'local' && (
           <Field className="flex flex-col">
             <div className="flex items-center gap-2">
               <Button
@@ -230,7 +242,7 @@ export function Settings({ close }: { close: () => void }) {
               </Button>
               <Description>
                 Download and use selected model locally. This model size is:{' '}
-                <strong>{localModelSizes[config.model]}mb</strong>
+                <strong>{localModelSizes[config.modelConfig.model]}mb</strong>
               </Description>
             </div>
             <Description className="mt-4 mx-1 !text-xs">
@@ -241,11 +253,11 @@ export function Settings({ close }: { close: () => void }) {
         )}
       </FieldGroup>
 
-      {!config.llmKey?.length &&
-        config.provider !== 'local' &&
-        config.provider !== 'ollama' && (
+      {!config.modelConfig.apiKey?.length &&
+        config.modelConfig.provider !== 'local' &&
+        config.modelConfig.provider !== 'ollama' && (
           <>
-            <ProviderKeysHint provider={config.provider} />
+            <ProviderKeysHint provider={config.modelConfig.provider} />
             <div className="rounded-md bg-red-50 dark:bg-red-900 p-4 mt-4">
               <div className="flex">
                 <div className="flex-shrink-0">

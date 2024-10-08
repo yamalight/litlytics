@@ -30,6 +30,10 @@ export async function pipelineFromText(
       system: systemToJSON,
       user: step,
     });
+
+    // TODO: handle error
+    if (stepRes instanceof Error) throw stepRes;
+
     const stepJSON = parseLLMJSON(stepRes.result!) as ProcessingStep;
     // generate id manually if LLM didn't do it for us (mostly happens with smaller LLMs)
     const id = stepJSON.id.length > 0 ? stepJSON.id : `step_${currentStep}`;

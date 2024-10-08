@@ -1,23 +1,21 @@
 import { LitLytics } from '@/src/litlytics';
-import { LLMModel, LLMProvider } from '@/src/llm/types';
+import { ModelConfig } from '@/src/llm/types';
 import { Pipeline } from '@/src/pipeline/Pipeline';
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
 
 interface ExecuteRequest {
-  provider?: LLMProvider;
-  model?: LLMModel;
-  key?: string;
+  modelConfig: ModelConfig;
   pipeline?: Pipeline;
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const body = (await request.json()) as ExecuteRequest;
-  const { provider, model, key, pipeline } = body;
-  if (!provider?.length || !model?.length) {
+  const { modelConfig, pipeline } = body;
+  if (!modelConfig.provider?.length || !modelConfig.model?.length) {
     throw new Error('Provider and model must not be empty!');
   }
-  if (!key?.length) {
+  if (!modelConfig.apiKey?.length) {
     throw new Error('API key must not be empty!');
   }
   if (!pipeline) {
@@ -25,9 +23,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
   // create new litlytics instance
   const litlytics = new LitLytics({
-    provider,
-    model,
-    key,
+    modelConfig,
   });
   const newPipeline = await litlytics.runPipeline(pipeline, () => {});
   return json(newPipeline);

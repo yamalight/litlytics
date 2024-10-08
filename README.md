@@ -61,18 +61,21 @@ This will launch the platform, and you will be able to interact with it in your 
 `POST /api/execute` endpoint executes pipeline using given LLM provider and model.  
 The body should be a JSON object with the following fields:
 
-- **provider**: The language model provider you wish to use.
-- **model** (`LLMModel`): The specific model to use, based on the selected provider.
-- **key** (`string`): The API key to authenticate with the specified provider.
+- **modelConfig** (`ModelConfig`): Configuration of the model you wish to use, as follows:
+  - **provider**: The language model provider you wish to use.
+  - **model** (`LLMModel`): The specific model to use, based on the selected provider.
+  - **key** (`string`): The API key to authenticate with the specified provider.
 - **pipeline** (`Pipeline`): The configuration for the processing pipeline.
 
 Example request:
 
 ```json
 {
-  "provider": "openai",
-  "model": "gpt-4o-mini",
-  "key": "sk-your-api-key",
+  "modelConfig": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "key": "sk-your-api-key"
+  },
   "pipeline": {
     // your pipeline configuration
   }

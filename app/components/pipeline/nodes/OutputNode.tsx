@@ -80,13 +80,13 @@ export function OutputNode() {
     const prompt = promptTokens.reduce((acc, val) => acc + val, 0);
     const completion = completionTokens.reduce((acc, val) => acc + val, 0);
     const inputCost =
-      litlyticsConfig.provider === 'ollama'
+      litlyticsConfig.modelConfig.provider === 'ollama'
         ? 0
-        : modelCosts[litlyticsConfig.model].input;
+        : modelCosts[litlyticsConfig.modelConfig.model].input;
     const outputCost =
-      litlyticsConfig.provider === 'ollama'
+      litlyticsConfig.modelConfig.provider === 'ollama'
         ? 0
-        : modelCosts[litlyticsConfig.model].output;
+        : modelCosts[litlyticsConfig.modelConfig.model].output;
     const cost = _.round(prompt * inputCost + completion * outputCost, 3);
     return { timing, prompt, completion, cost };
   }, [output, litlyticsConfig]);

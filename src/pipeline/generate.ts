@@ -15,6 +15,9 @@ export const generatePipeline = async ({
 
   // generate plan from LLM
   const plan = await litlytics.runPrompt({ system, user: description });
+  // TODO: handle error
+  if (plan instanceof Error) throw plan;
+
   const plannedSteps = plan.result
     ? parseThinkingOutputResult(plan.result)
     : plan.result;
