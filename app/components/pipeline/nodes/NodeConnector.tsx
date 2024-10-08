@@ -1,13 +1,13 @@
+import { PlusIcon } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   ProcessingStep,
   ProcessingStepTypes,
   SourceStep,
   StepInput,
   StepInputs,
-} from '@/packages/litlytics';
-import { PlusIcon } from '@heroicons/react/24/solid';
-import clsx from 'clsx';
-import { useAtom, useAtomValue } from 'jotai';
+} from 'litlytics';
 import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import { Checkbox } from '~/components/catalyst/checkbox';

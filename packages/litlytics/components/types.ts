@@ -9,8 +9,12 @@ export type UIComponents = {
       className?: string;
     }
   >;
-  Checkbox: React.FC<ComponentProps<'input'>>;
-  CustomMarkdown: React.FC<ComponentProps<'div'>>;
+  Checkbox: React.FC<
+    ComponentProps<'input'> & {
+      color?: string;
+    }
+  >;
+  CustomMarkdown: React.FC<{ children?: string | null }>;
   Dialog: React.FC<
     ComponentProps<'button'> & {
       open?: boolean;

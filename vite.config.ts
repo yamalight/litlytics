@@ -13,4 +13,9 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  optimizeDeps: {
+    esbuildOptions: {
+      jsx: 'automatic',
+    },
+  },
 });

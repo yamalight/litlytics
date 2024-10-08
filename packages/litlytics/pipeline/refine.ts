@@ -1,5 +1,5 @@
-import type { LitLytics } from '@/litlytics';
 import type { CoreMessage } from 'ai';
+import type { LitLytics } from '../litlytics';
 import type { Pipeline } from './Pipeline';
 import system from './prompts/pipeline.txt';
 import { parseThinkingOutputResult } from './util';

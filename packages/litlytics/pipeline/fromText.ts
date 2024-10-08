@@ -1,5 +1,5 @@
-import type { LitLytics } from '@/litlytics';
-import type { ProcessingStep, StepInput } from '@/step/Step';
+import type { LitLytics } from '../litlytics';
+import type { ProcessingStep, StepInput } from '../step/Step';
 import systemToJSON from './prompts/stepToJSON.txt';
 import { parseLLMJSON } from './util';
 

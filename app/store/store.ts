@@ -1,14 +1,14 @@
-import {
-  LitLytics,
-  type LLMModel,
-  type LLMProvider,
-  type MLCEngine,
-  type Pipeline,
-  type PipelineStatus,
-} from '@/packages/litlytics';
 import { atom } from 'jotai';
 import { withUndo } from 'jotai-history';
 import { atomWithStorage } from 'jotai/utils';
+import {
+  LitLytics,
+  LLMModel,
+  LLMProvider,
+  MLCEngine,
+  Pipeline,
+  PipelineStatus,
+} from 'litlytics';
 
 export const emptyPipeline: Pipeline = {
   // project setup

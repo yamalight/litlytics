@@ -1,5 +1,5 @@
-import { LitLytics } from '@/packages/src/litlytics';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { LitLytics } from 'litlytics';
 import { useEffect, useState } from 'react';
 import { PipelineBuilder } from '~/components/pipeline/PipelineBuilder';
 import { OverlayUI } from '~/components/ui/Overlay';

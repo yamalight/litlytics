@@ -1,7 +1,7 @@
-import type { UIComponents } from '@/components/types';
-import type { Doc } from '@/doc/Document';
-import type { SourceStep } from '@/step/Step';
 import { type ChangeEvent, useCallback, useEffect, useMemo } from 'react';
+import type { UIComponents } from '../../components/types';
+import type { Doc } from '../../doc/Document';
+import type { SourceStep } from '../../step/Step';
 import type { TextSourceConfig } from './types';
 
 export function TextSourceRender({

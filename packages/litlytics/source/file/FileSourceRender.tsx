@@ -1,6 +1,3 @@
-import type { UIComponents } from '@/components/types';
-import type { Doc } from '@/doc/Document';
-import type { SourceStep } from '@/step/Step';
 import {
   DocumentIcon,
   MagnifyingGlassIcon,
@@ -9,6 +6,9 @@ import {
 import clsx from 'clsx';
 import { useCallback, useMemo, useState } from 'react';
 import * as reactDropzone from 'react-dropzone';
+import type { UIComponents } from '../../components/types';
+import type { Doc } from '../../doc/Document';
+import type { SourceStep } from '../../step/Step';
 import type { FileSourceConfig } from './types';
 import { getFileContent, supportedFileTypes } from './util';
 

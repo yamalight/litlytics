@@ -1,5 +1,5 @@
-import type { Result } from '@/output/Output';
-import type { OutputStep, ProcessingStep, SourceStep } from '@/step/Step';
+import type { Result } from '../output/Output';
+import type { OutputStep, ProcessingStep, SourceStep } from '../step/Step';
 
 export interface Pipeline {
   name: string;

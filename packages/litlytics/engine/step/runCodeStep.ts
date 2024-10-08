@@ -1,6 +1,6 @@
-import { loadModule } from '@/code/loadModule';
-import type { Doc } from '@/doc/Document';
-import type { ProcessingStep, SourceStep } from '@/step/Step';
+import { loadModule } from '../../code/loadModule';
+import type { Doc } from '../../doc/Document';
+import type { ProcessingStep, SourceStep } from '../../step/Step';
 
 export async function runCodeStep({
   step,

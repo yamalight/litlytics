@@ -1,12 +1,10 @@
 {
   "name": "litlytics",
-  "module": "litlytics.js",
-  "types": "./types/litlytics.d.ts",
+  "module": "litlytics.ts",
+  "types": "litlytics.ts",
   "type": "module",
   "scripts": {
-    "build": "bun run build:js && bun run build:types",
-    "build:js": "bun build litlytics.ts --outfile=litlytics.js",
-    "build:types": "tsc litlytics.ts --declaration --emitDeclarationOnly --outDir types",
+    "build": "bun build litlytics.ts --outfile=litlytics.js",
     "typecheck": "tsc",
     "test": "bun test"
   },

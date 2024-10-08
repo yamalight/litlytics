@@ -1,8 +1,3 @@
-import { modelCosts } from '@/packages/src/llm/costs';
-import { BasicOutputConfig } from '@/packages/src/output/basic/types';
-import { OutputTypes } from '@/packages/src/output/Output';
-import { outputProviders } from '@/packages/src/output/outputs';
-import { OutputStep } from '@/packages/src/step/Step';
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -16,6 +11,13 @@ import {
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
+import {
+  BasicOutputConfig,
+  modelCosts,
+  outputProviders,
+  OutputStep,
+  OutputTypes,
+} from 'litlytics';
 import _ from 'lodash';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Badge } from '~/components/catalyst/badge';
@@ -43,6 +45,7 @@ import {
   pipelineAtom,
   pipelineStatusAtom,
 } from '~/store/store';
+import { components } from './components';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function OutputNode() {
@@ -229,7 +232,13 @@ export function OutputNode() {
                 </Badge>
               )}
             </div>
-            {Render && <Render pipeline={pipeline} setPipeline={setPipeline} />}
+            {Render && (
+              <Render
+                pipeline={pipeline}
+                setPipeline={setPipeline}
+                components={components}
+              />
+            )}
           </NodeContent>
         ) : (
           <></>

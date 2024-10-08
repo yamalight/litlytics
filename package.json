@@ -24,6 +24,7 @@
     "isbot": "^5.1.17",
     "jotai": "^2.10.0",
     "jotai-history": "^0.2.1",
+    "litlytics": "./packages/litlytics",
     "lodash": "^4.17.21",
     "mammoth": "^1.8.0",
     "openai": "^4.65.0",

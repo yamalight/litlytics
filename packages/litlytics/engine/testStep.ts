@@ -1,7 +1,7 @@
-import type { LitLytics } from '@/litlytics';
-import type { Pipeline } from '@/pipeline/Pipeline';
-import { getDocs } from '@/source/getDocs';
-import type { ProcessingStep } from '@/step/Step';
+import type { LitLytics } from '../litlytics';
+import type { Pipeline } from '../pipeline/Pipeline';
+import { getDocs } from '../source/getDocs';
+import type { ProcessingStep } from '../step/Step';
 import { runCodeStep } from './step/runCodeStep';
 
 export async function testPipelineStep({

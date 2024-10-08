@@ -1,4 +1,4 @@
-import type { Pipeline } from '@/pipeline/Pipeline';
+import type { Pipeline } from '../pipeline/Pipeline';
 import { sourceProviders } from './sources';
 
 export async function getDocs(pipeline: Pipeline) {

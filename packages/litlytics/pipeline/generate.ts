@@ -1,4 +1,4 @@
-import type { LitLytics } from '@/litlytics';
+import type { LitLytics } from '../litlytics';
 import system from './prompts/pipeline.txt';
 import { parseThinkingOutputResult } from './util';
 

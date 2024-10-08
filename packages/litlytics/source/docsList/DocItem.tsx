@@ -1,7 +1,7 @@
-import type { UIComponents } from '@/components/types';
-import type { Doc } from '@/doc/Document';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { type ChangeEvent, useState } from 'react';
+import type { UIComponents } from '../../components/types';
+import type { Doc } from '../../doc/Document';
 
 export function DocItem({
   doc,

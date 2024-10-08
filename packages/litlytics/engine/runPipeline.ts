@@ -1,8 +1,8 @@
-import type { Doc } from '@/doc/Document';
-import type { LitLytics } from '@/litlytics';
-import { outputProviders } from '@/output/outputs';
-import type { Pipeline, PipelineStatus } from '@/pipeline/Pipeline';
-import { getDocs } from '@/source/getDocs';
+import type { Doc } from '../doc/Document';
+import type { LitLytics } from '../litlytics';
+import { outputProviders } from '../output/outputs';
+import type { Pipeline, PipelineStatus } from '../pipeline/Pipeline';
+import { getDocs } from '../source/getDocs';
 
 export async function runPipeline(
   litlytics: LitLytics,

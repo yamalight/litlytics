@@ -1,7 +1,7 @@
-import type { UIComponents } from '@/components/types';
-import type { Doc } from '@/doc/Document';
-import type { SourceStep } from '@/step/Step';
 import React from 'react';
+import type { UIComponents } from '../../components/types';
+import type { Doc } from '../../doc/Document';
+import type { SourceStep } from '../../step/Step';
 import { SourceProvider, SourceTypes } from '../Source';
 import { TextSourceRender } from './TextSourceRender';
 import type { TextSourceConfig } from './types';

@@ -1,6 +1,6 @@
-import type { UIComponents } from '@/components/types';
-import type { Doc } from '@/doc/Document';
-import type { SourceStep } from '@/step/Step';
+import type { UIComponents } from '../components/types';
+import type { Doc } from '../doc/Document';
+import type { SourceStep } from '../step/Step';
 
 export class SourceTypes {
   static TEXT = 'text' as const;

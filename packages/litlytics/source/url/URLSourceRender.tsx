@@ -1,6 +1,3 @@
-import type { UIComponents } from '@/components/types';
-import type { Doc } from '@/doc/Document';
-import type { SourceStep } from '@/step/Step';
 import { Field } from '@headlessui/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
@@ -13,6 +10,9 @@ import {
   useState,
 } from 'react';
 import TurndownService from 'turndown';
+import type { UIComponents } from '../../components/types';
+import type { Doc } from '../../doc/Document';
+import type { SourceStep } from '../../step/Step';
 import type { URLSourceConfig } from './types';
 
 // init turndown service

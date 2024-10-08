@@ -1,10 +1,13 @@
-import { LLMProviders } from '@/packages/src/litlytics';
-import { modelCosts } from '@/packages/src/llm/costs';
-import { localModelSizes } from '@/packages/src/llm/sizes';
-import { LLMModelsList, LLMProvidersList } from '@/packages/src/llm/types';
 import { CurrencyDollarIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { MLCEngine } from '@mlc-ai/web-llm';
 import { useAtom } from 'jotai';
+import {
+  LLMModelsList,
+  LLMProviders,
+  LLMProvidersList,
+  localModelSizes,
+  modelCosts,
+} from 'litlytics';
 import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { litlyticsConfigStore, webllmAtom } from '~/store/store';

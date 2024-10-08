@@ -1,7 +1,7 @@
-import type { UIComponents } from '@/components/types';
-import type { Doc } from '@/doc/Document';
-import type { Pipeline } from '@/pipeline/Pipeline';
-import type { StepResult } from '@/step/Step';
+import type { UIComponents } from '../components/types';
+import type { Doc } from '../doc/Document';
+import type { Pipeline } from '../pipeline/Pipeline';
+import type { StepResult } from '../step/Step';
 
 export class OutputTypes {
   static BASIC = 'basic' as const;

@@ -1,6 +1,6 @@
-import type { OutputType } from '@/output/Output';
-import type { SourceType } from '@/source/Source';
 import type { LanguageModelUsage } from 'ai';
+import type { OutputType } from '../output/Output';
+import type { SourceType } from '../source/Source';
 
 export interface StepResult {
   stepId: string;

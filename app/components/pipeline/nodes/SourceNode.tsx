@@ -1,6 +1,3 @@
-import { SourceTypes } from '@/packages/src/source/Source';
-import { sourceProviders } from '@/packages/src/source/sources';
-import { SourceStep } from '@/packages/src/step/Step';
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -9,6 +6,7 @@ import {
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
+import { sourceProviders, SourceStep, SourceTypes } from 'litlytics';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
@@ -28,6 +26,7 @@ import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
 import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
+import { components } from './components';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 const UnknownSource = ({
@@ -134,7 +133,13 @@ export function SourceNode() {
         </NodeHeader>
         {data.expanded ? (
           <NodeContent className="h-[calc(100%-2rem)]">
-            {Render && <Render source={data} setSource={updateSource} />}
+            {Render && (
+              <Render
+                source={data}
+                setSource={updateSource}
+                components={components}
+              />
+            )}
           </NodeContent>
         ) : (
           <></>

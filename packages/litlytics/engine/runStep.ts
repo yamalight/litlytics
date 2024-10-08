@@ -1,6 +1,6 @@
-import type { Doc } from '@/doc/Document';
-import type { LitLytics } from '@/litlytics';
-import type { ProcessingStep, SourceStep } from '@/step/Step';
+import type { Doc } from '../doc/Document';
+import type { LitLytics } from '../litlytics';
+import type { ProcessingStep, SourceStep } from '../step/Step';
 import { runCodeStep } from './step/runCodeStep';
 
 export interface RunStepArgs {

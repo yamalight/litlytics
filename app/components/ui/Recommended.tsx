@@ -1,7 +1,6 @@
-import { LLMProviders } from '@/packages/src/litlytics';
-import { LLMModel } from '@/packages/src/llm/types';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
+import { LLMModel, LLMProviders } from 'litlytics';
 import { Badge } from '../catalyst/badge';
 
 export const recommendedForProvider: Record<LLMProviders, LLMModel> = {

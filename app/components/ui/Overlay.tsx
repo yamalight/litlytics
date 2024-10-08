@@ -1,4 +1,3 @@
-import { Pipeline } from '@/packages/src/pipeline/Pipeline';
 import {
   ArrowDownTrayIcon,
   ArrowUturnLeftIcon,
@@ -11,6 +10,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
+import { Pipeline } from 'litlytics';
 import { useEffect, useRef, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Button } from '~/components/catalyst/button';

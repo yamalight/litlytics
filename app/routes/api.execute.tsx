@@ -1,8 +1,6 @@
-import { LitLytics } from '@/packages/src/litlytics';
-import { LLMModel, LLMProvider } from '@/packages/src/llm/types';
-import { Pipeline } from '@/packages/src/pipeline/Pipeline';
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
+import { LitLytics, LLMModel, LLMProvider, Pipeline } from 'litlytics';
 
 interface ExecuteRequest {
   provider?: LLMProvider;

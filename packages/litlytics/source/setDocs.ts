@@ -1,5 +1,5 @@
-import type { Doc } from '@/doc/Document';
-import type { Pipeline } from '@/pipeline/Pipeline';
+import type { Doc } from '../doc/Document';
+import type { Pipeline } from '../pipeline/Pipeline';
 import { sourceProviders } from './sources';
 
 export async function setDocs(pipeline: Pipeline, docs: Doc[]) {

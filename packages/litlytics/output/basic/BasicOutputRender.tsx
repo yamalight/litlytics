@@ -1,10 +1,10 @@
-import type { UIComponents } from '@/components/types';
-import type { Pipeline } from '@/pipeline/Pipeline';
 import {
   ClipboardDocumentCheckIcon,
   ClipboardDocumentIcon,
 } from '@heroicons/react/24/solid';
 import { useMemo, useState } from 'react';
+import type { UIComponents } from '../../components/types';
+import type { Pipeline } from '../../pipeline/Pipeline';
 
 export function BasicOutputRender({
   pipeline,

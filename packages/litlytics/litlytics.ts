@@ -19,16 +19,33 @@ import { generateStep, type GenerateStepArgs } from './step/generate';
 import { refineStep } from './step/refine';
 import { type ProcessingStep } from './step/Step';
 
-// export types
-export type { LLMModel, LLMProvider } from '@/llm/types';
-export type { Pipeline, PipelineStatus } from '@/pipeline/Pipeline';
+// export types and commonly used vars
 export type { MLCEngine } from '@mlc-ai/web-llm';
-export type {
-  ProcessingStep,
-  ProcessingStepTypes,
-  SourceStep,
-  StepInput,
+export type { UIComponents } from './components/types';
+export type { Doc } from './doc/Document';
+export { modelCosts } from './llm/costs';
+export { localModelSizes } from './llm/sizes';
+export {
+  LLMModelsList,
+  LLMProvidersList,
+  type LLMModel,
+  type LLMProvider,
+} from './llm/types';
+export type { BasicOutputConfig } from './output/basic/types';
+export { OutputTypes } from './output/Output';
+export { outputProviders } from './output/outputs';
+export type { Pipeline, PipelineStatus } from './pipeline/Pipeline';
+export { getDocs } from './source/getDocs';
+export { setDocs } from './source/setDocs';
+export { SourceTypes } from './source/Source';
+export { sourceProviders } from './source/sources';
+export {
   StepInputs,
+  type OutputStep,
+  type ProcessingStep,
+  type ProcessingStepTypes,
+  type SourceStep,
+  type StepInput,
 } from './step/Step';
 
 export type LLMProviders = LLMProvider | 'local';

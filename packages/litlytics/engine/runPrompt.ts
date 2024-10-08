@@ -1,9 +1,9 @@
-import type { LLMProviders } from '@/litlytics';
-import { executeOnLLM } from '@/llm/llm';
-import type { LLMModel, LLMProvider, LLMRequest } from '@/llm/types';
-import { runWithWebLLM } from '@/webllm/webllm.client';
 import type { MLCEngine } from '@mlc-ai/web-llm';
 import type { CoreMessage, CoreTool } from 'ai';
+import type { LLMProviders } from '../litlytics';
+import { executeOnLLM } from '../llm/llm';
+import type { LLMModel, LLMProvider, LLMRequest } from '../llm/types';
+import { runWithWebLLM } from '../webllm/webllm.client';
 
 export interface RunPromptFromMessagesArgs {
   provider: LLMProviders;

@@ -1,7 +1,7 @@
-import type { UIComponents } from '@/components/types';
-import type { SourceStep } from '@/step/Step';
 import { DocumentIcon } from '@heroicons/react/16/solid';
 import { useRef, useState } from 'react';
+import type { UIComponents } from '../../components/types';
+import type { SourceStep } from '../../step/Step';
 import type { DocsListSourceConfig } from './types';
 
 export default function AddDoc({

@@ -1,7 +1,7 @@
-import type { UIComponents } from '@/components/types';
-import type { Doc } from '@/doc/Document';
-import type { Pipeline } from '@/pipeline/Pipeline';
 import React from 'react';
+import type { UIComponents } from '../../components/types';
+import type { Doc } from '../../doc/Document';
+import type { Pipeline } from '../../pipeline/Pipeline';
 import { OutputProvider, type Result } from '../Output';
 import { BasicOutputRender } from './BasicOutputRender';
 import type { BasicOutputConfig } from './types';

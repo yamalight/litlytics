@@ -1,5 +1,5 @@
-import type { LitLytics } from '@/litlytics';
-import { parseThinkingOutputResult } from '@/pipeline/util';
+import type { LitLytics } from '../litlytics';
+import { parseThinkingOutputResult } from '../pipeline/util';
 import system from './prompts/code-explain.txt';
 
 export const generateCodeExplain = async ({
