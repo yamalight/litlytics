@@ -85,7 +85,10 @@ export function OverlayUI() {
 
   useEffect(() => {
     // show settings if key not set
-    if (!litlyticsConfig.llmKey?.length && webllm.loadProgress !== 1) {
+    if (
+      !litlyticsConfig.modelConfig.apiKey?.length &&
+      webllm.loadProgress !== 1
+    ) {
       setIsSettingsOpen(true);
     }
   }, [litlyticsConfig, webllm]);
@@ -106,8 +109,8 @@ export function OverlayUI() {
   const savePipeline = () => {
     const pipelineToSave = structuredClone(pipeline);
     // set model and provider
-    pipelineToSave.provider = litlyticsConfig.provider;
-    pipelineToSave.model = litlyticsConfig.model;
+    pipelineToSave.provider = litlyticsConfig.modelConfig.provider;
+    pipelineToSave.model = litlyticsConfig.modelConfig.model;
     // Convert the object to a JSON string
     const jsonString = JSON.stringify(pipeline, null, 2);
     // Create a Blob from the JSON string
@@ -145,9 +148,12 @@ export function OverlayUI() {
 
   const closeSettings = () => {
     // disallow closing if no key set
-    if (!litlyticsConfig.llmKey?.length && webllm.loadProgress !== 1) {
+    if (
+      !litlyticsConfig.modelConfig.apiKey?.length &&
+      webllm.loadProgress !== 1
+    )
       return;
-    }
+
     setIsSettingsOpen(false);
   };
 
@@ -289,7 +295,8 @@ export function OverlayUI() {
         open={isSettingsOpen}
         onClose={closeSettings}
         canClose={
-          Boolean(litlyticsConfig.llmKey?.length) || webllm.loadProgress === 1
+          Boolean(litlyticsConfig.modelConfig.apiKey?.length) ||
+          webllm.loadProgress === 1
         }
         topClassName="z-20"
       >

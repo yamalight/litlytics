@@ -1,4 +1,3 @@
-import { MLCEngine } from '@mlc-ai/web-llm';
 import { runPipeline } from './engine/runPipeline';
 import {
   runPrompt,
@@ -9,7 +8,7 @@ import {
 import { runStep, RunStepArgs } from './engine/runStep';
 import { runLLMStep, RunLLMStepArgs } from './engine/step/runLLMStep';
 import { testPipelineStep } from './engine/testStep';
-import { LLMModel, LLMProvider } from './llm/types';
+import { ModelConfig } from './llm/types';
 import { pipelineFromText } from './pipeline/fromText';
 import { generatePipeline } from './pipeline/generate';
 import { Pipeline, PipelineStatus } from './pipeline/Pipeline';
@@ -19,29 +18,11 @@ import { generateStep, GenerateStepArgs } from './step/generate';
 import { refineStep } from './step/refine';
 import { ProcessingStep } from './step/Step';
 
-export type LLMProviders = LLMProvider | 'local';
-
 export class LitLytics {
-  provider?: LLMProviders;
-  model?: LLMModel;
-  #llmKey?: string;
-  engine?: MLCEngine;
+  modelConfig: ModelConfig;
 
-  constructor({
-    provider,
-    model,
-    key,
-    engine,
-  }: {
-    provider: LLMProviders;
-    model: LLMModel;
-    key: string;
-    engine?: MLCEngine;
-  }) {
-    this.provider = provider;
-    this.model = model;
-    this.#llmKey = key;
-    this.engine = engine;
+  constructor({ modelConfig }: { modelConfig: ModelConfig }) {
+    this.modelConfig = modelConfig;
   }
 
   /**
@@ -52,19 +33,8 @@ export class LitLytics {
     messages,
     args,
   }: Pick<RunPromptFromMessagesArgs, 'messages' | 'args'>) {
-    if (
-      !this.provider?.length ||
-      !this.model?.length ||
-      (!this.#llmKey?.length && this.provider !== 'local')
-    ) {
-      throw new Error('No provider, model or key set!');
-    }
-
     return await runPromptFromMessages({
-      provider: this.provider,
-      key: this.#llmKey ?? 'local',
-      model: this.model,
-      engine: this.engine,
+      modelConfig: this.modelConfig,
       messages,
       args,
     });
@@ -75,19 +45,8 @@ export class LitLytics {
     user,
     args,
   }: Pick<RunPromptArgs, 'system' | 'user' | 'args'>) {
-    if (
-      !this.provider?.length ||
-      !this.model?.length ||
-      (!this.#llmKey?.length && this.provider !== 'local')
-    ) {
-      throw new Error('No provider, model or key set!');
-    }
-
     return await runPrompt({
-      provider: this.provider,
-      key: this.#llmKey ?? 'local',
-      model: this.model,
-      engine: this.engine,
+      modelConfig: this.modelConfig,
       system,
       user,
       args,

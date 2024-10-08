@@ -91,13 +91,13 @@ export function StepNode({ data }: { data: ProcessingStep }) {
           completionTokens.length
       );
       const inputCost =
-        litlyticsConfig.provider === 'ollama'
+        litlyticsConfig.modelConfig.provider === 'ollama'
           ? 0
-          : modelCosts[litlyticsConfig.model].input;
+          : modelCosts[litlyticsConfig.modelConfig.model].input;
       const outputCost =
-        litlyticsConfig.provider === 'ollama'
+        litlyticsConfig.modelConfig.provider === 'ollama'
           ? 0
-          : modelCosts[litlyticsConfig.model].output;
+          : modelCosts[litlyticsConfig.modelConfig.model].output;
       const averageCost = _.round(
         averagePrompt * inputCost + averageCompletion * outputCost,
         3

@@ -15,9 +15,9 @@ export const generateCodeExplain = async ({
 
   // generate plan from LLM
   const step = await litlytics.runPrompt({ system, user: code });
-  if (!step.result) {
-    throw new Error('Error generating explanation!');
-  }
+  // TODO: handle error
+  if (step instanceof Error) throw step;
+  if (!step.result) throw new Error('Error generating explanation!');
 
   const result = parseThinkingOutputResult(step.result);
   return result;

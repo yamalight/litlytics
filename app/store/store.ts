@@ -1,5 +1,5 @@
 import { LitLytics } from '@/src/litlytics';
-import { LLMModel, LLMProvider } from '@/src/llm/types';
+import { ModelConfig } from '@/src/llm/types';
 import { Pipeline, PipelineStatus } from '@/src/pipeline/Pipeline';
 import { MLCEngine } from '@mlc-ai/web-llm';
 import { atom } from 'jotai';
@@ -39,24 +39,26 @@ export const emptyPipeline: Pipeline = {
 };
 
 export const litlyticsConfigStore = atomWithStorage<{
-  provider: LLMProvider | 'local';
-  model: LLMModel;
-  llmKey: string;
+  modelConfig: ModelConfig;
 }>(
   'litltyics.config',
   {
-    provider: 'openai',
-    model: 'gpt-4o-mini',
-    llmKey: '',
+    modelConfig: {
+      provider: 'openai',
+      model: 'gpt-4o-mini',
+      apiKey: '',
+    },
   },
   undefined,
   { getOnInit: true }
 );
 export const litlyticsStore = atom<LitLytics>(
   new LitLytics({
-    provider: 'openai',
-    model: 'gpt-4o-mini',
-    key: '',
+    modelConfig: {
+      provider: 'openai',
+      model: 'gpt-4o-mini',
+      apiKey: '',
+    },
   })
 );
 

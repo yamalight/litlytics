@@ -40,6 +40,9 @@ Step input: ${step.input}`;
 
   // generate plan from LLM
   const plan = await litlytics.runPromptFromMessages({ messages });
+  // TODO: handle error
+  if (plan instanceof Error) throw plan;
+
   const res = plan.result
     ? parseThinkingOutputResult(plan.result)
     : plan.result;

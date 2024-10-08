@@ -21,12 +21,7 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    const newLL = new LitLytics({
-      provider: config.provider,
-      model: config.model,
-      key: config.llmKey,
-      engine: webllm.engine,
-    });
+    const newLL = new LitLytics(config);
     setLitlytics(newLL);
   }, [config, webllm, setLitlytics]);
 

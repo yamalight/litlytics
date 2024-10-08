@@ -81,10 +81,15 @@ export async function runLLMStep({
   const startTime = performance.now();
   const res = await litlytics.runPrompt({ system, user });
   const endTime = performance.now();
+
+  if (res instanceof Error) throw res;
+
+  // FIXME: shouldn't this caching check be done before the LLM call?
   // replace existing result if present
   const existingResult = doc?.processingResults.find(
     (r) => r.stepId === step.id
   );
+
   if (existingResult) {
     existingResult.result = res.result!;
     existingResult.usage = res.usage;

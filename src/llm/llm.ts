@@ -3,38 +3,40 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 import { createOllama } from 'ollama-ai-provider';
-import { LLMModel, LLMProvider, LLMRequest } from './types';
+import { LLMRequest, ModelConfig } from './types';
 
-function getModel({
-  provider,
-  model,
-  key,
-}: {
-  provider: LLMProvider;
-  model: LLMModel;
-  key: string;
-}) {
+function getModel({ provider, model, apiKey, baseURL }: ModelConfig) {
+  if (
+    !provider?.length ||
+    !model?.length ||
+    (provider === 'local' && !apiKey?.length)
+  )
+    return new Error('No provider, model or key set!');
+
   // OpenAI
   switch (provider) {
     case 'openai': {
       const openai = createOpenAI({
-        apiKey: key,
+        apiKey: apiKey,
+        ...(baseURL ? { baseURL } : {}),
       });
       return openai(model);
     }
     case 'anthropic': {
       const anthropic = createAnthropic({
-        apiKey: key,
+        apiKey: apiKey,
         headers: {
           // allow in-browser execution
           'anthropic-dangerous-direct-browser-access': 'true',
         },
+        ...(baseURL ? { baseURL } : {}),
       });
       return anthropic(model);
     }
     case 'gemini': {
       const google = createGoogleGenerativeAI({
-        apiKey: key,
+        apiKey: apiKey,
+        ...(baseURL ? { baseURL } : {}),
       });
       return google(model, {
         // disable all safety blockers as they tend to mess with data analysis
@@ -59,8 +61,11 @@ function getModel({
       });
     }
     case 'ollama': {
+      if (!baseURL) return new Error('No custom URL provided');
+      if (!baseURL.endsWith('/api'))
+        baseURL += !baseURL.endsWith('/') ? '/api' : 'api';
       const ollama = createOllama({
-        baseURL: `${key}${key.endsWith('/') ? '' : '/'}api`,
+        baseURL,
       });
       return ollama(model);
     }
@@ -71,25 +76,27 @@ function getModel({
  * Executes LLM prompt and returns a single result
  */
 export async function executeOnLLM({
-  provider,
-  key,
-  model,
+  modelConfig,
   messages,
   modelArgs,
 }: LLMRequest) {
   // set key
-  const modelObj = getModel({ provider, model, key });
+  const model = getModel(modelConfig);
+  if (model instanceof Error) return model;
+  if (!model) return new Error('Invalid model config');
+
   const { text, usage } = await generateText({
     maxTokens: 4096,
     ...modelArgs,
-    model: modelObj,
+    model,
     messages,
   });
+
   if (process.env.NODE_ENV != 'production' && process.env.NODE_ENV != 'test') {
     console.log('\n\n');
-    console.log(model, messages, text);
+    console.log(modelConfig.model, messages, text);
     console.log('\n\n');
   }
-  const result = text;
-  return { result, usage };
+
+  return { result: text, usage };
 }

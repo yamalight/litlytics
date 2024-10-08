@@ -1,3 +1,4 @@
+import { MLCEngine } from '@mlc-ai/web-llm';
 import { CoreMessage, CoreTool } from 'ai';
 
 export const LLMProvidersList = [
@@ -5,7 +6,9 @@ export const LLMProvidersList = [
   'anthropic',
   'gemini',
   'ollama',
+  'local',
 ] as const;
+
 export type LLMProvider = (typeof LLMProvidersList)[number];
 
 export const LLMModelsList = {
@@ -40,10 +43,15 @@ export const LLMModelsList = {
 export type LLMModel =
   (typeof LLMModelsList)[keyof typeof LLMModelsList][number];
 
-export interface LLMRequest {
+export interface ModelConfig {
   provider: LLMProvider;
-  key: string;
   model: LLMModel;
+  apiKey?: string;
+  baseURL?: string;
+  engine?: MLCEngine;
+}
+export interface LLMRequest {
   messages: CoreMessage[];
+  modelConfig: ModelConfig;
   modelArgs?: Record<string, CoreTool>;
 }
