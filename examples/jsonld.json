@@ -38,9 +38,7 @@
         ]
       }
     },
-    "connectsTo": [
-      "extract-entities-and-relations"
-    ],
+    "connectsTo": ["extract-entities-and-relations"],
     "expanded": true
   },
   "output": {
@@ -92,9 +90,7 @@
       "type": "llm",
       "input": "doc",
       "prompt": "Extract and provide a comprehensive list of entities mentioned in the document, along with their relationships. Clearly differentiate between the types of entities (e.g., people, organizations, locations, concepts) and specify how these entities are connected to one another, highlighting key insights and connections found within the text. Ensure the output is structured and easy to read.",
-      "connectsTo": [
-        "convert-to-json-ld"
-      ],
+      "connectsTo": ["convert-to-json-ld"],
       "expanded": true
     },
     {
@@ -104,9 +100,7 @@
       "type": "llm",
       "input": "result",
       "prompt": "Convert the provided document's content into JSON-LD format. Identify and extract all relevant entities and their relationships from the text. Structure this information according to the JSON-LD specification, ensuring it is ready for use in semantic web applications. Provide the final JSON-LD output only, without any additional commentary or the original text document.",
-      "connectsTo": [
-        "output_0"
-      ],
+      "connectsTo": ["output_0"],
       "expanded": true
     }
   ],

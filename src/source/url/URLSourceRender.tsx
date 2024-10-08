@@ -2,6 +2,7 @@ import type { Doc } from '@/src/doc/Document';
 import type { SourceStep } from '@/src/step/Step';
 import { Field } from '@headlessui/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
 import {
   type ChangeEvent,
   useCallback,
@@ -139,7 +140,12 @@ export function URLSourceRender({
   return (
     <div className="flex flex-col w-full h-full overflow-auto">
       <div className="flex flex-col gap-1.5">
-        <Field className="grid grid-cols-[40px_minmax(0,_1fr)] items-center justify-center gap-6">
+        <Field
+          className={clsx([
+            'grid grid-cols-[40px_minmax(0,_1fr)]',
+            'items-center justify-center gap-6',
+          ])}
+        >
           <Label>URL:</Label>
           <Input
             name="url"
@@ -149,7 +155,12 @@ export function URLSourceRender({
             disabled={loading}
           />
         </Field>
-        <Field className="grid grid-cols-[40px_minmax(0,_1fr)] items-center justify-center gap-6">
+        <Field
+          className={clsx([
+            'grid grid-cols-[40px_minmax(0,_1fr)]',
+            'items-center justify-center gap-6',
+          ])}
+        >
           <Label>CORS:</Label>
           <Input
             name="corsproxy"
@@ -160,7 +171,13 @@ export function URLSourceRender({
           />
         </Field>
         {!loading && Boolean(config.document?.content?.length) && (
-          <div className="p-2 flex items-center justify-between bg-zinc-100 dark:bg-zinc-900 rounded-lg shadow-sm">
+          <div
+            className={clsx([
+              'flex items-center justify-between',
+              'bg-zinc-100 dark:bg-zinc-900',
+              'p-2 rounded-lg shadow-sm',
+            ])}
+          >
             {config.document?.name}
             <div className="flex items-center gap-2 min-w-fit">
               <Button icon title="Preview" onClick={() => setPreviewOpen(true)}>

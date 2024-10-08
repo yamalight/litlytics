@@ -32,7 +32,8 @@ declare module 'mammoth/mammoth.browser' {
 
   /** The error or warning message returned from the processing operation. */
   type Message = {
-    /** a string representing the type of the message, such as "warning" or "error" */
+    /** a string representing the type of the message,
+     * such as "warning" or "error" */
     type: 'warning' | 'error';
 
     /** a string containing the actual message */

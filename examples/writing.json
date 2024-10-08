@@ -38,9 +38,7 @@
         ]
       }
     },
-    "connectsTo": [
-      "step_0"
-    ],
+    "connectsTo": ["step_0"],
     "expanded": true
   },
   "output": {
@@ -92,9 +90,7 @@
       "type": "llm",
       "input": "doc",
       "prompt": "Create an engaging Instagram post based on the provided text description of the image.\nHighlight key elements, emotions, and any relevant hashtags to enhance visibility and engagement.\nEnsure the tone is suitable for Instagram, aiming to captivate the audience and encourage interaction.\nUse simpler language. Write as if you are not a native English speaker.",
-      "connectsTo": [
-        "step_1"
-      ],
+      "connectsTo": ["step_1"],
       "expanded": true
     },
     {
@@ -104,9 +100,7 @@
       "type": "llm",
       "input": "result",
       "prompt": "Please proofread and edit the provided Instagram post text to enhance its natural flow and engagement.\nFocus on improving grammar, clarity, and overall appeal to the audience, while maintaining the original message and tone.",
-      "connectsTo": [
-        "output_0"
-      ],
+      "connectsTo": ["output_0"],
       "expanded": true
     }
   ],

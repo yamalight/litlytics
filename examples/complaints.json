@@ -106,9 +106,7 @@
         }
       ]
     },
-    "connectsTo": [
-      "sentiment-analysis"
-    ],
+    "connectsTo": ["sentiment-analysis"],
     "expanded": true
   },
   "output": {
@@ -237,9 +235,7 @@
       "type": "llm",
       "input": "doc",
       "prompt": "Analyze the provided product review document to determine the overall sentiment expressed within it. Classify the sentiment as positive, negative, or neutral based on the content of the review. Provide a brief explanation for the assigned sentiment classification.",
-      "connectsTo": [
-        "filter-negative-reviews"
-      ],
+      "connectsTo": ["filter-negative-reviews"],
       "expanded": true
     },
     {
@@ -249,9 +245,7 @@
       "type": "code",
       "input": "result",
       "code": "export default function filterNegativeReviews(input) {\n    const isNegativeReview = (review) => {\n        // Assuming negative reviews contain specific keywords\n        const negativeKeywords = ['negativ', 'bad', 'neutral'];\n        return negativeKeywords.some(keyword => review.toLowerCase().includes(keyword));\n    };\n\n    if (Array.isArray(input)) {\n        return input.filter(review => !isNegativeReview(review));\n    } else if (typeof input === 'string') {\n        return isNegativeReview(input) ? input : undefined;\n    }\n    return undefined;\n}\n",
-      "connectsTo": [
-        "extract-complaints"
-      ],
+      "connectsTo": ["extract-complaints"],
       "expanded": true
     },
     {
@@ -261,9 +255,7 @@
       "type": "llm",
       "input": "doc",
       "prompt": "Extract the common complaints from the provided text document by identifying recurring themes or phrases in the negative reviews. Focus on highlighting specific issues mentioned, such as product quality, customer service, delivery problems, or any other relevant concerns. Summarize these complaints in a concise manner, ensuring that the key points are clear and easily understandable.",
-      "connectsTo": [
-        "summarize-complaints"
-      ],
+      "connectsTo": ["summarize-complaints"],
       "expanded": true
     },
     {
@@ -273,9 +265,7 @@
       "type": "llm",
       "input": "aggregate-results",
       "prompt": "Please summarize the list of extracted complaints from the negative reviews in the document, providing a concise overview of the main issues identified. Focus on highlighting the key themes and concerns raised by the reviewers.",
-      "connectsTo": [
-        "output_0"
-      ],
+      "connectsTo": ["output_0"],
       "expanded": true
     }
   ],

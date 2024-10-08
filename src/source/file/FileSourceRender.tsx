@@ -5,6 +5,7 @@ import {
   MagnifyingGlassIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
 import { useCallback, useMemo, useState } from 'react';
 import * as reactDropzone from 'react-dropzone';
 import { Button } from '~/components/catalyst/button';
@@ -109,7 +110,13 @@ export function FileSourceRender({
       <div className="flex flex-col w-full h-full overflow-auto">
         <div className="flex flex-col gap-2">
           {error && (
-            <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 my-2">
+            <div
+              className={clsx([
+                'flex items-center justify-between',
+                'bg-red-400 dark:bg-red-700',
+                'rounded-xl py-1 px-2 my-2',
+              ])}
+            >
               Error loading file: {error.message}
             </div>
           )}
@@ -121,7 +128,15 @@ export function FileSourceRender({
           >
             <label
               htmlFor="dropzone-file"
-              className="flex flex-col items-center justify-center w-full h-fit border-2 border-zinc-300 border-dashed rounded-lg cursor-pointer bg-zinc-50 dark:bg-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:hover:border-zinc-500 dark:hover:bg-zinc-800"
+              className={clsx([
+                'flex flex-col items-center justify-center',
+                'w-full h-fit',
+                'border-2  border-dashed',
+                'rounded-lg cursor-pointer',
+                'bg-zinc-50 dark:bg-zinc-700',
+                'hover:bg-zinc-100 dark:hover:bg-zinc-800',
+                'border-zinc-300 dark:border-zinc-600 dark:hover:border-zinc-500',
+              ])}
             >
               <div className="flex flex-col items-center justify-center pt-3 pb-4">
                 <DocumentIcon

@@ -49,9 +49,7 @@
         }
       ]
     },
-    "connectsTo": [
-      "extract-features"
-    ],
+    "connectsTo": ["extract-features"],
     "expanded": true
   },
   "output": {
@@ -128,9 +126,7 @@
       "type": "llm",
       "input": "doc",
       "prompt": "You are tasked with extracting product features from the following text description. Carefully read the provided document and identify the key characteristics, attributes, and functionalities of the product being described. Consider aspects such as size, color, material, unique selling points, and any other relevant features. Present your findings in a clear and organized manner, using bullet points or a list format to ensure readability. Focus on extracting only the essential features without any additional commentary or unrelated information. Please process the document now.",
-      "connectsTo": [
-        "compare-features"
-      ],
+      "connectsTo": ["compare-features"],
       "expanded": true
     },
     {
@@ -140,9 +136,7 @@
       "type": "llm",
       "input": "aggregate-results",
       "prompt": "Please analyze the text document to identify and extract the features of all products mentioned. Once the features are extracted, compare these features across all products by identifying similarities and differences. Summarize your findings in a clear, structured format, using bullet points for easy readability. Ensure to focus on key aspects such as functionality, design, pricing, and unique attributes of each product. Highlight any noteworthy distinctions and commonalities to provide a comprehensive overview.",
-      "connectsTo": [
-        "output_0"
-      ],
+      "connectsTo": ["output_0"],
       "expanded": true
     }
   ],

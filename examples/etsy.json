@@ -17,9 +17,7 @@
         "processingResults": []
       }
     },
-    "connectsTo": [
-      "generate-title-and-description"
-    ],
+    "connectsTo": ["generate-title-and-description"],
     "expanded": true
   },
   "output": {
@@ -81,9 +79,7 @@
       "type": "llm",
       "input": "doc",
       "prompt": "You are tasked with generating an Etsy product title and description based on the provided document. \n\n1. **Read the Document**: Carefully analyze the content of the document to understand the product's features, benefits, and unique selling points.\n\n2. **Generate a Title**: Create a catchy and descriptive title that encapsulates the essence of the product. The title should be engaging and suitable for Etsy's marketplace, appealing to potential buyers.\n\n3. **Craft a Description**: Write a detailed product description that highlights the key attributes of the product, including its uses, materials, dimensions, and any special features. Ensure the description is informative and persuasive, encouraging customers to make a purchase.\n\nRemember to consider the target audience on Etsy and incorporate relevant keywords that may enhance visibility in search results.",
-      "connectsTo": [
-        "check-for-copyrighted-terms"
-      ],
+      "connectsTo": ["check-for-copyrighted-terms"],
       "expanded": true
     },
     {
@@ -93,9 +89,7 @@
       "type": "llm",
       "input": "result",
       "prompt": "Analyze the provided title and description for any terms that may be copyrighted. Identify specific words or phrases that could potentially infringe on copyright, such as brand names or proprietary terms. After identifying these terms, suggest alternative edits that maintain the original meaning while avoiding copyright issues. Present the revised title and description clearly, indicating the changes made.",
-      "connectsTo": [
-        "proofread-optimize-seo"
-      ],
+      "connectsTo": ["proofread-optimize-seo"],
       "expanded": true
     },
     {
@@ -105,9 +99,7 @@
       "type": "llm",
       "input": "result",
       "prompt": "Please carefully proofread the provided text for any grammatical errors, spelling mistakes, and clarity issues. After proofreading, analyze the content for SEO performance. Suggest improvements that include relevant keywords, enhanced readability, and effective structuring for search engines. Ensure that the final output is both polished and optimized for better SEO performance.",
-      "connectsTo": [
-        "output_0"
-      ],
+      "connectsTo": ["output_0"],
       "expanded": true
     }
   ],

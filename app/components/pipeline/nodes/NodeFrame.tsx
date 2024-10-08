@@ -109,7 +109,14 @@ export function NodeFrame({
         {children}
       </div>
       {error && (
-        <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl rounded-t-none py-1 px-2">
+        <div
+          className={clsx([
+            'flex items-center justify-between',
+            'bg-red-400 dark:bg-red-700',
+            'rounded-xl rounded-t-none',
+            'py-1 px-2',
+          ])}
+        >
           <NodeError error={error} />
         </div>
       )}
