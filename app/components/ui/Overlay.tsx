@@ -76,6 +76,7 @@ export function OverlayUI() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isHelpFirstTime, setHelpFirstTime] = useAtom(helpAtom);
+  const [error, setError] = useState<Error>();
 
   useEffect(() => {
     if (isHelpFirstTime) {
@@ -103,13 +104,19 @@ export function OverlayUI() {
     setIsOpen(false);
   };
 
-  const savePipeline = () => {
+  const pipelineToJSON = () => {
     const pipelineToSave = structuredClone(pipeline);
     // set model and provider
     pipelineToSave.provider = litlyticsConfig.provider;
     pipelineToSave.model = litlyticsConfig.model;
     // Convert the object to a JSON string
     const jsonString = JSON.stringify(pipeline, null, 2);
+    return jsonString;
+  };
+
+  const savePipeline = () => {
+    setError(undefined);
+    const jsonString = pipelineToJSON();
     // Create a Blob from the JSON string
     const blob = new Blob([jsonString], { type: 'application/json' });
     // Create a temporary URL for the Blob
@@ -124,6 +131,18 @@ export function OverlayUI() {
     URL.revokeObjectURL(url);
     // close modal
     setIsSaveOpen(false);
+  };
+
+  const savePipelineToClipboard = async () => {
+    setError(undefined);
+    try {
+      const jsonString = pipelineToJSON();
+      await navigator.clipboard.writeText(jsonString);
+      // close modal
+      setIsSaveOpen(false);
+    } catch (err) {
+      setError(err as Error);
+    }
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -272,13 +291,19 @@ export function OverlayUI() {
               />
             </Field>
           </FieldGroup>
+          {error && (
+            <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 my-2">
+              Error saving pipleine: {error.message}
+            </div>
+          )}
         </DialogBody>
         <DialogActions className="flex justify-between">
           <Button plain onClick={() => setIsSaveOpen(false)}>
             Close
           </Button>
+          <Button onClick={savePipelineToClipboard}>Copy to clipboard</Button>
           <Button color="green" onClick={savePipeline}>
-            Save
+            Save to file
           </Button>
         </DialogActions>
       </Dialog>
