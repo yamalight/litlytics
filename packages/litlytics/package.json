@@ -4,18 +4,15 @@
   "types": "litlytics.ts",
   "type": "module",
   "scripts": {
-    "build": "bun build litlytics.ts --outfile=litlytics.js",
     "typecheck": "tsc",
-    "test": "bun test"
+    "test": "vitest"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@vitest/coverage-v8": "^2.1.2",
+    "vitest": "^2.1.2"
   },
   "peerDependencies": {
-    "@headlessui/react": "^2.1.8",
-    "@heroicons/react": "^2.1.5",
-    "react-dropzone": "^14.2.3",
-    "react": "^18.3.1",
     "typescript": "^5.0.0"
   },
   "dependencies": {

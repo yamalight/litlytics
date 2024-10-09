@@ -11,12 +11,15 @@ import { runStep, type RunStepArgs } from './engine/runStep';
 import { runLLMStep, type RunLLMStepArgs } from './engine/step/runLLMStep';
 import { testPipelineStep } from './engine/testStep';
 import type { LLMModel, LLMProvider } from './llm/types';
+import { OUTPUT_ID } from './output/Output';
 import { pipelineFromText } from './pipeline/fromText';
 import { generatePipeline } from './pipeline/generate';
-import type { Pipeline, PipelineStatus } from './pipeline/Pipeline';
+import {
+  emptyPipeline,
+  type Pipeline,
+  type PipelineStatus,
+} from './pipeline/Pipeline';
 import { refinePipeline } from './pipeline/refine';
-import { getDocs } from './source/getDocs';
-import { setDocs } from './source/setDocs';
 import { generateCodeExplain } from './step/explain';
 import { generateStep, type GenerateStepArgs } from './step/generate';
 import { refineStep } from './step/refine';
@@ -24,7 +27,6 @@ import { type ProcessingStep } from './step/Step';
 
 // export types and commonly used vars
 export type { MLCEngine } from '@mlc-ai/web-llm';
-export type { UIComponents } from './components/types';
 export type { Doc } from './doc/Document';
 export { modelCosts } from './llm/costs';
 export { localModelSizes } from './llm/sizes';
@@ -34,15 +36,9 @@ export {
   type LLMModel,
   type LLMProvider,
 } from './llm/types';
-export type { BasicOutputConfig } from './output/basic/types';
-export { OutputTypes } from './output/Output';
-export { outputProviders } from './output/outputs';
 export type { Pipeline, PipelineStatus } from './pipeline/Pipeline';
-export { SourceTypes } from './source/Source';
-export { sourceProviders } from './source/sources';
 export {
   StepInputs,
-  type OutputStep,
   type ProcessingStep,
   type ProcessingStepTypes,
   type SourceStep,
@@ -51,11 +47,28 @@ export {
 
 export type LLMProviders = LLMProvider | 'local';
 
+export interface LitLyticsConfig {
+  // model config
+  provider?: LLMProviders;
+  model?: LLMModel;
+  llmKey?: string;
+  // pipeline
+  pipeline?: Pipeline;
+}
+
 export class LitLytics {
+  // model config
   provider?: LLMProviders;
   model?: LLMModel;
   #llmKey?: string;
+  // local LLM engine
   engine?: MLCEngine;
+
+  // pipeline
+  pipeline: Pipeline = emptyPipeline;
+  pipelineStatus: PipelineStatus = {
+    status: 'init',
+  };
 
   constructor({
     provider,
@@ -75,24 +88,75 @@ export class LitLytics {
   }
 
   /**
-   * Document management
+   * Pipeline / config management
    */
-  getDocs(pipeline: Pipeline) {
-    return getDocs(pipeline);
+  exportConfig(): LitLyticsConfig {
+    return {
+      // model config
+      provider: this.provider,
+      model: this.model,
+      llmKey: this.#llmKey,
+      // pipeline
+      pipeline: this.pipeline,
+    };
   }
 
-  setDocs(pipeline: Pipeline, docs: Doc[]) {
-    return setDocs(pipeline, docs);
+  importConfig = (config: LitLyticsConfig) => {
+    this.provider = config.provider;
+    this.model = config.model;
+    this.#llmKey = config.llmKey;
+    this.pipeline = config.pipeline ?? emptyPipeline;
+  };
+
+  setWebEngine = (engine?: MLCEngine) => {
+    this.engine = engine;
+  };
+
+  setPipeline = (newPipeline: Partial<Pipeline>) => {
+    this.pipeline = {
+      ...this.pipeline,
+      ...newPipeline,
+    };
+  };
+
+  resetPipeline = () => {
+    this.pipeline = emptyPipeline;
+    this.pipelineStatus = { status: 'init' };
+  };
+
+  setPipelineStatus = (status: PipelineStatus) => {
+    this.pipelineStatus = {
+      ...this.pipelineStatus,
+      ...status,
+    };
+  };
+
+  /**
+   * Document management
+   */
+  getDocs() {
+    return this.pipeline.source.docs;
   }
+
+  setDocs = async (docs: Doc[]) => {
+    // update docs
+    this.pipeline = {
+      ...this.pipeline,
+      source: {
+        ...this.pipeline.source,
+        docs,
+      },
+    };
+  };
 
   /**
    * Prompt execution
    */
 
-  async runPromptFromMessages({
+  runPromptFromMessages = async ({
     messages,
     args,
-  }: Pick<RunPromptFromMessagesArgs, 'messages' | 'args'>) {
+  }: Pick<RunPromptFromMessagesArgs, 'messages' | 'args'>) => {
     if (
       !this.provider?.length ||
       !this.model?.length ||
@@ -109,13 +173,13 @@ export class LitLytics {
       messages,
       args,
     });
-  }
+  };
 
-  async runPrompt({
+  runPrompt = async ({
     system,
     user,
     args,
-  }: Pick<RunPromptArgs, 'system' | 'user' | 'args'>) {
+  }: Pick<RunPromptArgs, 'system' | 'user' | 'args'>) => {
     if (
       !this.provider?.length ||
       !this.model?.length ||
@@ -133,13 +197,12 @@ export class LitLytics {
       user,
       args,
     });
-  }
+  };
 
   /**
    * Pipeline
    */
-  async pipelineFromText(
-    description: string,
+  pipelineFromText = async (
     onStatus: ({
       step,
       totalSteps,
@@ -147,45 +210,89 @@ export class LitLytics {
       step: number;
       totalSteps: number;
     }) => void
-  ) {
-    return await pipelineFromText(this, description, onStatus);
-  }
+  ) => {
+    if (!this.pipeline.pipelinePlan) {
+      return;
+    }
 
-  async generatePipeline({ description }: { description: string }) {
-    return generatePipeline({ litlytics: this, description });
-  }
+    this.setPipelineStatus({ status: 'sourcing' });
+    const newSteps = await pipelineFromText(
+      this,
+      this.pipeline.pipelinePlan,
+      onStatus
+    );
 
-  async refinePipeline({
-    refineRequest,
-    pipeline,
-  }: {
-    refineRequest: string;
-    pipeline: Pipeline;
-  }) {
-    return await refinePipeline({
+    // assign output to last step
+    newSteps.at(-1)!.connectsTo = [OUTPUT_ID];
+
+    // save
+    this.pipeline = {
+      ...this.pipeline,
+      // assign input to first step
+      source: {
+        ...this.pipeline.source,
+        connectsTo: [newSteps.at(0)!.id],
+      },
+      // assign steps
+      steps: newSteps,
+    };
+
+    this.setPipelineStatus({ status: 'done' });
+  };
+
+  generatePipeline = async () => {
+    if (!this.pipeline.pipelineDescription?.length) {
+      return;
+    }
+
+    const plan = await generatePipeline({
+      litlytics: this,
+      description: this.pipeline.pipelineDescription,
+    });
+
+    this.pipeline = {
+      ...this.pipeline,
+      pipelinePlan: plan ?? '',
+    };
+  };
+
+  refinePipeline = async ({ refineRequest }: { refineRequest: string }) => {
+    this.setPipelineStatus({ status: 'refine' });
+    const plan = await refinePipeline({
       litlytics: this,
       refineRequest,
-      pipeline,
+      pipeline: this.pipeline,
     });
-  }
+    this.pipeline = {
+      ...this.pipeline,
+      pipelinePlan: plan ?? '',
+    };
+    this.setPipelineStatus({ status: 'init' });
+  };
 
-  async runPipeline(
-    pipeline: Pipeline,
-    onStatus: (status: PipelineStatus) => void
-  ) {
-    return await runPipeline(this, pipeline, onStatus);
-  }
+  runPipeline = async () => {
+    this.setPipelineStatus({ status: 'init' });
+    try {
+      const newPipeline = await runPipeline(
+        this,
+        this.setPipelineStatus.bind(this)
+      );
+      this.pipeline = structuredClone(newPipeline);
+    } catch (err) {
+      this.setPipelineStatus({ status: 'error', error: err as Error });
+    }
+  };
 
   /**
    * Steps generation
    */
-  async generateStep({
+  generateStep = async ({
     id,
     name,
     description,
     input,
     type,
-  }: Omit<GenerateStepArgs, 'litlytics'>) {
+  }: Omit<GenerateStepArgs, 'litlytics'>) => {
     return await generateStep({
       litlytics: this,
       id,
@@ -194,37 +301,37 @@ export class LitLytics {
       input,
       type,
     });
-  }
+  };
 
-  async generateCodeExplain({ code }: { code: string }) {
+  generateCodeExplain = async ({ code }: { code: string }) => {
     return await generateCodeExplain({ litlytics: this, code });
-  }
+  };
 
-  async refineStep({
+  refineStep = async ({
     refineRequest,
     step,
   }: {
     refineRequest: string;
     step: ProcessingStep;
-  }) {
+  }) => {
     return await refineStep({
       litlytics: this,
       refineRequest,
       step,
     });
-  }
+  };
 
   /**
    * Step execution
    */
 
-  async runStep({
+  runStep = async ({
     step,
     source,
     allSteps,
     doc,
     allDocs,
-  }: Omit<RunStepArgs, 'litlytics'>) {
+  }: Omit<RunStepArgs, 'litlytics'>) => {
     return await runStep({
       litlytics: this,
       step,
@@ -233,15 +340,15 @@ export class LitLytics {
       doc,
       allDocs,
     });
-  }
+  };
 
-  async runLLMStep({
+  runLLMStep = async ({
     step,
     source,
     allSteps,
     doc,
     allDocs,
-  }: Omit<RunLLMStepArgs, 'litlytics'>) {
+  }: Omit<RunLLMStepArgs, 'litlytics'>) => {
     return await runLLMStep({
       litlytics: this,
       step,
@@ -250,22 +357,20 @@ export class LitLytics {
       doc,
       allDocs,
     });
-  }
+  };
 
-  async testPipelineStep({
-    pipeline,
+  testPipelineStep = async ({
     step,
     docId,
   }: {
-    pipeline: Pipeline;
     step: ProcessingStep;
     docId: string;
-  }) {
+  }) => {
     return await testPipelineStep({
       litlytics: this,
-      pipeline,
+      pipeline: this.pipeline,
       step,
       docId,
     });
-  }
+  };
 }

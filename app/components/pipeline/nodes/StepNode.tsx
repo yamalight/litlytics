@@ -10,7 +10,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import {
   modelCosts,
   outputProviders,
@@ -38,28 +38,21 @@ import { CodeEditor } from '~/components/step/CodeEditor';
 import { StepTest } from '~/components/step/StepTest';
 import { stepInputLabels } from '~/components/step/util';
 import { CentIcon } from '~/components/ui/CentIcon';
-import {
-  litlyticsConfigStore,
-  litlyticsStore,
-  pipelineAtom,
-  pipelineStatusAtom,
-} from '~/store/store';
+import { configAtom, useLitlytics } from '~/store/store';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function StepNode({ data }: { data: ProcessingStep }) {
-  const status = useAtomValue(pipelineStatusAtom);
-  const litlytics = useAtomValue(litlyticsStore);
-  const litlyticsConfig = useAtomValue(litlyticsConfigStore);
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
+  const litlytics = useLitlytics();
+  const litlyticsConfig = useAtomValue(configAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [refine, setRefine] = useState('');
 
   const output = useMemo(() => {
-    const Output = outputProviders[pipeline.output.outputType];
-    const output = new Output(pipeline);
+    const Output = outputProviders[litlytics.pipeline.output.outputType];
+    const output = new Output(litlytics.pipeline);
     return output;
-  }, [pipeline]);
+  }, [litlytics]);
 
   const { averageTiming, averagePrompt, averageCompletion, averageCost } =
     useMemo(() => {
@@ -96,11 +89,11 @@ export function StepNode({ data }: { data: ProcessingStep }) {
       const inputCost =
         litlyticsConfig.provider === 'ollama'
           ? 0
-          : modelCosts[litlyticsConfig.model].input;
+          : modelCosts[litlyticsConfig.model!].input;
       const outputCost =
         litlyticsConfig.provider === 'ollama'
           ? 0
-          : modelCosts[litlyticsConfig.model].output;
+          : modelCosts[litlyticsConfig.model!].output;
       const averageCost = _.round(
         averagePrompt * inputCost + averageCompletion * outputCost,
         3
@@ -115,14 +108,13 @@ export function StepNode({ data }: { data: ProcessingStep }) {
     const newData = structuredClone(data);
     newData[prop] = newVal;
 
-    const newSteps = pipeline.steps.map((s) => {
+    const newSteps = litlytics.pipeline.steps.map((s) => {
       if (s.id === newData.id) {
         return newData;
       }
       return s;
     });
-    setPipeline({
-      ...pipeline,
+    litlytics.setPipeline({
       steps: newSteps,
     });
   };
@@ -143,49 +135,47 @@ export function StepNode({ data }: { data: ProcessingStep }) {
     const newData = structuredClone(data);
     newData.code = newCode;
 
-    const newSteps = pipeline.steps.map((s) => {
+    const newSteps = litlytics.pipeline.steps.map((s) => {
       if (s.id === newData.id) {
         return newData;
       }
       return s;
     });
-    setPipeline({
-      ...pipeline,
+    litlytics.setPipeline({
       steps: newSteps,
     });
   };
 
   const deleteStep = () => {
-    const newSteps = pipeline.steps
+    const newSteps = litlytics.pipeline.steps
       // remove step
       .filter((s) => s.id !== data.id)
       // remove all links to step
       .map((s) => {
         let connectsTo = s.connectsTo.filter((id) => id !== data.id);
         if (connectsTo.length === 0) {
-          connectsTo = [pipeline.output.id];
+          connectsTo = [litlytics.pipeline.output.id];
         }
         return {
           ...s,
           connectsTo,
         };
       });
-    let sourceConnect = pipeline.source.connectsTo.filter(
+    let sourceConnect = litlytics.pipeline.source.connectsTo.filter(
       (id) => id !== data.id
     );
     const firstStep = newSteps.at(0);
     if (sourceConnect.length === 0 && firstStep) {
       sourceConnect = [firstStep.id];
     }
-    setPipeline({
-      ...pipeline,
+    litlytics.setPipeline({
       source: {
-        ...pipeline.source,
+        ...litlytics.pipeline.source,
         connectsTo: sourceConnect,
       },
       steps: newSteps,
       output: {
-        ...pipeline.output,
+        ...litlytics.pipeline.output,
       },
     });
   };
@@ -202,14 +192,13 @@ export function StepNode({ data }: { data: ProcessingStep }) {
       refineRequest: refine,
       step: data,
     });
-    const newSteps = pipeline.steps.map((s) => {
+    const newSteps = litlytics.pipeline.steps.map((s) => {
       if (s.id === data.id) {
         return newStep;
       }
       return s;
     });
-    setPipeline({
-      ...pipeline,
+    litlytics.setPipeline({
       steps: newSteps,
     });
     setRefine('');
@@ -226,14 +215,16 @@ export function StepNode({ data }: { data: ProcessingStep }) {
         size={data.expanded ? 'sm' : 'collapsed'}
         className="pb-1"
         error={
-          status.status === 'error' && status.currentStep?.id === data.id
-            ? status.error
+          litlytics.pipelineStatus.status === 'error' &&
+          litlytics.pipelineStatus.currentStep?.id === data.id
+            ? litlytics.pipelineStatus.error
             : undefined
         }
       >
         <NodeHeader collapsed={!data.expanded}>
           <div className="flex flex-1 gap-2 items-center">
-            {status.status === 'step' && status.currentStep?.id === data.id ? (
+            {litlytics.pipelineStatus.status === 'step' &&
+            litlytics.pipelineStatus.currentStep?.id === data.id ? (
               <Spinner className="w-4 h-4" />
             ) : (
               <Button

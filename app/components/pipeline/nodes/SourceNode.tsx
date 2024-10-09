@@ -5,7 +5,6 @@ import {
   EllipsisHorizontalIcon,
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
-import { useAtom, useAtomValue } from 'jotai';
 import { sourceProviders, SourceStep, SourceTypes } from 'litlytics';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
@@ -25,7 +24,7 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
-import { pipelineAtom, pipelineStatusAtom } from '~/store/store';
+import { useLitlytics } from '~/store/store';
 import { components } from './components';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
@@ -38,42 +37,40 @@ const UnknownSource = ({
 
 export function SourceNode() {
   const [isOpen, setIsOpen] = useState(false);
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const { status } = useAtomValue(pipelineStatusAtom);
+  const litlytics = useLitlytics();
 
-  const data = useMemo(() => pipeline.source, [pipeline]);
+  const source = useMemo(() => {
+    return litlytics.pipeline.source;
+  }, [litlytics.pipeline.source]);
   const Render = useMemo(() => {
-    if (!data) {
+    if (!source) {
       return;
     }
 
     // get all documents from the source
-    const Source = sourceProviders[data.sourceType];
+    const Source = sourceProviders[source.sourceType];
     if (!Source) {
       return UnknownSource;
     }
-    const src = new Source(data);
+    const src = new Source(source);
     return src.render;
-  }, [data]);
+  }, [source]);
 
   const updateNodeByKey = (
     newVal: string | boolean | undefined,
     prop: keyof SourceStep
   ) => {
-    const newData = structuredClone(data!);
+    const newData = structuredClone(source!);
     newData[prop] = newVal;
-
-    const newPipeline = {
-      ...pipeline,
-      source: newData,
-    };
 
     // clear docs when changing source type
     if (prop === 'sourceType') {
       newData.config = {};
     }
 
-    setPipeline(newPipeline);
+    litlytics.setPipeline({
+      source: newData,
+    });
   };
 
   const updateNode = (
@@ -85,13 +82,12 @@ export function SourceNode() {
   };
 
   const updateSource = (newSource: SourceStep) => {
-    setPipeline({
-      ...pipeline,
+    litlytics.setPipeline({
       source: newSource,
     });
   };
 
-  if (!data) {
+  if (!source) {
     return <></>;
   }
 
@@ -99,21 +95,21 @@ export function SourceNode() {
     <>
       {/* Source node render */}
       <NodeFrame
-        hasConnector={pipeline.steps.length > 0 ? true : 'auto'}
-        currentStep={data}
-        size={data.expanded ? 'lg' : 'collapsed'}
+        hasConnector={litlytics.pipeline.steps.length > 0 ? true : 'auto'}
+        currentStep={source}
+        size={source.expanded ? 'lg' : 'collapsed'}
       >
-        <NodeHeader collapsed={!data.expanded}>
+        <NodeHeader collapsed={!source.expanded}>
           <div className="flex flex-1 gap-2 items-center">
-            {status === 'sourcing' ? (
+            {litlytics.pipelineStatus.status === 'sourcing' ? (
               <Spinner className="w-4 h-4" />
             ) : (
               <Button
                 icon
                 className="!p-0"
-                onClick={() => updateNodeByKey(!data.expanded, 'expanded')}
+                onClick={() => updateNodeByKey(!source.expanded, 'expanded')}
               >
-                {data.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                {source.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
               </Button>
             )}
             <RectangleStackIcon className="w-4 h-4" /> Source
@@ -131,11 +127,11 @@ export function SourceNode() {
             </Dropdown>
           </div>
         </NodeHeader>
-        {data.expanded ? (
+        {source.expanded ? (
           <NodeContent className="h-[calc(100%-2rem)]">
             {Render && (
               <Render
-                source={data}
+                source={source}
                 setSource={updateSource}
                 components={components}
               />
@@ -148,9 +144,9 @@ export function SourceNode() {
 
       {/* Source config */}
       <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
-        <DialogTitle>Configure {data.name}</DialogTitle>
+        <DialogTitle>Configure {source.name}</DialogTitle>
         <DialogDescription>
-          Configure parameters for source node: {data.name}
+          Configure parameters for source node: {source.name}
         </DialogDescription>
         <DialogBody>
           <FieldGroup>
@@ -158,7 +154,7 @@ export function SourceNode() {
               <Label>Source type</Label>
               <Select
                 name="step-input"
-                value={data.sourceType as string}
+                value={source.sourceType as string}
                 onChange={(e) => updateNode(e, 'sourceType')}
               >
                 {Object.keys(SourceTypes).map((type) => (

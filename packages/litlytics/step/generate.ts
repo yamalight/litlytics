@@ -1,8 +1,8 @@
 import type { LitLytics } from '../litlytics';
 import { parseThinkingOutputResult } from '../pipeline/util';
 import type { ProcessingStep, ProcessingStepTypes, StepInput } from './Step';
-import codeSystem from './prompts/code-step.txt';
-import llmSystem from './prompts/llm-step.txt';
+import { codeStepPrompt } from './prompts/code-step';
+import { llmStepPrompt } from './prompts/llm-step';
 import { cleanResult } from './util';
 
 export interface GenerateStepArgs {
@@ -31,7 +31,7 @@ Step description: ${description}
 Step input: ${input}`;
 
   // determine system prompt based on step type
-  const system = type === 'llm' ? llmSystem : codeSystem;
+  const system = type === 'llm' ? llmStepPrompt : codeStepPrompt;
 
   // generate plan from LLM
   const step = await litlytics.runPrompt({ system, user });

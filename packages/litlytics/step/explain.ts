@@ -1,6 +1,6 @@
 import type { LitLytics } from '../litlytics';
 import { parseThinkingOutputResult } from '../pipeline/util';
-import system from './prompts/code-explain.txt';
+import { codeExplainPrompt } from './prompts/code-explain';
 
 export const generateCodeExplain = async ({
   litlytics,
@@ -14,7 +14,10 @@ export const generateCodeExplain = async ({
   }
 
   // generate plan from LLM
-  const step = await litlytics.runPrompt({ system, user: code });
+  const step = await litlytics.runPrompt({
+    system: codeExplainPrompt,
+    user: code,
+  });
   if (!step.result) {
     throw new Error('Error generating explanation!');
   }

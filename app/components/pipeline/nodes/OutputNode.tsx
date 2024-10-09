@@ -10,13 +10,14 @@ import {
   PlayIcon,
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import {
   BasicOutputConfig,
   modelCosts,
   outputProviders,
   OutputStep,
   OutputTypes,
+  Pipeline,
 } from 'litlytics';
 import _ from 'lodash';
 import { ChangeEvent, useMemo, useState } from 'react';
@@ -39,28 +40,21 @@ import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
 import { CentIcon } from '~/components/ui/CentIcon';
-import {
-  litlyticsConfigStore,
-  litlyticsStore,
-  pipelineAtom,
-  pipelineStatusAtom,
-} from '~/store/store';
+import { configAtom, useLitlytics } from '~/store/store';
 import { components } from './components';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function OutputNode() {
-  const litlytics = useAtomValue(litlyticsStore);
-  const litlyticsConfig = useAtomValue(litlyticsConfigStore);
+  const litlytics = useLitlytics();
+  const litlyticsConfig = useAtomValue(configAtom);
   const [isOpen, setIsOpen] = useState(false);
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const [status, setStatus] = useAtom(pipelineStatusAtom);
 
-  const data = useMemo(() => pipeline.output, [pipeline]);
+  const data = useMemo(() => litlytics.pipeline.output, [litlytics.pipeline]);
   const output = useMemo(() => {
-    const Output = outputProviders[pipeline.output.outputType];
-    const output = new Output(pipeline);
+    const Output = outputProviders[litlytics.pipeline.output.outputType];
+    const output = new Output(litlytics.pipeline);
     return output;
-  }, [pipeline]);
+  }, [litlytics]);
 
   const { timing, prompt, completion, cost } = useMemo(() => {
     // const timings = data.
@@ -85,11 +79,11 @@ export function OutputNode() {
     const inputCost =
       litlyticsConfig.provider === 'ollama'
         ? 0
-        : modelCosts[litlyticsConfig.model].input;
+        : modelCosts[litlyticsConfig.model!].input;
     const outputCost =
       litlyticsConfig.provider === 'ollama'
         ? 0
-        : modelCosts[litlyticsConfig.model].output;
+        : modelCosts[litlyticsConfig.model!].output;
     const cost = _.round(prompt * inputCost + completion * outputCost, 3);
     return { timing, prompt, completion, cost };
   }, [output, litlyticsConfig]);
@@ -108,8 +102,7 @@ export function OutputNode() {
     const newData = structuredClone(data!);
     newData[prop] = newVal;
 
-    setPipeline({
-      ...pipeline,
+    litlytics.setPipeline({
       output: newData,
     });
   };
@@ -123,16 +116,12 @@ export function OutputNode() {
   };
 
   const doRunPipeline = async () => {
-    setStatus((s) => ({ ...s, status: 'init' }));
-    try {
-      const newPipeline = await litlytics.runPipeline(pipeline, setStatus);
-      setPipeline(structuredClone(newPipeline));
-    } catch (err) {
-      setStatus((s) => ({ ...s, status: 'error', error: err as Error }));
-    }
+    await litlytics.runPipeline();
   };
 
-  const running = status.status === 'sourcing' || status.status === 'step';
+  const running =
+    litlytics.pipelineStatus.status === 'sourcing' ||
+    litlytics.pipelineStatus.status === 'step';
 
   if (!data) {
     return <></>;
@@ -172,7 +161,7 @@ export function OutputNode() {
                 <PlayIcon aria-hidden="true" className="h-5 w-5" />
               )}
             </Button>
-            {status.status === 'done' && (
+            {litlytics.pipelineStatus.status === 'done' && (
               <div
                 className="flex flex-1 justify-end"
                 title="Successfully finished!"
@@ -180,7 +169,7 @@ export function OutputNode() {
                 <CheckIcon color="green" className="w-5 h-5" />
               </div>
             )}
-            {status.status === 'error' && (
+            {litlytics.pipelineStatus.status === 'error' && (
               <div
                 className="flex flex-1 justify-end"
                 title="Error during execution!"
@@ -234,8 +223,8 @@ export function OutputNode() {
             </div>
             {Render && (
               <Render
-                pipeline={pipeline}
-                setPipeline={setPipeline}
+                pipeline={litlytics.pipeline}
+                setPipeline={(p: Pipeline) => litlytics.setPipeline(p)}
                 components={components}
               />
             )}

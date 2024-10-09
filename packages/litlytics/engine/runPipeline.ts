@@ -1,16 +1,15 @@
 import type { Doc } from '../doc/Document';
 import type { LitLytics } from '../litlytics';
-import { outputProviders } from '../output/outputs';
-import type { Pipeline, PipelineStatus } from '../pipeline/Pipeline';
-import { getDocs } from '../source/getDocs';
+import { getResults } from '../output/getResults';
+import { OUTPUT_ID } from '../output/Output';
+import type { PipelineStatus } from '../pipeline/Pipeline';
 
 export async function runPipeline(
   litlytics: LitLytics,
-  pipeline: Pipeline,
   onStatus: (status: PipelineStatus) => void
 ) {
   // get source
-  const source = pipeline.source;
+  const source = litlytics.pipeline.source;
   // validate source
   if (!source) {
     throw new Error('Source is required!');
@@ -20,7 +19,7 @@ export async function runPipeline(
   onStatus({ status: 'sourcing' });
 
   // get all documents from the source
-  const docs: Doc[] = await getDocs(pipeline);
+  const docs: Doc[] = litlytics.pipeline.source.docs;
   // validate docs
   if (!docs?.length) {
     throw new Error('At least one document is required!');
@@ -32,7 +31,7 @@ export async function runPipeline(
   // get all connections to source
   let stepIds = source.connectsTo;
   // find all connected steps
-  let nextStep = pipeline.steps.find((s) => stepIds.includes(s.id));
+  let nextStep = litlytics.pipeline.steps.find((s) => stepIds.includes(s.id));
   // while there are follow-up steps - continue;
   while (nextStep !== undefined) {
     onStatus({ status: 'step', currentStep: nextStep });
@@ -44,7 +43,7 @@ export async function runPipeline(
           litlytics.runStep({
             step: nextStep!,
             source,
-            allSteps: pipeline.steps,
+            allSteps: litlytics.pipeline.steps,
             doc,
             allDocs: docs,
           })
@@ -65,7 +64,7 @@ export async function runPipeline(
       aggregateResult = (await litlytics.runStep({
         step: nextStep!,
         source,
-        allSteps: pipeline.steps,
+        allSteps: litlytics.pipeline.steps,
         doc: aggregateResult,
         allDocs: docs,
       })) as Doc;
@@ -74,22 +73,17 @@ export async function runPipeline(
     // get next step and continue
     stepIds = nextStep.connectsTo;
     // if we're at the output - handle results and break
-    if (stepIds.includes(pipeline.output.id)) {
-      // construct output
-      const Output = outputProviders[pipeline.output.outputType];
-      const output = new Output(pipeline);
-      // save result docs
-      output.saveResults(newDocs);
+    if (stepIds.includes(OUTPUT_ID)) {
       // process and store final results
-      pipeline.results = output.getResult();
+      litlytics.pipeline.results = getResults(litlytics, newDocs);
       break;
     }
-    nextStep = pipeline.steps.find((s) => stepIds.includes(s.id));
+    nextStep = litlytics.pipeline.steps.find((s) => stepIds.includes(s.id));
   }
 
   onStatus({ status: 'done' });
 
   // save result to pipeline
   // pipeline.results = finalResult;
-  return pipeline;
+  return litlytics.pipeline;
 }

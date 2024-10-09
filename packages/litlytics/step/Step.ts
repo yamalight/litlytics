@@ -1,6 +1,5 @@
 import type { LanguageModelUsage } from 'ai';
-import type { OutputType } from '../output/Output';
-import type { SourceType } from '../source/Source';
+import type { Doc } from '../doc/Document';
 
 export interface StepResult {
   stepId: string;
@@ -38,8 +37,7 @@ export interface BaseStep extends Record<string, unknown> {
 
 export interface SourceStep extends BaseStep {
   type: SourceStepType;
-  sourceType: SourceType;
-  config: object;
+  docs: Doc[];
 }
 
 export interface ProcessingStep extends BaseStep {
@@ -48,10 +46,4 @@ export interface ProcessingStep extends BaseStep {
   prompt?: string;
   code?: string;
   codeExplanation?: string;
-}
-
-export interface OutputStep extends BaseStep {
-  type: OutputStepTypes;
-  outputType: OutputType;
-  config: object;
 }

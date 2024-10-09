@@ -3,6 +3,7 @@ import { MLCEngine } from '@mlc-ai/web-llm';
 import { useAtom } from 'jotai';
 import {
   LLMModelsList,
+  LLMProvider,
   LLMProviders,
   LLMProvidersList,
   localModelSizes,
@@ -10,7 +11,7 @@ import {
 } from 'litlytics';
 import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
-import { litlyticsConfigStore, webllmAtom } from '~/store/store';
+import { configAtom, webllmAtom } from '~/store/store';
 import { Badge } from '../catalyst/badge';
 import { Button } from '../catalyst/button';
 import { Description, Field, FieldGroup, Label } from '../catalyst/fieldset';
@@ -22,10 +23,11 @@ import { Recommended, recommendedForProvider } from './Recommended';
 
 export function Settings({ close }: { close: () => void }) {
   const [webllm, setWebllm] = useAtom(webllmAtom);
-  const [config, setConfig] = useAtom(litlyticsConfigStore);
+  const [config, setConfig] = useAtom(configAtom);
   const [providers, setProviders] = useState<LLMProviders[]>([]);
 
-  const models = useMemo(() => LLMModelsList[config.provider], [config]);
+  const provider = useMemo(() => config.provider ?? 'openai', [config]);
+  const models = useMemo(() => LLMModelsList[provider], [provider]);
 
   useEffect(() => {
     async function loadProviders() {
@@ -60,6 +62,9 @@ export function Settings({ close }: { close: () => void }) {
   }, []);
 
   const loadLocalModel = () => {
+    if (!config.model) {
+      return;
+    }
     // create engine
     const engine = new MLCEngine();
     engine.setInitProgressCallback((initProgress) => {
@@ -117,6 +122,53 @@ export function Settings({ close }: { close: () => void }) {
           </div>
         </Field>
 
+        <Field>
+          <Label>Model</Label>
+          {config.provider === 'ollama' && (
+            <Input
+              value={config.model}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  model: e.target.value,
+                }))
+              }
+            />
+          )}
+          {config.provider !== 'ollama' && (
+            <Select
+              value={config.model}
+              onChange={(e) =>
+                setConfig((c) => ({
+                  ...c,
+                  model: e.target.value,
+                }))
+              }
+            >
+              {models.map((model) => (
+                <option key={model} value={model}>
+                  {model}{' '}
+                  {recommendedForProvider[provider] === model
+                    ? '(recommended)'
+                    : ''}
+                </option>
+              ))}
+            </Select>
+          )}
+          {config.provider !== 'local' && config.provider !== 'ollama' && (
+            <Description className="flex gap-2">
+              <Badge title="Input price (USD) per million tokens">
+                Input: <CurrencyDollarIcon className="w-3 h-3" />{' '}
+                {_.round(modelCosts[config.model!].input * 10000, 2)} / MTok
+              </Badge>
+              <Badge title="Output price (USD) per million tokens">
+                Output: <CurrencyDollarIcon className="w-3 h-3" />{' '}
+                {_.round(modelCosts[config.model!].output * 10000, 2)} / MTok
+              </Badge>
+            </Description>
+          )}
+        </Field>
+
         {config.provider === 'ollama' && (
           <Field>
             <Label>Ollama URL</Label>
@@ -160,53 +212,6 @@ export function Settings({ close }: { close: () => void }) {
           </Field>
         )}
 
-        <Field>
-          <Label>Model</Label>
-          {config.provider === 'ollama' && (
-            <Input
-              value={config.model}
-              onChange={(e) =>
-                setConfig((c) => ({
-                  ...c,
-                  model: e.target.value,
-                }))
-              }
-            />
-          )}
-          {config.provider !== 'ollama' && (
-            <Select
-              value={config.model}
-              onChange={(e) =>
-                setConfig((c) => ({
-                  ...c,
-                  model: e.target.value,
-                }))
-              }
-            >
-              {models.map((model) => (
-                <option key={model} value={model}>
-                  {model}{' '}
-                  {recommendedForProvider[config.provider] === model
-                    ? '(recommended)'
-                    : ''}
-                </option>
-              ))}
-            </Select>
-          )}
-          {config.provider !== 'local' && config.provider !== 'ollama' && (
-            <Description className="flex gap-2">
-              <Badge title="Input price (USD) per million tokens">
-                Input: <CurrencyDollarIcon className="w-3 h-3" />{' '}
-                {_.round(modelCosts[config.model].input * 10000, 2)} / MTok
-              </Badge>
-              <Badge title="Output price (USD) per million tokens">
-                Output: <CurrencyDollarIcon className="w-3 h-3" />{' '}
-                {_.round(modelCosts[config.model].output * 10000, 2)} / MTok
-              </Badge>
-            </Description>
-          )}
-        </Field>
-
         {config.provider === 'local' && (
           <Field className="flex flex-col">
             <div className="flex items-center gap-2">
@@ -233,7 +238,7 @@ export function Settings({ close }: { close: () => void }) {
               </Button>
               <Description>
                 Download and use selected model locally. This model size is:{' '}
-                <strong>{localModelSizes[config.model]}mb</strong>
+                <strong>{localModelSizes[config.model!]}mb</strong>
               </Description>
             </div>
             <Description className="mt-4 mx-1 !text-xs">
@@ -248,7 +253,7 @@ export function Settings({ close }: { close: () => void }) {
         config.provider !== 'local' &&
         config.provider !== 'ollama' && (
           <>
-            <ProviderKeysHint provider={config.provider} />
+            <ProviderKeysHint provider={provider as LLMProvider} />
             <div className="rounded-md bg-red-50 dark:bg-red-900 p-4 mt-4">
               <div className="flex">
                 <div className="flex-shrink-0">

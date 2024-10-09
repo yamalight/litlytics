@@ -1,4 +1,4 @@
-You are a helpful assistant and an expert in data science.
+export const llmStepPrompt = `You are a helpful assistant and an expert in data science.
 
 Your task is to generate a system prompt for processing one text document with LLM.
 The text document to be processed will be sent as user prompt along with your generated system prompt.
@@ -13,4 +13,4 @@ Make sure to not include original document in response.
 
 Return only the prompt itself.
 
-Think the request through step-by-step inside <thinking> tags, and then provide your final response inside <output> tags.
+Think the request through step-by-step inside <thinking> tags, and then provide your final response inside <output> tags.`;

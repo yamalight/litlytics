@@ -1,20 +1,19 @@
-import { useAtomValue } from 'jotai';
-import { Doc, Pipeline } from 'litlytics';
+import { Doc } from 'litlytics';
 import { useEffect, useMemo, useState } from 'react';
-import { litlyticsStore } from '~/store/store';
+import { useLitlytics } from '~/store/store';
 
-export function useTestDocs(pipeline: Pipeline) {
-  const litlytics = useAtomValue(litlyticsStore);
+export function useTestDocs() {
+  const litlytics = useLitlytics();
   const [allDocs, setDocs] = useState<Doc[]>([]);
   const testDocs = useMemo(() => allDocs.filter((d) => d?.test), [allDocs]);
 
   useEffect(() => {
     async function getTestDocs() {
-      const newAllDocs = await litlytics.getDocs(pipeline);
+      const newAllDocs = await litlytics.getDocs();
       setDocs(newAllDocs ?? []);
     }
     getTestDocs();
-  }, [pipeline, litlytics]);
+  }, [litlytics]);
 
   return { allDocs, testDocs };
 }

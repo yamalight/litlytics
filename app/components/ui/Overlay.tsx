@@ -8,7 +8,7 @@ import {
   QuestionMarkCircleIcon,
   TrashIcon,
 } from '@heroicons/react/24/solid';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { Pipeline } from 'litlytics';
 import { useEffect, useRef, useState } from 'react';
@@ -30,11 +30,9 @@ import {
   DropdownShortcut,
 } from '~/components/catalyst/dropdown';
 import {
-  emptyPipeline,
-  litlyticsConfigStore,
-  pipelineAtom,
-  pipelineStatusAtom,
-  pipelineUndoAtom,
+  configAtom,
+  configUndoAtom,
+  litlyticsAtom,
   webllmAtom,
 } from '~/store/store';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
@@ -68,11 +66,10 @@ function MenuHolder({
 export function OverlayUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const loadInputRef = useRef<HTMLTextAreaElement>(null);
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const setStatus = useSetAtom(pipelineStatusAtom);
-  const litlyticsConfig = useAtomValue(litlyticsConfigStore);
+  const litlytics = useAtomValue(litlyticsAtom);
+  const litlyticsConfig = useAtomValue(configAtom);
   const webllm = useAtomValue(webllmAtom);
-  const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
+  const { undo, redo, canUndo, canRedo } = useAtomValue(configUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isLoadOpen, setIsLoadOpen] = useState(false);
@@ -102,18 +99,17 @@ export function OverlayUI() {
   };
 
   const resetPipeline = () => {
-    setPipeline(structuredClone(emptyPipeline));
-    setStatus({ status: 'init' });
+    litlytics.resetPipeline();
     setIsOpen(false);
   };
 
   const pipelineToJSON = () => {
-    const pipelineToSave = structuredClone(pipeline);
+    const pipelineToSave = structuredClone(litlytics.pipeline);
     // set model and provider
     pipelineToSave.provider = litlyticsConfig.provider;
     pipelineToSave.model = litlyticsConfig.model;
     // Convert the object to a JSON string
-    const jsonString = JSON.stringify(pipeline, null, 2);
+    const jsonString = JSON.stringify(pipelineToSave, null, 2);
     return jsonString;
   };
 
@@ -127,7 +123,7 @@ export function OverlayUI() {
     // Create a temporary anchor element
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${pipeline.name}.json`;
+    a.download = `${litlytics.pipeline.name}.json`;
     // Programmatically click the anchor to trigger the download
     a.click();
     // Clean up: revoke the object URL
@@ -159,8 +155,8 @@ export function OverlayUI() {
     }
     try {
       const pipelineJson = JSON.parse(inputStr);
-      setPipeline(pipelineJson);
-      setStatus({ status: 'init' });
+      litlytics.setPipeline(pipelineJson);
+      litlytics.setPipelineStatus({ status: 'init' });
       loadInputRef.current!.value = '';
       setIsLoadOpen(false);
     } catch (err) {
@@ -175,8 +171,8 @@ export function OverlayUI() {
       reader.onload = (e) => {
         try {
           const json = JSON.parse(e.target?.result as string) as Pipeline;
-          setPipeline(json);
-          setStatus({ status: 'init' });
+          litlytics.setPipeline(json);
+          litlytics.setPipelineStatus({ status: 'init' });
           setIsLoadOpen(false);
         } catch (error) {
           console.error('Error parsing JSON:', error);
@@ -345,10 +341,8 @@ export function OverlayUI() {
                 name="name"
                 placeholder="Pipeline name"
                 autoFocus
-                value={pipeline.name}
-                onChange={(e) =>
-                  setPipeline({ ...pipeline, name: e.target.value })
-                }
+                value={litlytics.pipeline.name}
+                onChange={(e) => (litlytics.pipeline.name = e.target.value)}
               />
             </Field>
           </FieldGroup>

@@ -1,8 +1,7 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SparklesIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { useAtom, useAtomValue } from 'jotai';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
@@ -13,11 +12,7 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
-import {
-  litlyticsStore,
-  pipelineAtom,
-  pipelineStatusAtom,
-} from '~/store/store';
+import { useLitlytics } from '~/store/store';
 import { RefinePipeline } from './RefinePipeline';
 
 const tabClass = clsx(
@@ -29,32 +24,21 @@ const tabClass = clsx(
 );
 
 export default function GeneratePipeline() {
-  const status = useAtomValue(pipelineStatusAtom);
-  const litlytics = useAtomValue(litlyticsStore);
+  const litlytics = useLitlytics();
   const [selectedTab, setSelectedTab] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
   const [error, setError] = useState<Error>();
+  const pipeline = useMemo(() => litlytics.pipeline, [litlytics.pipeline]);
 
   const runPlan = async () => {
-    if (!pipeline.pipelineDescription?.length) {
-      return;
-    }
-
     try {
       setLoading(true);
       setError(undefined);
 
       // generate plan from LLM
-      const plan = await litlytics.generatePipeline({
-        description: pipeline.pipelineDescription,
-      });
+      await litlytics.generatePipeline();
 
-      setPipeline({
-        ...pipeline,
-        pipelinePlan: plan ?? '',
-      });
       setLoading(false);
       setSelectedTab(1);
     } catch (err) {
@@ -66,9 +50,9 @@ export default function GeneratePipeline() {
   const closeDialog = () => {
     if (
       loading ||
-      status.status === 'refine' ||
-      status.status === 'step' ||
-      status.status === 'sourcing'
+      litlytics.pipelineStatus.status === 'refine' ||
+      litlytics.pipelineStatus.status === 'step' ||
+      litlytics.pipelineStatus.status === 'sourcing'
     ) {
       return;
     }
@@ -81,7 +65,10 @@ export default function GeneratePipeline() {
         title="Generate pipeline"
         outline
         onClick={() => setIsOpen(true)}
-        disabled={status.status === 'sourcing' || status.status === 'step'}
+        disabled={
+          litlytics.pipelineStatus.status === 'sourcing' ||
+          litlytics.pipelineStatus.status === 'step'
+        }
         className="border-sky-500 dark:border-sky-500"
       >
         <SparklesIcon aria-hidden="true" className="h-5 w-5 fill-sky-500" />{' '}
@@ -111,12 +98,11 @@ export default function GeneratePipeline() {
                       name="task"
                       placeholder="Task description"
                       value={pipeline.pipelineDescription}
-                      onChange={(e) =>
-                        setPipeline((p) => ({
-                          ...p,
+                      onChange={(e) => {
+                        litlytics.setPipeline({
                           pipelineDescription: e.target.value,
-                        }))
-                      }
+                        });
+                      }}
                       autoFocus
                       disabled={loading}
                     />

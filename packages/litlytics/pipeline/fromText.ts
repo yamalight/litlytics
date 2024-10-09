@@ -1,6 +1,6 @@
 import type { LitLytics } from '../litlytics';
 import type { ProcessingStep, StepInput } from '../step/Step';
-import systemToJSON from './prompts/stepToJSON.txt';
+import { stepToJSONPrompt } from './prompts/stepToJSON';
 import { parseLLMJSON } from './util';
 
 export async function pipelineFromText(
@@ -27,7 +27,7 @@ export async function pipelineFromText(
   for (const step of steps) {
     onStatus({ step: currentStep, totalSteps: steps.length });
     const stepRes = await litlytics.runPrompt({
-      system: systemToJSON,
+      system: stepToJSONPrompt,
       user: step,
     });
     const stepJSON = parseLLMJSON(stepRes.result!) as ProcessingStep;

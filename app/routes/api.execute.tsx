@@ -27,6 +27,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     model,
     key,
   });
-  const newPipeline = await litlytics.runPipeline(pipeline, () => {});
+  litlytics.setPipeline(pipeline);
+  const newPipeline = await litlytics.runPipeline();
   return json(newPipeline);
 };

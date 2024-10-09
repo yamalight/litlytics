@@ -1,6 +1,5 @@
 import type { LitLytics } from '../litlytics';
 import type { Pipeline } from '../pipeline/Pipeline';
-import { getDocs } from '../source/getDocs';
 import type { ProcessingStep } from '../step/Step';
 import { runCodeStep } from './step/runCodeStep';
 
@@ -15,7 +14,7 @@ export async function testPipelineStep({
   step: ProcessingStep;
   docId: string;
 }) {
-  const allDocs = await getDocs(pipeline);
+  const allDocs = pipeline.source.docs;
   const testDocs = allDocs.filter((d) => d.test);
   const doc = testDocs.find((d) => d.id === docId);
   if (

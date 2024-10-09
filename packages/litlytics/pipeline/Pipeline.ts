@@ -1,12 +1,11 @@
 import type { Result } from '../output/Output';
-import type { OutputStep, ProcessingStep, SourceStep } from '../step/Step';
+import type { ProcessingStep, SourceStep } from '../step/Step';
 
 export interface Pipeline {
   name: string;
   pipelineDescription?: string;
   pipelinePlan?: string;
   source: SourceStep;
-  output: OutputStep;
   results?: Result[];
   steps: ProcessingStep[];
   provider?: string;
@@ -18,3 +17,24 @@ export interface PipelineStatus {
   currentStep?: ProcessingStep;
   error?: Error;
 }
+
+export const emptyPipeline: Pipeline = {
+  // project setup
+  name: '',
+  // pipeline plan
+  pipelinePlan: '',
+  pipelineDescription: '',
+  // pipeline source
+  source: {
+    id: 'source_0',
+    name: 'Source',
+    description: 'Primary source',
+    type: 'source',
+    sourceType: 'text',
+    docs: [],
+    connectsTo: [],
+    expanded: true,
+  },
+  // pipeline steps
+  steps: [],
+};

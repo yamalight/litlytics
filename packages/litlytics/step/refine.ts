@@ -1,8 +1,8 @@
 import type { CoreMessage } from 'ai';
 import type { LitLytics } from '../litlytics';
 import { parseThinkingOutputResult } from '../pipeline/util';
-import codeSystem from './prompts/code-step.txt';
-import llmSystem from './prompts/llm-step.txt';
+import { codeStepPrompt } from './prompts/code-step';
+import { llmStepPrompt } from './prompts/llm-step';
 import type { ProcessingStep } from './Step';
 import { cleanResult } from './util';
 
@@ -25,7 +25,7 @@ Step description: ${step.description}
 Step input: ${step.input}`;
 
   // determine system prompt based on step type
-  const system = step.type === 'llm' ? llmSystem : codeSystem;
+  const system = step.type === 'llm' ? llmStepPrompt : codeStepPrompt;
 
   // determine result
   const result = step.type === 'llm' ? step.prompt : step.code;

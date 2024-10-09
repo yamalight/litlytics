@@ -1,5 +1,5 @@
 import type { LitLytics } from '../litlytics';
-import system from './prompts/pipeline.txt';
+import { pipelinePrompt } from './prompts/pipeline';
 import { parseThinkingOutputResult } from './util';
 
 export const generatePipeline = async ({
@@ -14,7 +14,10 @@ export const generatePipeline = async ({
   }
 
   // generate plan from LLM
-  const plan = await litlytics.runPrompt({ system, user: description });
+  const plan = await litlytics.runPrompt({
+    system: pipelinePrompt,
+    user: description,
+  });
   const plannedSteps = plan.result
     ? parseThinkingOutputResult(plan.result)
     : plan.result;

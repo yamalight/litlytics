@@ -1,7 +1,7 @@
 import type { CoreMessage } from 'ai';
 import type { LitLytics } from '../litlytics';
 import type { Pipeline } from './Pipeline';
-import system from './prompts/pipeline.txt';
+import { pipelinePrompt } from './prompts/pipeline';
 import { parseThinkingOutputResult } from './util';
 
 export const refinePipeline = async ({
@@ -18,7 +18,7 @@ export const refinePipeline = async ({
   }
 
   const messages: CoreMessage[] = [
-    { role: 'system', content: system.trim() },
+    { role: 'system', content: pipelinePrompt.trim() },
     { role: 'user', content: pipeline.pipelineDescription!.trim() },
     { role: 'assistant', content: pipeline.pipelinePlan!.trim() },
     { role: 'user', content: refineRequest.trim() },

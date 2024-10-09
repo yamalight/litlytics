@@ -1,6 +1,5 @@
 import { PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { useAtom, useAtomValue } from 'jotai';
 import {
   ProcessingStep,
   ProcessingStepTypes,
@@ -25,7 +24,7 @@ import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
 import { CodeEditor } from '~/components/step/CodeEditor';
 import { stepInputLabels } from '~/components/step/util';
-import { litlyticsStore, pipelineAtom } from '~/store/store';
+import { useLitlytics } from '~/store/store';
 import GeneratePipeline from '../GeneratePipeline';
 
 const defaultStep: ProcessingStep = {
@@ -47,14 +46,13 @@ export function NodeConnector({
   currentStep?: SourceStep | ProcessingStep;
   showAuto?: boolean;
 }) {
-  const litlytics = useAtomValue(litlyticsStore);
+  const litlytics = useLitlytics();
   const [step, setStep] = useState<ProcessingStep>(
     structuredClone(defaultStep)
   );
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [manual, setManual] = useState(false);
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const showAddStep = () => {
     setStep(structuredClone(defaultStep));
@@ -68,11 +66,15 @@ export function NodeConnector({
 
     setLoading(true);
     // generate new ID and double-check that it doesn't overlap with other steps
-    let id = pipeline.steps.length;
-    let existingStep = pipeline.steps.find((s) => s.id === `step_${id}`);
+    let id = litlytics.pipeline.steps.length;
+    let existingStep = litlytics.pipeline.steps.find(
+      (s) => s.id === `step_${id}`
+    );
     while (existingStep) {
       id += 1;
-      existingStep = pipeline.steps.find((s) => s.id === `step_${id}`);
+      existingStep = litlytics.pipeline.steps.find(
+        (s) => s.id === `step_${id}`
+      );
     }
     // generate final id
     const idStr = `step_${id}`;
@@ -94,28 +96,28 @@ export function NodeConnector({
 
     if (currentStep?.type === 'source') {
       // connect new step to next node
-      const nextNodeId = pipeline.source.connectsTo.at(0) ?? pipeline.output.id;
+      const nextNodeId =
+        litlytics.pipeline.source.connectsTo.at(0) ??
+        litlytics.pipeline.output.id;
       newStep.connectsTo = [nextNodeId];
       // add
-      setPipeline({
-        ...pipeline,
+      litlytics.setPipeline({
         source: {
-          ...pipeline.source,
+          ...litlytics.pipeline.source,
           connectsTo: [newStep.id],
         },
-        steps: pipeline.steps.concat(newStep),
+        steps: litlytics.pipeline.steps.concat(newStep),
       });
     } else {
       // connect new step to next node
       const nextNodeId =
-        pipeline.steps
+        litlytics.pipeline.steps
           .find((s) => s.id === currentStep?.id)
-          ?.connectsTo.at(0) ?? pipeline.output.id;
+          ?.connectsTo.at(0) ?? litlytics.pipeline.output.id;
       newStep.connectsTo = [nextNodeId];
       // add
-      setPipeline({
-        ...pipeline,
-        steps: pipeline.steps
+      litlytics.setPipeline({
+        steps: litlytics.pipeline.steps
           .map((s) => {
             if (s.id === currentStep?.id) {
               s.connectsTo = [newStep.id];
