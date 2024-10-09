@@ -26,11 +26,14 @@ jobs:
         with:
           bun-version: latest
 
-      # lib lint/check/test
-      - name: Install deps
+      # install deps
+      - name: Install lib deps
         working-directory: ./packages/litlytics
         run: bun install
+      - name: Install app deps
+        run: bun install
 
+      # lib lint/check/test
       - name: Run lib typecheck
         working-directory: ./packages/litlytics
         run: bun run typecheck
