@@ -17,7 +17,7 @@ vi.mock('ai', async (importOriginal) => {
   };
 });
 
-test('Should run prompt', async () => {
+test('should run prompt', async () => {
   const res = await runPrompt({
     provider: 'openai',
     key: 'test',

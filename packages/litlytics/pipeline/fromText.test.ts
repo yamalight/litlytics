@@ -37,7 +37,7 @@ const stepTwo: ProcessingStep = {
   code: 'test',
 };
 
-test('Should generate pipeline steps from text', async () => {
+test('should generate pipeline steps from text', async () => {
   const litlytics = new LitLytics({
     provider: 'openai',
     model: 'test',

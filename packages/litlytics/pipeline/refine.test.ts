@@ -18,13 +18,13 @@ Step input: result
 Step description: Analyze the generated title and description for possible copyrighted terms and suggest edits.
 `;
 
-test('Should refine pipeline from request', async () => {
+test('should refine pipeline from request', async () => {
   const litlytics = new LitLytics({
     provider: 'openai',
     model: 'test',
     key: 'test',
   });
-  // mock step-to-json prompt
+  // mock prompt
   litlytics.runPromptFromMessages = async ({
     messages,
   }: Pick<RunPromptFromMessagesArgs, 'messages' | 'args'>) => {

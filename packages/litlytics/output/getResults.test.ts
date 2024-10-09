@@ -4,7 +4,7 @@ import { allDocs, doc, docSecond, pipeline } from '../test/testPipeline';
 import { getResults } from './getResults';
 import { OUTPUT_ID } from './Output';
 
-test('Should convert docs to results', async () => {
+test('should convert docs to results', async () => {
   const litlytics = new LitLytics({
     provider: 'openai',
     model: 'test',

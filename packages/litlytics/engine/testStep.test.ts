@@ -4,7 +4,7 @@ import { LitLytics } from '../litlytics';
 import { doc, firstStep, pipeline, secondStep } from '../test/testPipeline';
 import { testPipelineStep } from './testStep';
 
-test('Should test llm step', async () => {
+test('should test llm step', async () => {
   let systemPrompt = '';
   let userPrompt = '';
   const litlytics = new LitLytics({
@@ -35,7 +35,7 @@ test('Should test llm step', async () => {
   expect(userPrompt).toEqual('test doc');
 });
 
-test('Should test code step', async () => {
+test('should test code step', async () => {
   const litlytics = new LitLytics({
     provider: 'openai',
     model: 'test',

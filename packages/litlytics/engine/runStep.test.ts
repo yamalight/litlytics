@@ -11,7 +11,7 @@ import {
 } from '../test/testPipeline';
 import { runStep } from './runStep';
 
-test('Should run llm step', async () => {
+test('should run llm step', async () => {
   let systemPrompt = '';
   let userPrompt = '';
   const litlytics = new LitLytics({
@@ -44,7 +44,7 @@ test('Should run llm step', async () => {
   expect(userPrompt).toEqual('test doc');
 });
 
-test('Should run code step', async () => {
+test('should run code step', async () => {
   const litlytics = new LitLytics({
     provider: 'openai',
     model: 'test',

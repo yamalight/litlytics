@@ -5,7 +5,7 @@ import type { PipelineStatus } from '../pipeline/Pipeline';
 import { docSecond, firstStep, pipeline } from '../test/testPipeline';
 import { runPipeline } from './runPipeline';
 
-test('Should run basic pipeline', async () => {
+test('should run basic pipeline', async () => {
   const statuses = [];
   let systemPrompt = '';
   let userPrompt = '';
