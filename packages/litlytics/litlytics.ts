@@ -1,4 +1,5 @@
 import { MLCEngine } from '@mlc-ai/web-llm';
+import type { Doc } from './doc/Document';
 import { runPipeline } from './engine/runPipeline';
 import {
   runPrompt,
@@ -14,6 +15,8 @@ import { pipelineFromText } from './pipeline/fromText';
 import { generatePipeline } from './pipeline/generate';
 import type { Pipeline, PipelineStatus } from './pipeline/Pipeline';
 import { refinePipeline } from './pipeline/refine';
+import { getDocs } from './source/getDocs';
+import { setDocs } from './source/setDocs';
 import { generateCodeExplain } from './step/explain';
 import { generateStep, type GenerateStepArgs } from './step/generate';
 import { refineStep } from './step/refine';
@@ -35,8 +38,6 @@ export type { BasicOutputConfig } from './output/basic/types';
 export { OutputTypes } from './output/Output';
 export { outputProviders } from './output/outputs';
 export type { Pipeline, PipelineStatus } from './pipeline/Pipeline';
-export { getDocs } from './source/getDocs';
-export { setDocs } from './source/setDocs';
 export { SourceTypes } from './source/Source';
 export { sourceProviders } from './source/sources';
 export {
@@ -71,6 +72,17 @@ export class LitLytics {
     this.model = model;
     this.#llmKey = key;
     this.engine = engine;
+  }
+
+  /**
+   * Document management
+   */
+  getDocs(pipeline: Pipeline) {
+    return getDocs(pipeline);
+  }
+
+  setDocs(pipeline: Pipeline, docs: Doc[]) {
+    return setDocs(pipeline, docs);
   }
 
   /**

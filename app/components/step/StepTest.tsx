@@ -12,7 +12,7 @@ import { Spinner } from '@/app/components/Spinner';
 import { litlyticsStore, pipelineAtom } from '@/app/store/store';
 import { BeakerIcon } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
-import { ProcessingStep, setDocs } from 'litlytics';
+import { ProcessingStep } from 'litlytics';
 import { useEffect, useMemo, useState } from 'react';
 import { CustomMarkdown } from '../markdown/Markdown';
 import { useTestDocs } from '../pipeline/source/useTestDocs';
@@ -68,7 +68,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
           }
           return d;
         });
-        const newSource = await setDocs(pipeline, newDocs);
+        const newSource = await litlytics.setDocs(pipeline, newDocs);
         // update result manually with no execution
         setPipeline({
           ...pipeline,
@@ -81,7 +81,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
           }
           return d;
         });
-        const newSource = await setDocs(pipeline, newDocs);
+        const newSource = await litlytics.setDocs(pipeline, newDocs);
         // update test doc results
         setPipeline({
           ...pipeline,
