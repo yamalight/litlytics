@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc",
-    "test": "vitest"
+    "test": "vitest",
+    "test:ci": "vitest --coverage --run"
   },
   "devDependencies": {
     "@types/bun": "latest",

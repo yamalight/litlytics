@@ -1,0 +1,48 @@
+name: Test and lint
+
+on:
+  push:
+    branches: ['*']
+    paths-ignore:
+      - '**/*.md' # Ignore changes to markdown files
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md' # Ignore changes to markdown files
+
+jobs:
+  test-lint:
+    environment: Github CI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install bun for deployment
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # lib lint/check/test
+      - name: Install deps
+        working-directory: ./packages/litlytics
+        run: bun install
+
+      - name: Run lib typecheck
+        working-directory: ./packages/litlytics
+        run: bun run typecheck
+
+      - name: Run lib tests
+        working-directory: ./packages/litlytics
+        run: bun run test:ci
+
+      # main app lint/check/test
+      - name: Run app eslint
+        run: bun run lint
+
+      - name: Run app typecheck
+        run: bun run typecheck
