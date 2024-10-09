@@ -2,7 +2,6 @@ name: Test and lint
 
 on:
   push:
-    branches: ['*']
     paths-ignore:
       - '**/*.md' # Ignore changes to markdown files
   pull_request:
