@@ -270,16 +270,22 @@ export class LitLytics {
     this.setPipelineStatus({ status: 'init' });
   };
 
-  runPipeline = async () => {
-    this.setPipelineStatus({ status: 'init' });
+  runPipeline = async ({
+    onStatus,
+  }: {
+    onStatus?: (status: PipelineStatus) => void;
+  } = {}) => {
+    const setStatus = (status: PipelineStatus) => {
+      this.setPipelineStatus(status);
+      onStatus?.(this.pipelineStatus);
+    };
     try {
-      const newPipeline = await runPipeline(
-        this,
-        this.setPipelineStatus.bind(this)
-      );
+      setStatus({ status: 'init' });
+      const newPipeline = await runPipeline(this, setStatus);
       this.pipeline = structuredClone(newPipeline);
+      return this.pipeline;
     } catch (err) {
-      this.setPipelineStatus({ status: 'error', error: err as Error });
+      setStatus({ status: 'error', error: err as Error });
     }
   };
 
