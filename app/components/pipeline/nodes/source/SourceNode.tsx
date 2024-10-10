@@ -5,8 +5,8 @@ import {
   EllipsisHorizontalIcon,
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
-import { sourceProviders, SourceStep, SourceTypes } from 'litlytics';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { Doc, SourceStep } from 'litlytics';
+import { useMemo, useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
@@ -24,37 +24,39 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
-import { useLitlytics } from '~/store/store';
-import { components } from './components';
-import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
+import { useLitlytics } from '~/store/WithLitLytics';
+import { NodeContent, NodeFrame, NodeHeader } from '../NodeFrame';
+import { sourceRenders } from './providers';
+import { SourceType, SourceTypes } from './types';
 
 const UnknownSource = ({
-  source: _data,
+  docs: _data,
 }: {
-  source: SourceStep;
-  setSource: (n: SourceStep) => void;
+  docs: Doc[];
+  setDocs: (newDocs: Doc[]) => void;
 }) => <span>Unknown source type! Cannot get render</span>;
 
 export function SourceNode() {
   const [isOpen, setIsOpen] = useState(false);
+  const [sourceType, setSourceType] = useState<SourceType>('text');
   const litlytics = useLitlytics();
 
   const source = useMemo(() => {
     return litlytics.pipeline.source;
   }, [litlytics.pipeline.source]);
-  const Render = useMemo(() => {
-    if (!source) {
-      return;
-    }
+  const docs = useMemo(
+    () => litlytics.pipeline.source.docs,
+    [litlytics.pipeline.source.docs]
+  );
 
+  const Render = useMemo(() => {
     // get all documents from the source
-    const Source = sourceProviders[source.sourceType];
-    if (!Source) {
+    const Render = sourceRenders[sourceType];
+    if (!Render) {
       return UnknownSource;
     }
-    const src = new Source(source);
-    return src.render;
-  }, [source]);
+    return Render;
+  }, [sourceType]);
 
   const updateNodeByKey = (
     newVal: string | boolean | undefined,
@@ -62,29 +64,13 @@ export function SourceNode() {
   ) => {
     const newData = structuredClone(source!);
     newData[prop] = newVal;
-
-    // clear docs when changing source type
-    if (prop === 'sourceType') {
-      newData.config = {};
-    }
-
     litlytics.setPipeline({
       source: newData,
     });
   };
 
-  const updateNode = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-    prop: keyof SourceStep
-  ) => {
-    const newVal = e.target.value;
-    updateNodeByKey(newVal, prop);
-  };
-
-  const updateSource = (newSource: SourceStep) => {
-    litlytics.setPipeline({
-      source: newSource,
-    });
+  const updateDocs = (newDocs: Doc[]) => {
+    litlytics.setDocs(newDocs);
   };
 
   if (!source) {
@@ -129,13 +115,7 @@ export function SourceNode() {
         </NodeHeader>
         {source.expanded ? (
           <NodeContent className="h-[calc(100%-2rem)]">
-            {Render && (
-              <Render
-                source={source}
-                setSource={updateSource}
-                components={components}
-              />
-            )}
+            {Render && <Render docs={docs} setDocs={updateDocs} />}
           </NodeContent>
         ) : (
           <></>
@@ -155,7 +135,7 @@ export function SourceNode() {
               <Select
                 name="step-input"
                 value={source.sourceType as string}
-                onChange={(e) => updateNode(e, 'sourceType')}
+                onChange={(e) => setSourceType(e.target.value as SourceType)}
               >
                 {Object.keys(SourceTypes).map((type) => (
                   <option

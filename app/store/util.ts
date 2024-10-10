@@ -9,15 +9,12 @@ export function createReactiveProxy(
       const value = Reflect.get(target, prop, receiver);
       if (typeof value === 'function') {
         // @ts-ignore
-        return async function (...args) {
-          let result;
-          try {
-            // @ts-ignore
-            result = value.apply(this, args);
-            if (result instanceof Promise) {
-              result = await result;
-            }
-          } finally {
+        return function (...args) {
+          // @ts-ignore
+          const result = value.apply(this, args);
+          if (result instanceof Promise) {
+            result.then(() => updateCallback.call(target));
+          } else {
             updateCallback.call(target);
           }
           return result;

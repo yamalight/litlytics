@@ -1,7 +1,7 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SparklesIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
 import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
-import { useLitlytics } from '~/store/store';
+import { useLitlytics } from '~/store/WithLitLytics';
 import { RefinePipeline } from './RefinePipeline';
 
 const tabClass = clsx(
@@ -29,7 +29,6 @@ export default function GeneratePipeline() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error>();
-  const pipeline = useMemo(() => litlytics.pipeline, [litlytics.pipeline]);
 
   const runPlan = async () => {
     try {
@@ -84,7 +83,7 @@ export default function GeneratePipeline() {
           <TabGroup selectedIndex={selectedTab} onChange={setSelectedTab}>
             <TabList className="flex gap-4">
               <Tab className={tabClass}>Plan</Tab>
-              {Boolean(pipeline.pipelinePlan?.length) && (
+              {Boolean(litlytics.pipeline.pipelinePlan?.length) && (
                 <Tab className={tabClass}>Refine plan</Tab>
               )}
             </TabList>
@@ -97,7 +96,7 @@ export default function GeneratePipeline() {
                       rows={5}
                       name="task"
                       placeholder="Task description"
-                      value={pipeline.pipelineDescription}
+                      value={litlytics.pipeline.pipelineDescription}
                       onChange={(e) => {
                         litlytics.setPipeline({
                           pipelineDescription: e.target.value,

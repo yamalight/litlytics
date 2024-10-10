@@ -1,6 +1,7 @@
 import { PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import {
+  OUTPUT_ID,
   ProcessingStep,
   ProcessingStepTypes,
   SourceStep,
@@ -24,7 +25,7 @@ import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
 import { CodeEditor } from '~/components/step/CodeEditor';
 import { stepInputLabels } from '~/components/step/util';
-import { useLitlytics } from '~/store/store';
+import { useLitlytics } from '~/store/WithLitLytics';
 import GeneratePipeline from '../GeneratePipeline';
 
 const defaultStep: ProcessingStep = {
@@ -97,8 +98,7 @@ export function NodeConnector({
     if (currentStep?.type === 'source') {
       // connect new step to next node
       const nextNodeId =
-        litlytics.pipeline.source.connectsTo.at(0) ??
-        litlytics.pipeline.output.id;
+        litlytics.pipeline.source.connectsTo.at(0) ?? OUTPUT_ID;
       newStep.connectsTo = [nextNodeId];
       // add
       litlytics.setPipeline({
@@ -113,7 +113,7 @@ export function NodeConnector({
       const nextNodeId =
         litlytics.pipeline.steps
           .find((s) => s.id === currentStep?.id)
-          ?.connectsTo.at(0) ?? litlytics.pipeline.output.id;
+          ?.connectsTo.at(0) ?? OUTPUT_ID;
       newStep.connectsTo = [nextNodeId];
       // add
       litlytics.setPipeline({

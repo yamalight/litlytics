@@ -10,17 +10,9 @@ import {
   PlayIcon,
   RectangleStackIcon,
 } from '@heroicons/react/24/solid';
-import { useAtomValue } from 'jotai';
-import {
-  BasicOutputConfig,
-  modelCosts,
-  outputProviders,
-  OutputStep,
-  OutputTypes,
-  Pipeline,
-} from 'litlytics';
+import { modelCosts } from 'litlytics';
 import _ from 'lodash';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Badge } from '~/components/catalyst/badge';
 import { Button } from '~/components/catalyst/button';
 import {
@@ -40,26 +32,25 @@ import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Select } from '~/components/catalyst/select';
 import { Spinner } from '~/components/Spinner';
 import { CentIcon } from '~/components/ui/CentIcon';
-import { configAtom, useLitlytics } from '~/store/store';
-import { components } from './components';
-import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
+import { useLitlytics } from '~/store/WithLitLytics';
+import { NodeContent, NodeFrame, NodeHeader } from '../NodeFrame';
+import { BasicOutputRender } from './BasicOutput';
+import { OutputType, OutputTypes } from './types';
 
 export function OutputNode() {
   const litlytics = useLitlytics();
-  const litlyticsConfig = useAtomValue(configAtom);
   const [isOpen, setIsOpen] = useState(false);
+  const [expanded, setExpanded] = useState(true);
+  const [outputType, setOutputType] = useState<OutputType>('basic');
 
-  const data = useMemo(() => litlytics.pipeline.output, [litlytics.pipeline]);
-  const output = useMemo(() => {
-    const Output = outputProviders[litlytics.pipeline.output.outputType];
-    const output = new Output(litlytics.pipeline);
-    return output;
-  }, [litlytics]);
+  const results = useMemo(
+    () => litlytics.pipeline.results,
+    [litlytics.pipeline]
+  );
 
   const { timing, prompt, completion, cost } = useMemo(() => {
     // const timings = data.
-    const cfg = output.getConfig();
-    const results = Array.isArray(cfg.results) ? cfg.results : [cfg.results];
+    const results = litlytics.docs;
     const res = results.filter((doc) => doc);
     if (!res.length) {
       return {};
@@ -77,43 +68,16 @@ export function OutputNode() {
     const prompt = promptTokens.reduce((acc, val) => acc + val, 0);
     const completion = completionTokens.reduce((acc, val) => acc + val, 0);
     const inputCost =
-      litlyticsConfig.provider === 'ollama'
+      litlytics.config.provider === 'ollama'
         ? 0
-        : modelCosts[litlyticsConfig.model!].input;
+        : modelCosts[litlytics.config.model!].input;
     const outputCost =
-      litlyticsConfig.provider === 'ollama'
+      litlytics.config.provider === 'ollama'
         ? 0
-        : modelCosts[litlyticsConfig.model!].output;
+        : modelCosts[litlytics.config.model!].output;
     const cost = _.round(prompt * inputCost + completion * outputCost, 3);
     return { timing, prompt, completion, cost };
-  }, [output, litlyticsConfig]);
-
-  const Render = useMemo(() => {
-    if (!output) {
-      return;
-    }
-    return output.render;
-  }, [output]);
-
-  const updateNodeByKey = (
-    newVal: string | boolean | undefined,
-    prop: keyof OutputStep
-  ) => {
-    const newData = structuredClone(data!);
-    newData[prop] = newVal;
-
-    litlytics.setPipeline({
-      output: newData,
-    });
-  };
-
-  const updateNode = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-    prop: keyof OutputStep
-  ) => {
-    const newVal = e.target.value;
-    updateNodeByKey(newVal, prop);
-  };
+  }, [litlytics]);
 
   const doRunPipeline = async () => {
     await litlytics.runPipeline();
@@ -123,30 +87,18 @@ export function OutputNode() {
     litlytics.pipelineStatus.status === 'sourcing' ||
     litlytics.pipelineStatus.status === 'step';
 
-  if (!data) {
-    return <></>;
-  }
-
   return (
     <>
       {/* Output node render */}
-      <NodeFrame
-        size={
-          data.expanded
-            ? (data.config as BasicOutputConfig).results
-              ? 'xl'
-              : 'lg'
-            : 'collapsed'
-        }
-      >
-        <NodeHeader collapsed={!data.expanded}>
+      <NodeFrame size={expanded ? (results ? 'xl' : 'lg') : 'collapsed'}>
+        <NodeHeader collapsed={!expanded}>
           <div className="flex flex-1 gap-2 items-center">
             <Button
               icon
               className="!p-0"
-              onClick={() => updateNodeByKey(!data.expanded, 'expanded')}
+              onClick={() => setExpanded((e) => !e)}
             >
-              {data.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
+              {expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
             </Button>
             <RectangleStackIcon className="w-4 h-4" /> Output
             <Button
@@ -191,7 +143,7 @@ export function OutputNode() {
             </Dropdown>
           </div>
         </NodeHeader>
-        {data.expanded ? (
+        {expanded ? (
           <NodeContent className="flex flex-col relative h-[calc(100%-2rem)]">
             <div className="flex items-center justify-center gap-1 my-1">
               {Number.isFinite(timing) && (
@@ -221,13 +173,7 @@ export function OutputNode() {
                 </Badge>
               )}
             </div>
-            {Render && (
-              <Render
-                pipeline={litlytics.pipeline}
-                setPipeline={(p: Pipeline) => litlytics.setPipeline(p)}
-                components={components}
-              />
-            )}
+            <BasicOutputRender pipeline={litlytics.pipeline} />
           </NodeContent>
         ) : (
           <></>
@@ -236,9 +182,9 @@ export function OutputNode() {
 
       {/* Output config */}
       <Dialog open={isOpen} onClose={setIsOpen} topClassName="z-20">
-        <DialogTitle>Configure {data.name}</DialogTitle>
+        <DialogTitle>Configure output</DialogTitle>
         <DialogDescription>
-          Configure parameters for output node: {data.name}
+          Configure parameters for output node
         </DialogDescription>
         <DialogBody>
           <FieldGroup>
@@ -246,8 +192,8 @@ export function OutputNode() {
               <Label>Output type</Label>
               <Select
                 name="output-type"
-                value={data.outputType as string}
-                onChange={(e) => updateNode(e, 'outputType')}
+                value={outputType}
+                onChange={(e) => setOutputType(e.target.value as OutputType)}
               >
                 {Object.keys(OutputTypes).map((type) => (
                   <option

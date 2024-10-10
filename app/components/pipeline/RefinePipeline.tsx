@@ -3,7 +3,7 @@ import { Button } from '~/components/catalyst/button';
 import { Textarea } from '~/components/catalyst/textarea';
 import { CustomMarkdown } from '~/components/markdown/Markdown';
 import { Spinner } from '~/components/Spinner';
-import { useLitlytics } from '~/store/store';
+import { useLitlytics } from '~/store/WithLitLytics';
 
 export function RefinePipeline({ hide }: { hide: () => void }) {
   const litlytics = useLitlytics();
@@ -18,9 +18,11 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
 
     try {
       // generate plan from LLM
+      litlytics.setPipelineStatus({ status: 'refine' });
       await litlytics.refinePipeline({
         refineRequest: refine,
       });
+      litlytics.setPipelineStatus({ status: 'init' });
       setRefine('');
     } catch (err) {
       setError(err as Error);
@@ -57,7 +59,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
         <h1 className="m-0">Suggested pipeline:</h1>
       </div>
 
-      <CustomMarkdown>{litlytics.pipeline.pipelinePlan}</CustomMarkdown>
+      <CustomMarkdown>{`${litlytics.pipeline.pipelinePlan}`}</CustomMarkdown>
       <div className="flex gap-1">
         <Textarea
           rows={2}

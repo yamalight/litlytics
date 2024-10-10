@@ -14,7 +14,7 @@ test('should run basic pipeline', async () => {
     model: 'test',
     key: 'test',
   });
-  litlytics.pipeline = pipeline;
+  litlytics.setPipeline(pipeline);
   litlytics.runPrompt = async ({
     system,
     user,

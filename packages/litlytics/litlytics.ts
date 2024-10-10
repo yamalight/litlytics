@@ -36,6 +36,7 @@ export {
   type LLMModel,
   type LLMProvider,
 } from './llm/types';
+export { OUTPUT_ID } from './output/Output';
 export type { Pipeline, PipelineStatus } from './pipeline/Pipeline';
 export {
   StepInputs,
@@ -58,15 +59,15 @@ export interface LitLyticsConfig {
 
 export class LitLytics {
   // model config
-  provider?: LLMProviders;
-  model?: LLMModel;
+  private _provider?: LLMProviders;
+  private _model?: LLMModel;
   #llmKey?: string;
   // local LLM engine
-  engine?: MLCEngine;
+  private _engine?: MLCEngine;
 
   // pipeline
-  pipeline: Pipeline = emptyPipeline;
-  pipelineStatus: PipelineStatus = {
+  private _pipeline: Pipeline = emptyPipeline;
+  private _pipelineStatus: PipelineStatus = {
     status: 'init',
   };
 
@@ -81,52 +82,78 @@ export class LitLytics {
     key: string;
     engine?: MLCEngine;
   }) {
-    this.provider = provider;
-    this.model = model;
+    this._provider = provider;
+    this._model = model;
     this.#llmKey = key;
-    this.engine = engine;
+    this._engine = engine;
   }
 
   /**
-   * Pipeline / config management
+   * Config management
    */
-  exportConfig(): LitLyticsConfig {
+  public get config(): LitLyticsConfig {
     return {
       // model config
-      provider: this.provider,
-      model: this.model,
-      llmKey: this.#llmKey,
+      provider: this._provider,
+      model: this._model,
       // pipeline
-      pipeline: this.pipeline,
+      pipeline: this._pipeline,
     };
   }
 
+  exportConfig = (): LitLyticsConfig => {
+    return {
+      // model config
+      provider: this._provider,
+      model: this._model,
+      llmKey: this.#llmKey,
+      // pipeline
+      pipeline: this._pipeline,
+    };
+  };
+
   importConfig = (config: LitLyticsConfig) => {
-    this.provider = config.provider;
-    this.model = config.model;
+    this._provider = config.provider;
+    this._model = config.model;
     this.#llmKey = config.llmKey;
-    this.pipeline = config.pipeline ?? emptyPipeline;
+    this._pipeline = config.pipeline ?? this._pipeline ?? emptyPipeline;
   };
 
   setWebEngine = (engine?: MLCEngine) => {
-    this.engine = engine;
+    this._engine = engine;
   };
 
+  /**
+   * Pipeline management
+   */
+  public get pipeline(): Pipeline {
+    return this._pipeline;
+  }
+
   setPipeline = (newPipeline: Partial<Pipeline>) => {
-    this.pipeline = {
-      ...this.pipeline,
+    console.log('set pipeline', newPipeline);
+    this._pipeline = {
+      ...this._pipeline,
       ...newPipeline,
     };
   };
 
   resetPipeline = () => {
-    this.pipeline = emptyPipeline;
-    this.pipelineStatus = { status: 'init' };
+    console.log('reset pipeline');
+    this._pipeline = emptyPipeline;
+    this._pipelineStatus = { status: 'init' };
   };
 
+  /**
+   * Pipeline status
+   */
+  public get pipelineStatus(): PipelineStatus {
+    return this._pipelineStatus;
+  }
+
   setPipelineStatus = (status: PipelineStatus) => {
-    this.pipelineStatus = {
-      ...this.pipelineStatus,
+    this._pipelineStatus = {
+      ...this._pipelineStatus,
       ...status,
     };
   };
@@ -134,19 +161,18 @@ export class LitLytics {
   /**
    * Document management
    */
-  getDocs() {
-    return this.pipeline.source.docs;
+  public get docs(): Doc[] {
+    return this._pipeline.source.docs;
   }
 
-  setDocs = async (docs: Doc[]) => {
+  setDocs = (docs: Doc[]) => {
     // update docs
-    this.pipeline = {
-      ...this.pipeline,
+    return this.setPipeline({
       source: {
         ...this.pipeline.source,
         docs,
       },
-    };
+    });
   };
 
   /**
@@ -158,18 +184,18 @@ export class LitLytics {
     args,
   }: Pick<RunPromptFromMessagesArgs, 'messages' | 'args'>) => {
     if (
-      !this.provider?.length ||
-      !this.model?.length ||
-      (!this.#llmKey?.length && this.provider !== 'local')
+      !this._provider?.length ||
+      !this._model?.length ||
+      (!this.#llmKey?.length && this._provider !== 'local')
     ) {
       throw new Error('No provider, model or key set!');
     }
 
     return await runPromptFromMessages({
-      provider: this.provider,
+      provider: this._provider,
       key: this.#llmKey ?? 'local',
-      model: this.model,
-      engine: this.engine,
+      model: this._model,
+      engine: this._engine,
       messages,
       args,
     });
@@ -181,18 +207,18 @@ export class LitLytics {
     args,
   }: Pick<RunPromptArgs, 'system' | 'user' | 'args'>) => {
     if (
-      !this.provider?.length ||
-      !this.model?.length ||
-      (!this.#llmKey?.length && this.provider !== 'local')
+      !this._provider?.length ||
+      !this._model?.length ||
+      (!this.#llmKey?.length && this._provider !== 'local')
     ) {
       throw new Error('No provider, model or key set!');
     }
 
     return await runPrompt({
-      provider: this.provider,
+      provider: this._provider,
       key: this.#llmKey ?? 'local',
-      model: this.model,
-      engine: this.engine,
+      model: this._model,
+      engine: this._engine,
       system,
       user,
       args,
@@ -226,8 +252,7 @@ export class LitLytics {
     newSteps.at(-1)!.connectsTo = [OUTPUT_ID];
 
     // save
-    this.pipeline = {
-      ...this.pipeline,
+    this.setPipeline({
       // assign input to first step
       source: {
         ...this.pipeline.source,
@@ -235,7 +260,7 @@ export class LitLytics {
       },
       // assign steps
       steps: newSteps,
-    };
+    });
 
     this.setPipelineStatus({ status: 'done' });
   };
@@ -250,24 +275,23 @@ export class LitLytics {
       description: this.pipeline.pipelineDescription,
     });
 
-    this.pipeline = {
-      ...this.pipeline,
+    this.setPipeline({
       pipelinePlan: plan ?? '',
-    };
+    });
+
+    return this.pipeline;
   };
 
   refinePipeline = async ({ refineRequest }: { refineRequest: string }) => {
-    this.setPipelineStatus({ status: 'refine' });
     const plan = await refinePipeline({
       litlytics: this,
       refineRequest,
       pipeline: this.pipeline,
     });
-    this.pipeline = {
+    this.setPipeline({
       ...this.pipeline,
       pipelinePlan: plan ?? '',
-    };
-    this.setPipelineStatus({ status: 'init' });
+    });
   };
 
   runPipeline = async ({
@@ -282,8 +306,8 @@ export class LitLytics {
     try {
       setStatus({ status: 'init' });
       const newPipeline = await runPipeline(this, setStatus);
-      this.pipeline = structuredClone(newPipeline);
-      return this.pipeline;
+      this.setPipeline(newPipeline);
+      return newPipeline;
     } catch (err) {
       setStatus({ status: 'error', error: err as Error });
     }

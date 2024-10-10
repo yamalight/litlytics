@@ -9,10 +9,10 @@ import {
 import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
 import { Select } from '@/app/components/catalyst/select';
 import { Spinner } from '@/app/components/Spinner';
-import { useLitlytics } from '@/app/store/store';
 import { BeakerIcon } from '@heroicons/react/24/solid';
 import { ProcessingStep } from 'litlytics';
 import { useEffect, useMemo, useState } from 'react';
+import { useLitlytics } from '~/store/WithLitLytics';
 import { CustomMarkdown } from '../markdown/Markdown';
 import { useTestDocs } from '../pipeline/source/useTestDocs';
 
@@ -65,7 +65,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
           }
           return d;
         });
-        await litlytics.setDocs(newDocs);
+        litlytics.setDocs(newDocs);
       } else {
         const newDocs = allDocs.map((d) => {
           if (d.id === doc?.id) {
@@ -73,7 +73,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
           }
           return d;
         });
-        await litlytics.setDocs(newDocs);
+        litlytics.setDocs(newDocs);
       }
     } catch (err) {
       setError(err as Error);

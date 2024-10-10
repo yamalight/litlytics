@@ -10,7 +10,7 @@ test('should convert docs to results', async () => {
     model: 'test',
     key: 'test',
   });
-  litlytics.pipeline = pipeline;
+  litlytics.setPipeline(pipeline);
   const newDocs = allDocs.map((d) => {
     const step = pipeline.steps.find((s) =>
       s.connectsTo.includes(OUTPUT_ID)

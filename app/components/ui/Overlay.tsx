@@ -29,12 +29,8 @@ import {
   DropdownMenu,
   DropdownShortcut,
 } from '~/components/catalyst/dropdown';
-import {
-  configAtom,
-  configUndoAtom,
-  litlyticsAtom,
-  webllmAtom,
-} from '~/store/store';
+import { configAtom, configUndoAtom, webllmAtom } from '~/store/store';
+import { useLitlytics } from '~/store/WithLitLytics';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
 import { Textarea } from '../catalyst/textarea';
@@ -66,7 +62,7 @@ function MenuHolder({
 export function OverlayUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const loadInputRef = useRef<HTMLTextAreaElement>(null);
-  const litlytics = useAtomValue(litlyticsAtom);
+  const litlytics = useLitlytics();
   const litlyticsConfig = useAtomValue(configAtom);
   const webllm = useAtomValue(webllmAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(configUndoAtom);

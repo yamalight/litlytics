@@ -1,12 +1,10 @@
-import { atom, useAtom, useAtomValue } from 'jotai';
+import { atom } from 'jotai';
 import { withUndo } from 'jotai-history';
 import { atomWithStorage } from 'jotai/utils';
 import { LitLytics, LitLyticsConfig, MLCEngine } from 'litlytics';
-import { useEffect, useReducer } from 'react';
-import { createReactiveProxy } from './util';
 
 export const configAtom = atomWithStorage<LitLyticsConfig>(
-  'litltyics.config',
+  'litlytics.config',
   {
     provider: 'openai',
     model: 'gpt-4o-mini',
@@ -38,32 +36,4 @@ export const webllmAtom = atom<{
   status: '',
 });
 
-export function useLitlytics() {
-  const config = useAtomValue(configAtom);
-  const webllm = useAtomValue(webllmAtom);
-  const [litlytics, setLitlytics] = useAtom(litlyticsAtom);
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-
-  // create proxy that triggers state updates
-  // only create it once
-  useEffect(() => {
-    setLitlytics(
-      createReactiveProxy(
-        new LitLytics({
-          provider: 'openai',
-          model: 'gpt-4o-mini',
-          key: '',
-        }),
-        () => forceUpdate()
-      )
-    );
-  }, [setLitlytics]);
-
-  // update config and engine on changes
-  useEffect(() => {
-    litlytics.importConfig(config);
-    litlytics.setWebEngine(webllm.engine);
-  }, [config, webllm, litlytics]);
-
-  return litlytics;
-}
+export const litlyticsInitedAtom = atom(false);

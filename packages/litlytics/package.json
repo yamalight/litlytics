@@ -1,9 +1,10 @@
 {
   "name": "litlytics",
-  "module": "litlytics.ts",
+  "module": "dist/litlytics.js",
   "types": "litlytics.ts",
   "type": "module",
   "scripts": {
+    "build": "bun run build.ts",
     "typecheck": "tsc",
     "test": "vitest",
     "test:ci": "vitest --coverage --run"
@@ -14,7 +15,7 @@
     "vitest": "^2.1.2"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^0.0.51",

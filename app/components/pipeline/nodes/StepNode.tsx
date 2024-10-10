@@ -10,13 +10,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
-import { useAtomValue } from 'jotai';
-import {
-  modelCosts,
-  outputProviders,
-  ProcessingStep,
-  StepInputs,
-} from 'litlytics';
+import { modelCosts, OUTPUT_ID, ProcessingStep, StepInputs } from 'litlytics';
 import _ from 'lodash';
 import { ChangeEvent, useMemo, useState } from 'react';
 import { Badge } from '~/components/catalyst/badge';
@@ -38,27 +32,19 @@ import { CodeEditor } from '~/components/step/CodeEditor';
 import { StepTest } from '~/components/step/StepTest';
 import { stepInputLabels } from '~/components/step/util';
 import { CentIcon } from '~/components/ui/CentIcon';
-import { configAtom, useLitlytics } from '~/store/store';
+import { useLitlytics } from '~/store/WithLitLytics';
 import { NodeContent, NodeFrame, NodeHeader } from './NodeFrame';
 
 export function StepNode({ data }: { data: ProcessingStep }) {
   const litlytics = useLitlytics();
-  const litlyticsConfig = useAtomValue(configAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [refine, setRefine] = useState('');
 
-  const output = useMemo(() => {
-    const Output = outputProviders[litlytics.pipeline.output.outputType];
-    const output = new Output(litlytics.pipeline);
-    return output;
-  }, [litlytics]);
-
   const { averageTiming, averagePrompt, averageCompletion, averageCost } =
     useMemo(() => {
       // const timings = data.
-      const cfg = output.getConfig();
-      const results = Array.isArray(cfg.results) ? cfg.results : [cfg.results];
+      const results = litlytics.docs;
       const res = results.filter((doc) => doc);
       if (!res.length) {
         return {};
@@ -87,19 +73,19 @@ export function StepNode({ data }: { data: ProcessingStep }) {
           completionTokens.length
       );
       const inputCost =
-        litlyticsConfig.provider === 'ollama'
+        litlytics.config.provider === 'ollama'
           ? 0
-          : modelCosts[litlyticsConfig.model!].input;
+          : modelCosts[litlytics.config.model!].input;
       const outputCost =
-        litlyticsConfig.provider === 'ollama'
+        litlytics.config.provider === 'ollama'
           ? 0
-          : modelCosts[litlyticsConfig.model!].output;
+          : modelCosts[litlytics.config.model!].output;
       const averageCost = _.round(
         averagePrompt * inputCost + averageCompletion * outputCost,
         3
       );
       return { averageTiming, averagePrompt, averageCompletion, averageCost };
-    }, [output, data, litlyticsConfig]);
+    }, [litlytics, data]);
 
   const updateNodeByKey = (
     newVal: string | boolean | undefined,
@@ -154,7 +140,7 @@ export function StepNode({ data }: { data: ProcessingStep }) {
       .map((s) => {
         let connectsTo = s.connectsTo.filter((id) => id !== data.id);
         if (connectsTo.length === 0) {
-          connectsTo = [litlytics.pipeline.output.id];
+          connectsTo = [OUTPUT_ID];
         }
         return {
           ...s,
@@ -174,9 +160,6 @@ export function StepNode({ data }: { data: ProcessingStep }) {
         connectsTo: sourceConnect,
       },
       steps: newSteps,
-      output: {
-        ...litlytics.pipeline.output,
-      },
     });
   };
 

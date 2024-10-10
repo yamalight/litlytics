@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PipelineBuilder } from '~/components/pipeline/PipelineBuilder';
 import { OverlayUI } from '~/components/ui/Overlay';
+import { WithLitLytics } from '~/store/WithLitLytics';
 import { Background } from '../Background';
 import { Spinner } from '../Spinner';
 
@@ -24,7 +25,11 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return <main className="relative min-h-screen min-w-screen">{children}</main>;
+  return (
+    <WithLitLytics>
+      <main className="relative min-h-screen min-w-screen">{children}</main>
+    </WithLitLytics>
+  );
 }
 
 export function UI() {
