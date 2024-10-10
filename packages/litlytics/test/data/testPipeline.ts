@@ -1,7 +1,7 @@
-import type { Doc } from '../doc/Document';
-import { OUTPUT_ID } from '../output/Output';
-import type { Pipeline } from '../pipeline/Pipeline';
-import type { ProcessingStep, SourceStep } from '../step/Step';
+import type { Doc } from '../../doc/Document';
+import { OUTPUT_ID } from '../../output/Output';
+import type { Pipeline } from '../../pipeline/Pipeline';
+import type { ProcessingStep, SourceStep } from '../../step/Step';
 
 // steps
 export const firstStep: ProcessingStep = {

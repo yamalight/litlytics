@@ -1,7 +1,12 @@
 import type { LanguageModelUsage } from 'ai';
 import { expect, test } from 'vitest';
 import { LitLytics } from '../litlytics';
-import { doc, firstStep, pipeline, secondStep } from '../test/testPipeline';
+import {
+  doc,
+  firstStep,
+  pipeline,
+  secondStep,
+} from '../test/data/testPipeline';
 import { testPipelineStep } from './testStep';
 
 test('should test llm step', async () => {

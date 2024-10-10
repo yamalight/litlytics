@@ -2,7 +2,7 @@ import type { LanguageModelUsage } from 'ai';
 import { expect, test } from 'vitest';
 import type { RunPromptFromMessagesArgs } from '../engine/runPrompt';
 import { LitLytics } from '../litlytics';
-import { firstStep, secondStep } from '../test/testPipeline';
+import { firstStep, secondStep } from '../test/data/testPipeline';
 import { refineStep } from './refine';
 
 const testPrompt = `Test prompt`;

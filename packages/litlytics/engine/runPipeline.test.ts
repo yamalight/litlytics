@@ -2,7 +2,7 @@ import type { LanguageModelUsage } from 'ai';
 import { expect, test } from 'vitest';
 import { LitLytics } from '../litlytics';
 import type { PipelineStatus } from '../pipeline/Pipeline';
-import { docSecond, firstStep, pipeline } from '../test/testPipeline';
+import { docSecond, firstStep, pipeline } from '../test/data/testPipeline';
 import { runPipeline } from './runPipeline';
 
 test('should run basic pipeline', async () => {

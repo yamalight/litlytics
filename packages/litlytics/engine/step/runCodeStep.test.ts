@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import type { ProcessingStep } from '../../step/Step';
-import { allDocs, doc, docSecond, source } from '../../test/testPipeline';
+import { allDocs, doc, docSecond, source } from '../../test/data/testPipeline';
 import { runCodeStep } from './runCodeStep';
 
 // steps

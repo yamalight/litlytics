@@ -2,7 +2,7 @@ import type { LanguageModelUsage } from 'ai';
 import { expect, test } from 'vitest';
 import type { RunPromptFromMessagesArgs } from '../engine/runPrompt';
 import { LitLytics } from '../litlytics';
-import { pipeline } from '../test/testPipeline';
+import { pipeline } from '../test/data/testPipeline';
 import { refinePipeline } from './refine';
 
 const testResult = `Step name: Generate Title and Description

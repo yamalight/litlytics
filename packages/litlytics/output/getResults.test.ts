@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { LitLytics } from '../litlytics';
-import { allDocs, doc, docSecond, pipeline } from '../test/testPipeline';
+import { allDocs, doc, docSecond, pipeline } from '../test/data/testPipeline';
 import { getResults } from './getResults';
 import { OUTPUT_ID } from './Output';
 

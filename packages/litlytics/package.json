@@ -22,7 +22,6 @@
     "@ai-sdk/openai": "^0.0.66",
     "@mlc-ai/web-llm": "^0.2.73",
     "ai": "^3.4.9",
-    "ollama-ai-provider": "^0.15.1",
-    "turndown": "^7.2.0"
+    "ollama-ai-provider": "^0.15.1"
   }
 }

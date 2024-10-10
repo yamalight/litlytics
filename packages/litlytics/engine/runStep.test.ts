@@ -8,7 +8,7 @@ import {
   firstStep,
   secondStep,
   source,
-} from '../test/testPipeline';
+} from '../test/data/testPipeline';
 import { runStep } from './runStep';
 
 test('should run llm step', async () => {

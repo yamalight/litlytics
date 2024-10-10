@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import type { LitLytics } from '../../litlytics';
 import type { ProcessingStep } from '../../step/Step';
-import { allDocs, doc, docSecond, source } from '../../test/testPipeline';
+import { allDocs, doc, docSecond, source } from '../../test/data/testPipeline';
 import { runLLMStep } from './runLLMStep';
 
 // steps
