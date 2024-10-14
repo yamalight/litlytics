@@ -59,6 +59,23 @@ export function WithLitLytics({ children }: { children: React.ReactNode }) {
     ll.setWebEngine(webllm.engine);
   }, [isInited, config, webllm, setIsInited, setLitlytics, setConfig]);
 
+  // update config / llm on changes
+  useEffect(() => {
+    // assign updated config
+    const cfg = litlytics.exportConfig();
+    if (
+      cfg.provider !== config.provider ||
+      cfg.model !== config.model ||
+      cfg.llmKey !== config.llmKey
+    ) {
+      litlytics.importConfig(config);
+    }
+    // assign webllm engine
+    if (litlytics.getEngine() !== webllm.engine) {
+      litlytics.setWebEngine(webllm.engine);
+    }
+  }, [config, webllm, litlytics]);
+
   return (
     <LitLyticsContext.Provider value={{ litlytics }}>
       {children}

@@ -119,6 +119,10 @@ export class LitLytics {
     this._pipeline = config.pipeline ?? this._pipeline ?? emptyPipeline;
   };
 
+  getEngine = (): MLCEngine | undefined => {
+    return this._engine;
+  };
+
   setWebEngine = (engine?: MLCEngine) => {
     this._engine = engine;
   };
