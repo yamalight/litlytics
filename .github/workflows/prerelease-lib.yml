@@ -85,6 +85,6 @@ jobs:
       - name: publish
         if: ${{ env.should_publish == 'true' }}
         working-directory: ./packages/litlytics
-        run: bun publish --access public --tag next
+        run: npm publish --access public --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
