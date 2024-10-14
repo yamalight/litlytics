@@ -6,7 +6,8 @@ ENV NODE_ENV=production
 WORKDIR /app
 # install deps
 ADD package.json bun.lockb ./
-COPY ./packages/litlytics ./packages/litlytics
+ADD ./packages/litlytics ./packages/litlytics
+RUN cd ./packages/litlytics && bun install --frozen-lockfile && bun run build
 RUN bun install --frozen-lockfile --ignore-scripts
 
 # build app
