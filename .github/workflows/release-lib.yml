@@ -6,8 +6,6 @@ on:
     workflows: ['Test and lint']
     types:
       - completed # Only when it's completed
-    branches:
-      - main # Only run the publish workflow for pushes to main
 
 jobs:
   publish-lib:
