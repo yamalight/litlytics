@@ -45,7 +45,8 @@ export function StepNode({ data }: { data: ProcessingStep }) {
     useMemo(() => {
       // const timings = data.
       const results = litlytics.docs;
-      const res = results.filter((doc) => doc);
+      const resultDocs = litlytics.pipeline.results?.map((r) => r.doc) ?? [];
+      const res = results.concat(resultDocs).filter((doc) => doc);
       if (!res.length) {
         return {};
       }
