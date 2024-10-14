@@ -48,3 +48,6 @@ jobs:
 
       - name: Run app typecheck
         run: bun run typecheck
+
+      - name: Run app test
+        run: bun run test:ci
