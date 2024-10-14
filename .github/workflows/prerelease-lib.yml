@@ -12,8 +12,12 @@ on:
 jobs:
   publish-lib:
     environment: Github CI
-    if: ${{ github.event.workflow_run.conclusion == 'success' }} # Only proceed if the tests passed
+    # Only proceed if the tests passed and we're not on release
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} && startsWith(github.head_ref, 'refs/tags/') == false
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout repository
@@ -37,6 +41,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          registry-url: 'https://registry.npmjs.org'
 
       # install bun
       - name: Install bun for deployment
