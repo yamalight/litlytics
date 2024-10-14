@@ -5,7 +5,7 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 # install deps
-ADD bunfig.toml package.json bun.lockb ./
+ADD package.json bun.lockb ./
 RUN bun install --frozen-lockfile --ignore-scripts
 
 # build app
