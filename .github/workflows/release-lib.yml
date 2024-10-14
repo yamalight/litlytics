@@ -1,4 +1,4 @@
-name: Prerelease litlytics library
+name: Release litlytics library
 
 on:
   workflow_run:
@@ -13,7 +13,7 @@ jobs:
   publish-lib:
     environment: Github CI
     # Only proceed if the tests passed and we're on release
-    if: ${{ github.event.workflow_run.conclusion == 'success' }} && startsWith(github.head_ref, 'refs/tags/') == true
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} && ${{ startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
