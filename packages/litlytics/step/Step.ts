@@ -1,4 +1,4 @@
-import type { LanguageModelUsage } from 'ai';
+import type { CoreTool, LanguageModelUsage } from 'ai';
 import type { Doc } from '../doc/Document';
 
 export interface StepResult {
@@ -44,7 +44,10 @@ export interface SourceStep extends BaseStep {
 export interface ProcessingStep extends BaseStep {
   type: ProcessingStepTypes;
   input?: StepInput;
+  // llm
   prompt?: string;
+  llmArgs?: Record<string, CoreTool>;
+  // code
   code?: string;
   codeExplanation?: string;
 }

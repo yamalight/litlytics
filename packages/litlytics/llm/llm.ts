@@ -80,7 +80,6 @@ export async function executeOnLLM({
   // set key
   const modelObj = getModel({ provider, model, key });
   const { text, usage } = await generateText({
-    maxTokens: 4096,
     ...modelArgs,
     model: modelObj,
     messages,

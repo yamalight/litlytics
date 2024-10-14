@@ -79,7 +79,7 @@ export async function runLLMStep({
 
   const user = input;
   const startTime = performance.now();
-  const res = await litlytics.runPrompt({ system, user });
+  const res = await litlytics.runPrompt({ system, user, args: step.llmArgs });
   const endTime = performance.now();
   // replace existing result if present
   const existingResult = doc?.processingResults.find(
