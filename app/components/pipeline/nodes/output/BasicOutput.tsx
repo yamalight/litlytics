@@ -16,6 +16,7 @@ export function BasicOutputRender({ pipeline }: { pipeline: Pipeline }) {
     }
 
     return results
+      .filter((res) => res.result)
       .map((res) => `## Result for "${res.doc.name}":\n\n${res.result}`)
       .join('\n\n')
       .trim();
