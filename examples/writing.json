@@ -8,8 +8,8 @@
     "description": "Primary source",
     "type": "source",
     "sourceType": "text",
-    "config": {
-      "document": {
+    "docs": [
+      {
         "id": "textdoc",
         "name": "Default document",
         "content": "Post is a photo of my cute black cat with white mustache.",
@@ -37,49 +37,13 @@
           }
         ]
       }
-    },
-    "connectsTo": ["step_0"],
-    "expanded": true
-  },
-  "output": {
-    "id": "output_0",
-    "name": "Output",
-    "description": "Primary output",
-    "type": "output",
-    "outputType": "basic",
+    ],
     "config": {
-      "results": [
-        {
-          "id": "textdoc",
-          "name": "Default document",
-          "content": "Post is a photo of my cute black cat with white mustache.",
-          "test": true,
-          "processingResults": [
-            {
-              "stepId": "step_0",
-              "result": "🐾 Meet my adorable little buddy! 🐱✨ This is my cute black cat with a charming white mustache! Isn’t he just the cutest? 😻 He always knows how to make me smile! \n\nWhat do you think of his mustache? Let me know in the comments! 💬👇\n\n#CatLovers #CuteCats #BlackCat #CatMustache #FurryFriend #PetLove #Caturday",
-              "usage": {
-                "completionTokens": 88,
-                "promptTokens": 89,
-                "totalTokens": 177
-              },
-              "timingMs": 1623
-            },
-            {
-              "stepId": "step_1",
-              "result": "🐾 Meet my adorable little buddy! 🐱✨ This is my cute black cat with a charming white mustache! Isn’t he just the cutest? 😻 He always knows how to put a smile on my face!\n\nWhat do you think of his mustache? Let me know in the comments! 💬👇\n\n#CatLovers #CuteCats #BlackCat #CatMustache #FurryFriend #PetLove #Caturday",
-              "usage": {
-                "completionTokens": 90,
-                "promptTokens": 139,
-                "totalTokens": 229
-              },
-              "timingMs": 1649
-            }
-          ]
-        }
-      ]
+      "type": "text"
     },
-    "connectsTo": [],
+    "connectsTo": [
+      "step_0"
+    ],
     "expanded": true
   },
   "steps": [
@@ -90,7 +54,9 @@
       "type": "llm",
       "input": "doc",
       "prompt": "Create an engaging Instagram post based on the provided text description of the image.\nHighlight key elements, emotions, and any relevant hashtags to enhance visibility and engagement.\nEnsure the tone is suitable for Instagram, aiming to captivate the audience and encourage interaction.\nUse simpler language. Write as if you are not a native English speaker.",
-      "connectsTo": ["step_1"],
+      "connectsTo": [
+        "step_1"
+      ],
       "expanded": true
     },
     {
@@ -100,7 +66,9 @@
       "type": "llm",
       "input": "result",
       "prompt": "Please proofread and edit the provided Instagram post text to enhance its natural flow and engagement.\nFocus on improving grammar, clarity, and overall appeal to the audience, while maintaining the original message and tone.",
-      "connectsTo": ["output_0"],
+      "connectsTo": [
+        "litlytics_output"
+      ],
       "expanded": true
     }
   ],

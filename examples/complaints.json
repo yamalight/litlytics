@@ -8,223 +8,102 @@
     "description": "Primary source",
     "type": "source",
     "sourceType": "docs",
-    "config": {
-      "document": {
-        "id": "textdoc",
-        "name": "Default document",
-        "content": "",
-        "processingResults": []
+    "docs": [
+      {
+        "id": "0",
+        "name": "Positive",
+        "content": "The PS5 arrived fairly quickly and was in good shape upon arrival.\n\nNow, regarding the console itself. The PS5 has a 'unique' design and is easily the biggest video game console I've ever seen. Due to its sheer size, I've had to place it horizontally within my media center where it's a bit difficult to access the disc drive.\n\nThe console came with a short HDMI 2.1 cable (capable of supporting 120fps if both your TV and the game you're playing support it too) and a generously sized USB cable for plugging in the controller or charging it. The game \"Astro's Playroom\" comes preinstalled and is an enjoyable, albeit short, game which you can use to familiarize yourself with the controller and console.\n\nThe console is advertised as having 825GB of storage, but only 667GB are usable so I'd recommend buying either an external HDD or a compatible nvme SSD for extra storage. PS5 games load extraordinarily fast and PS4 games enjoy faster loading times as well. Even XCOM2, which barely chugged along the PS4, runs smooth as butter. That said, install times are still rather long and it takes a while to transfer games to/from my HDD and SSD.\n\nDespite claiming 8k on the box, I'm not aware of any games that are capable of natively supporting it. While the console does support 4k resolution and 120fps, you'll need to find games that do so too. While some games will run at 4k/60fps, others will have resolution vs. performance modes that'll sacrifice either resolution or framerate to ensure the game runs well.\n\nThe DualSense controller is appealing to the eye, has an ergonomic design, and the built-in haptic feedback is very pleasing to experience whenever a game supports it. My only complaint is that the battery life is somewhat poor and seems to charge slowly whenever plugged into something that's not a PS5. As such, I'd recommend charging the controller while playing a game or while the PS5 is in rest mode.\n\nThe PS5's Wi-Fi adapter is an improvement over the PS4's. It supports both 2.4ghz and 5ghz. I've noticed my downloads running faster on the PS5 than the PS4 while on the same network.\n\nThe PS5's backwards compatibility with PS4 games seems to work pretty well. Most games (especially ones with PS4 Pro patches) run extremely well and you can play them with a PS4 controller if you'd like. The only downside is that installing PS4 games seems to add to the PS5's \"other\" storage space. All games now have an install progress bar, and you can now separately delete DLC from games.\n\nAs far as problems go, I've found that the PS5's UI leaves something to be desired and I've occasionally run into small software problems, usually whenever installing, moving, or deleting games. Additionally, when I plugged in my external HDD for the first time, half of its game library was seemingly deleted. I now suspect that it's due to most of the games not being fully installed, something that I've now remedied on the PS5 and have not experienced again.\n\nOverall, I'm pretty satisfied with my purchase so far and find it to be a worthwhile upgrade to my aging PS4. If you own physical PS4 games or prefer physical game copies in general, buy the PS5 disc edition. If you go all digital, get the cheaper digital edition. Aside from the presence (or lack thereof) of an optical drive, I'm not aware of any difference between them.",
+        "test": true,
+        "processingResults": [
+          {
+            "stepId": "sentiment-analysis",
+            "result": "The overall sentiment expressed in the product review is **positive**. \n\nThe reviewer highlights several favorable aspects of the PS5, such as its quick arrival, good condition, impressive loading speeds for games, and the appealing design and functionality of the DualSense controller. They also appreciate the improvements in Wi-Fi performance and the backwards compatibility with PS4 games. While the reviewer mentions some drawbacks, such as the console's size, limited usable storage, and some issues with the user interface and software, these concerns do not overshadow their overall satisfaction with the product. The conclusion explicitly states that they are \"pretty satisfied\" and consider the PS5 a \"worthwhile upgrade,\" reinforcing the positive sentiment.",
+            "usage": {
+              "completionTokens": 137,
+              "promptTokens": 779,
+              "totalTokens": 916
+            },
+            "timingMs": 2456
+          },
+          {
+            "stepId": "filter-negative-reviews",
+            "timingMs": 0
+          }
+        ]
       },
-      "documents": [
-        {
-          "id": "0",
-          "name": "Positive",
-          "content": "The PS5 arrived fairly quickly and was in good shape upon arrival.\n\nNow, regarding the console itself. The PS5 has a 'unique' design and is easily the biggest video game console I've ever seen. Due to its sheer size, I've had to place it horizontally within my media center where it's a bit difficult to access the disc drive.\n\nThe console came with a short HDMI 2.1 cable (capable of supporting 120fps if both your TV and the game you're playing support it too) and a generously sized USB cable for plugging in the controller or charging it. The game \"Astro's Playroom\" comes preinstalled and is an enjoyable, albeit short, game which you can use to familiarize yourself with the controller and console.\n\nThe console is advertised as having 825GB of storage, but only 667GB are usable so I'd recommend buying either an external HDD or a compatible nvme SSD for extra storage. PS5 games load extraordinarily fast and PS4 games enjoy faster loading times as well. Even XCOM2, which barely chugged along the PS4, runs smooth as butter. That said, install times are still rather long and it takes a while to transfer games to/from my HDD and SSD.\n\nDespite claiming 8k on the box, I'm not aware of any games that are capable of natively supporting it. While the console does support 4k resolution and 120fps, you'll need to find games that do so too. While some games will run at 4k/60fps, others will have resolution vs. performance modes that'll sacrifice either resolution or framerate to ensure the game runs well.\n\nThe DualSense controller is appealing to the eye, has an ergonomic design, and the built-in haptic feedback is very pleasing to experience whenever a game supports it. My only complaint is that the battery life is somewhat poor and seems to charge slowly whenever plugged into something that's not a PS5. As such, I'd recommend charging the controller while playing a game or while the PS5 is in rest mode.\n\nThe PS5's Wi-Fi adapter is an improvement over the PS4's. It supports both 2.4ghz and 5ghz. I've noticed my downloads running faster on the PS5 than the PS4 while on the same network.\n\nThe PS5's backwards compatibility with PS4 games seems to work pretty well. Most games (especially ones with PS4 Pro patches) run extremely well and you can play them with a PS4 controller if you'd like. The only downside is that installing PS4 games seems to add to the PS5's \"other\" storage space. All games now have an install progress bar, and you can now separately delete DLC from games.\n\nAs far as problems go, I've found that the PS5's UI leaves something to be desired and I've occasionally run into small software problems, usually whenever installing, moving, or deleting games. Additionally, when I plugged in my external HDD for the first time, half of its game library was seemingly deleted. I now suspect that it's due to most of the games not being fully installed, something that I've now remedied on the PS5 and have not experienced again.\n\nOverall, I'm pretty satisfied with my purchase so far and find it to be a worthwhile upgrade to my aging PS4. If you own physical PS4 games or prefer physical game copies in general, buy the PS5 disc edition. If you go all digital, get the cheaper digital edition. Aside from the presence (or lack thereof) of an optical drive, I'm not aware of any difference between them.",
-          "test": true,
-          "processingResults": [
-            {
-              "stepId": "sentiment-analysis",
-              "result": "The overall sentiment expressed in the product review is **positive**. \n\nThe reviewer highlights several favorable aspects of the PS5, such as its quick arrival, good condition, impressive loading speeds for games, and the appealing design and functionality of the DualSense controller. They also appreciate the improvements in Wi-Fi performance and the backwards compatibility with PS4 games. While the reviewer mentions some drawbacks, such as the console's size, limited usable storage, and some issues with the user interface and software, these concerns do not overshadow their overall satisfaction with the product. The conclusion explicitly states that they are \"pretty satisfied\" and consider the PS5 a \"worthwhile upgrade,\" reinforcing the positive sentiment.",
-              "usage": {
-                "completionTokens": 137,
-                "promptTokens": 779,
-                "totalTokens": 916
-              },
-              "timingMs": 2456
+      {
+        "id": "1",
+        "name": "Negative",
+        "content": "Very disappointing experience:\n\n- Most games require always online connection, regardless if you buy the disk version of these games and/or you intend to only play single player. This means that developer can shut down the game at any time and you never truly own anything. It also means that if developer's servers are down, you can't play even the single player portion of the game you have just paid for.\n- EA Games require you agreeing to give away ALL your privacy and let EA monitor everything you do on the PS5. If you decline this, you can no longer play the games you bought and thought you were owning. I chose to decline this.\n- Ubisoft Games require you creating an account, even for playing demos! This is so ridiculous that we decided not to play any Ubisoft games. Again, once you create an account with them, they can track anything you do on the PS5. Would not be surprised if they require a credit card too.\n- Other PS5 games have only the first chapter of the game on the disk, then require huge downloads to actually continue the game past the first chapter. This impacts the resale values of the games and also means developer can take that functionality away anytime they want to.\n- Yes, graphics are better, but games that truly take advantage of what the PS5 can do are still very few.\n- Deleting games or demos from the menu is not possible, which is another ridiculous change. You have to go under your account and through multiple menus for this simple function.\n- Compared to PS3 where we owned 100+ games, we have around 5 games on the PS5 and most of these are PS4 games that don't require an internet connection. The PS5 has been a waste of money. Wish we would have known the scam being run with regard to owning the games.\n\nOverall, this console is junk and I wish we would have kept our PS3 and the games we owned for it. These PS3 games had more fun gameplay and you truly owned the games you bought. We will not buy any further consoles from Sony.",
+        "test": true,
+        "processingResults": [
+          {
+            "stepId": "sentiment-analysis",
+            "result": "The overall sentiment expressed in the review is negative. \n\nThe reviewer articulates a series of frustrations and disappointments regarding the PS5, highlighting issues such as the requirement for an always-online connection, privacy concerns with EA and Ubisoft, limitations on game ownership, and the cumbersome process of managing games on the console. The use of phrases like \"very disappointing experience,\" \"this console is junk,\" and \"a waste of money\" clearly indicates dissatisfaction. Additionally, the reviewer expresses a strong preference for the previous generation console (PS3) and regrets the decision to purchase the PS5, further reinforcing the negative sentiment.",
+            "usage": {
+              "completionTokens": 122,
+              "promptTokens": 473,
+              "totalTokens": 595
             },
-            {
-              "stepId": "filter-negative-reviews",
-              "timingMs": 0
-            }
-          ]
-        },
-        {
-          "id": "1",
-          "name": "Negative",
-          "content": "Very disappointing experience:\n\n- Most games require always online connection, regardless if you buy the disk version of these games and/or you intend to only play single player. This means that developer can shut down the game at any time and you never truly own anything. It also means that if developer's servers are down, you can't play even the single player portion of the game you have just paid for.\n- EA Games require you agreeing to give away ALL your privacy and let EA monitor everything you do on the PS5. If you decline this, you can no longer play the games you bought and thought you were owning. I chose to decline this.\n- Ubisoft Games require you creating an account, even for playing demos! This is so ridiculous that we decided not to play any Ubisoft games. Again, once you create an account with them, they can track anything you do on the PS5. Would not be surprised if they require a credit card too.\n- Other PS5 games have only the first chapter of the game on the disk, then require huge downloads to actually continue the game past the first chapter. This impacts the resale values of the games and also means developer can take that functionality away anytime they want to.\n- Yes, graphics are better, but games that truly take advantage of what the PS5 can do are still very few.\n- Deleting games or demos from the menu is not possible, which is another ridiculous change. You have to go under your account and through multiple menus for this simple function.\n- Compared to PS3 where we owned 100+ games, we have around 5 games on the PS5 and most of these are PS4 games that don't require an internet connection. The PS5 has been a waste of money. Wish we would have known the scam being run with regard to owning the games.\n\nOverall, this console is junk and I wish we would have kept our PS3 and the games we owned for it. These PS3 games had more fun gameplay and you truly owned the games you bought. We will not buy any further consoles from Sony.",
-          "test": true,
-          "processingResults": [
-            {
-              "stepId": "sentiment-analysis",
-              "result": "The overall sentiment expressed in the review is negative. \n\nThe reviewer articulates a series of frustrations and disappointments regarding the PS5, highlighting issues such as the requirement for an always-online connection, privacy concerns with EA and Ubisoft, limitations on game ownership, and the cumbersome process of managing games on the console. The use of phrases like \"very disappointing experience,\" \"this console is junk,\" and \"a waste of money\" clearly indicates dissatisfaction. Additionally, the reviewer expresses a strong preference for the previous generation console (PS3) and regrets the decision to purchase the PS5, further reinforcing the negative sentiment.",
-              "usage": {
-                "completionTokens": 122,
-                "promptTokens": 473,
-                "totalTokens": 595
-              },
-              "timingMs": 1689
+            "timingMs": 1689
+          },
+          {
+            "stepId": "filter-negative-reviews",
+            "result": "The overall sentiment expressed in the review is negative. \n\nThe reviewer articulates a series of frustrations and disappointments regarding the PS5, highlighting issues such as the requirement for an always-online connection, privacy concerns with EA and Ubisoft, limitations on game ownership, and the cumbersome process of managing games on the console. The use of phrases like \"very disappointing experience,\" \"this console is junk,\" and \"a waste of money\" clearly indicates dissatisfaction. Additionally, the reviewer expresses a strong preference for the previous generation console (PS3) and regrets the decision to purchase the PS5, further reinforcing the negative sentiment.",
+            "timingMs": 0
+          },
+          {
+            "stepId": "extract-complaints",
+            "result": "The common complaints extracted from the text document highlight several recurring themes regarding the PS5 gaming experience:\n\n1. **Always Online Requirement**: Many games necessitate a constant internet connection, even for single-player modes, leading to concerns about game accessibility if servers are down.\n\n2. **Privacy Concerns**: Players are frustrated with the requirement to agree to extensive privacy policies, particularly with EA Games, which they feel compromises their personal data.\n\n3. **Account Creation for Access**: Ubisoft games require account creation even for demos, which users find excessive and intrusive, leading to a reluctance to engage with their games.\n\n4. **Incomplete Game Discs**: Some PS5 games only include the first chapter on the disc, requiring large downloads to access the full game, which affects resale value and raises concerns about future access to content.\n\n5. **Limited Game Library**: Users express disappointment in the limited number of games available for PS5, especially compared to previous consoles like the PS3, where they owned many more games.\n\n6. **Inconvenient User Interface**: The inability to easily delete games or demos from the menu is criticized as a cumbersome change from previous systems.\n\n7. **Overall Discontent with Value**: Many users feel that the PS5 does not provide good value for money, expressing regret over their purchase and a desire to return to older consoles.\n\nThese complaints reflect a broader dissatisfaction with the direction of gaming consoles, particularly regarding ownership, privacy, and user experience.",
+            "usage": {
+              "completionTokens": 300,
+              "promptTokens": 494,
+              "totalTokens": 794
             },
-            {
-              "stepId": "filter-negative-reviews",
-              "result": "The overall sentiment expressed in the review is negative. \n\nThe reviewer articulates a series of frustrations and disappointments regarding the PS5, highlighting issues such as the requirement for an always-online connection, privacy concerns with EA and Ubisoft, limitations on game ownership, and the cumbersome process of managing games on the console. The use of phrases like \"very disappointing experience,\" \"this console is junk,\" and \"a waste of money\" clearly indicates dissatisfaction. Additionally, the reviewer expresses a strong preference for the previous generation console (PS3) and regrets the decision to purchase the PS5, further reinforcing the negative sentiment.",
-              "timingMs": 0
+            "timingMs": 6994
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "name": "Negative 2",
+        "content": "Very disappointed.\n\nYes, the loading times are fast. Yes, it seems to be a nice system. Yes, the little Astro game included is cute. But…\n\n1. How is it that Sony thought voice chat should come through the controller? There is no setting that will allow voice chat to come through the TV. The only options are to have it come through the controller (which sounds like broken static and is too quiet to hear voices) or through a headset. Some peeps r probably fine with this bc they use a headset. But for those of us with different audio settings, Sony screwed up! The PS4 had more flexibility for voice chat.\n\n2. Why is it so difficult to turn off the PS5? On the PS4, it was super fast to turn off the system from the controller. On PS5, you have to push the middle button, scroll along the small symbols at the bottom of the screen to the very last one, then hit it, then select to power off. Way too many steps!\n\n3. Why isn’t there a simple way to access messages? If you’re accustomed to texting with peeps directly from your console, you’re gonna hate this new design! To message a friend, you gotta hit the middle PS button, scroll along the small symbols at the bottom, click on the “base”, then scroll down to messages, search your friend, then type. What the heck!! The PS4 made accessing messages so easy. If u use the app, this may not matter much. But if u type on console, this is so not cool.\n\n4. My first Ps5 got stolen (no, I hadn’t been irresponsible)…maybe there should be a GPS chip in these to detour people from stealing them.\n\nI still recommend it due to how much faster it operates than the PS4, but come on Sony, fix this crap! Too many strange inconveniences for a modern, pricey console.",
+        "test": true,
+        "processingResults": [
+          {
+            "stepId": "sentiment-analysis",
+            "result": "The overall sentiment expressed in the review is **negative**. \n\nThe reviewer starts with a clear expression of disappointment and lists several specific frustrations regarding the PS5's features, such as the voice chat functionality, the complexity of turning off the console, and the difficulty in accessing messages. Although they acknowledge some positive aspects, like fast loading times and the cute Astro game, the overwhelming focus is on the inconveniences and shortcomings of the system. The reviewer concludes by recommending the console but emphasizes the need for improvements, indicating that their overall experience is marred by these issues. This combination of dissatisfaction with key features and the initial expression of disappointment leads to a negative sentiment classification.",
+            "usage": {
+              "completionTokens": 133,
+              "promptTokens": 448,
+              "totalTokens": 581
             },
-            {
-              "stepId": "extract-complaints",
-              "result": "The common complaints extracted from the text document highlight several recurring themes regarding the PS5 gaming experience:\n\n1. **Always Online Requirement**: Many games necessitate a constant internet connection, even for single-player modes, leading to concerns about game accessibility if servers are down.\n\n2. **Privacy Concerns**: Players are frustrated with the requirement to agree to extensive privacy policies, particularly with EA Games, which they feel compromises their personal data.\n\n3. **Account Creation for Access**: Ubisoft games require account creation even for demos, which users find excessive and intrusive, leading to a reluctance to engage with their games.\n\n4. **Incomplete Game Discs**: Some PS5 games only include the first chapter on the disc, requiring large downloads to access the full game, which affects resale value and raises concerns about future access to content.\n\n5. **Limited Game Library**: Users express disappointment in the limited number of games available for PS5, especially compared to previous consoles like the PS3, where they owned many more games.\n\n6. **Inconvenient User Interface**: The inability to easily delete games or demos from the menu is criticized as a cumbersome change from previous systems.\n\n7. **Overall Discontent with Value**: Many users feel that the PS5 does not provide good value for money, expressing regret over their purchase and a desire to return to older consoles.\n\nThese complaints reflect a broader dissatisfaction with the direction of gaming consoles, particularly regarding ownership, privacy, and user experience.",
-              "usage": {
-                "completionTokens": 300,
-                "promptTokens": 494,
-                "totalTokens": 794
-              },
-              "timingMs": 6994
-            }
-          ]
-        },
-        {
-          "id": "2",
-          "name": "Negative 2",
-          "content": "Very disappointed.\n\nYes, the loading times are fast. Yes, it seems to be a nice system. Yes, the little Astro game included is cute. But…\n\n1. How is it that Sony thought voice chat should come through the controller? There is no setting that will allow voice chat to come through the TV. The only options are to have it come through the controller (which sounds like broken static and is too quiet to hear voices) or through a headset. Some peeps r probably fine with this bc they use a headset. But for those of us with different audio settings, Sony screwed up! The PS4 had more flexibility for voice chat.\n\n2. Why is it so difficult to turn off the PS5? On the PS4, it was super fast to turn off the system from the controller. On PS5, you have to push the middle button, scroll along the small symbols at the bottom of the screen to the very last one, then hit it, then select to power off. Way too many steps!\n\n3. Why isn’t there a simple way to access messages? If you’re accustomed to texting with peeps directly from your console, you’re gonna hate this new design! To message a friend, you gotta hit the middle PS button, scroll along the small symbols at the bottom, click on the “base”, then scroll down to messages, search your friend, then type. What the heck!! The PS4 made accessing messages so easy. If u use the app, this may not matter much. But if u type on console, this is so not cool.\n\n4. My first Ps5 got stolen (no, I hadn’t been irresponsible)…maybe there should be a GPS chip in these to detour people from stealing them.\n\nI still recommend it due to how much faster it operates than the PS4, but come on Sony, fix this crap! Too many strange inconveniences for a modern, pricey console.",
-          "test": true,
-          "processingResults": [
-            {
-              "stepId": "sentiment-analysis",
-              "result": "The overall sentiment expressed in the review is **negative**. \n\nThe reviewer starts with a clear expression of disappointment and lists several specific frustrations regarding the PS5's features, such as the voice chat functionality, the complexity of turning off the console, and the difficulty in accessing messages. Although they acknowledge some positive aspects, like fast loading times and the cute Astro game, the overwhelming focus is on the inconveniences and shortcomings of the system. The reviewer concludes by recommending the console but emphasizes the need for improvements, indicating that their overall experience is marred by these issues. This combination of dissatisfaction with key features and the initial expression of disappointment leads to a negative sentiment classification.",
-              "usage": {
-                "completionTokens": 133,
-                "promptTokens": 448,
-                "totalTokens": 581
-              },
-              "timingMs": 2375
+            "timingMs": 2375
+          },
+          {
+            "stepId": "filter-negative-reviews",
+            "result": "The overall sentiment expressed in the review is **negative**. \n\nThe reviewer starts with a clear expression of disappointment and lists several specific frustrations regarding the PS5's features, such as the voice chat functionality, the complexity of turning off the console, and the difficulty in accessing messages. Although they acknowledge some positive aspects, like fast loading times and the cute Astro game, the overwhelming focus is on the inconveniences and shortcomings of the system. The reviewer concludes by recommending the console but emphasizes the need for improvements, indicating that their overall experience is marred by these issues. This combination of dissatisfaction with key features and the initial expression of disappointment leads to a negative sentiment classification.",
+            "timingMs": 0
+          },
+          {
+            "stepId": "extract-complaints",
+            "result": "The common complaints from the review can be summarized as follows:\n\n1. **Voice Chat Issues**: Users are frustrated that voice chat can only be heard through the controller or a headset, with no option to use the TV. The audio quality through the controller is described as poor, with static and low volume.\n\n2. **Complicated Power Off Process**: The process to turn off the PS5 is seen as overly complicated compared to the PS4, requiring multiple steps that users find inconvenient.\n\n3. **Difficult Access to Messages**: The new design for accessing messages is criticized for being cumbersome and less user-friendly than the previous system, making it hard to quickly communicate with friends.\n\n4. **Security Concerns**: There is a concern about the lack of security features, such as a GPS chip, to deter theft, especially after the reviewer experienced their console being stolen.\n\nOverall, the reviewer expresses disappointment with these design and functionality issues, despite acknowledging the system's improved performance.",
+            "usage": {
+              "completionTokens": 198,
+              "promptTokens": 469,
+              "totalTokens": 667
             },
-            {
-              "stepId": "filter-negative-reviews",
-              "result": "The overall sentiment expressed in the review is **negative**. \n\nThe reviewer starts with a clear expression of disappointment and lists several specific frustrations regarding the PS5's features, such as the voice chat functionality, the complexity of turning off the console, and the difficulty in accessing messages. Although they acknowledge some positive aspects, like fast loading times and the cute Astro game, the overwhelming focus is on the inconveniences and shortcomings of the system. The reviewer concludes by recommending the console but emphasizes the need for improvements, indicating that their overall experience is marred by these issues. This combination of dissatisfaction with key features and the initial expression of disappointment leads to a negative sentiment classification.",
-              "timingMs": 0
-            },
-            {
-              "stepId": "extract-complaints",
-              "result": "The common complaints from the review can be summarized as follows:\n\n1. **Voice Chat Issues**: Users are frustrated that voice chat can only be heard through the controller or a headset, with no option to use the TV. The audio quality through the controller is described as poor, with static and low volume.\n\n2. **Complicated Power Off Process**: The process to turn off the PS5 is seen as overly complicated compared to the PS4, requiring multiple steps that users find inconvenient.\n\n3. **Difficult Access to Messages**: The new design for accessing messages is criticized for being cumbersome and less user-friendly than the previous system, making it hard to quickly communicate with friends.\n\n4. **Security Concerns**: There is a concern about the lack of security features, such as a GPS chip, to deter theft, especially after the reviewer experienced their console being stolen.\n\nOverall, the reviewer expresses disappointment with these design and functionality issues, despite acknowledging the system's improved performance.",
-              "usage": {
-                "completionTokens": 198,
-                "promptTokens": 469,
-                "totalTokens": 667
-              },
-              "timingMs": 3252
-            }
-          ]
-        }
-      ]
-    },
-    "connectsTo": ["sentiment-analysis"],
-    "expanded": true
-  },
-  "output": {
-    "id": "output_0",
-    "name": "Output",
-    "description": "Primary output",
-    "type": "output",
-    "outputType": "basic",
+            "timingMs": 3252
+          }
+        ]
+      }
+    ],
     "config": {
-      "results": [
-        {
-          "id": "0",
-          "name": "Positive",
-          "content": "The PS5 arrived fairly quickly and was in good shape upon arrival.\n\nNow, regarding the console itself. The PS5 has a 'unique' design and is easily the biggest video game console I've ever seen. Due to its sheer size, I've had to place it horizontally within my media center where it's a bit difficult to access the disc drive.\n\nThe console came with a short HDMI 2.1 cable (capable of supporting 120fps if both your TV and the game you're playing support it too) and a generously sized USB cable for plugging in the controller or charging it. The game \"Astro's Playroom\" comes preinstalled and is an enjoyable, albeit short, game which you can use to familiarize yourself with the controller and console.\n\nThe console is advertised as having 825GB of storage, but only 667GB are usable so I'd recommend buying either an external HDD or a compatible nvme SSD for extra storage. PS5 games load extraordinarily fast and PS4 games enjoy faster loading times as well. Even XCOM2, which barely chugged along the PS4, runs smooth as butter. That said, install times are still rather long and it takes a while to transfer games to/from my HDD and SSD.\n\nDespite claiming 8k on the box, I'm not aware of any games that are capable of natively supporting it. While the console does support 4k resolution and 120fps, you'll need to find games that do so too. While some games will run at 4k/60fps, others will have resolution vs. performance modes that'll sacrifice either resolution or framerate to ensure the game runs well.\n\nThe DualSense controller is appealing to the eye, has an ergonomic design, and the built-in haptic feedback is very pleasing to experience whenever a game supports it. My only complaint is that the battery life is somewhat poor and seems to charge slowly whenever plugged into something that's not a PS5. As such, I'd recommend charging the controller while playing a game or while the PS5 is in rest mode.\n\nThe PS5's Wi-Fi adapter is an improvement over the PS4's. It supports both 2.4ghz and 5ghz. I've noticed my downloads running faster on the PS5 than the PS4 while on the same network.\n\nThe PS5's backwards compatibility with PS4 games seems to work pretty well. Most games (especially ones with PS4 Pro patches) run extremely well and you can play them with a PS4 controller if you'd like. The only downside is that installing PS4 games seems to add to the PS5's \"other\" storage space. All games now have an install progress bar, and you can now separately delete DLC from games.\n\nAs far as problems go, I've found that the PS5's UI leaves something to be desired and I've occasionally run into small software problems, usually whenever installing, moving, or deleting games. Additionally, when I plugged in my external HDD for the first time, half of its game library was seemingly deleted. I now suspect that it's due to most of the games not being fully installed, something that I've now remedied on the PS5 and have not experienced again.\n\nOverall, I'm pretty satisfied with my purchase so far and find it to be a worthwhile upgrade to my aging PS4. If you own physical PS4 games or prefer physical game copies in general, buy the PS5 disc edition. If you go all digital, get the cheaper digital edition. Aside from the presence (or lack thereof) of an optical drive, I'm not aware of any difference between them.",
-          "test": true,
-          "processingResults": [
-            {
-              "stepId": "sentiment-analysis",
-              "result": "The overall sentiment expressed in the product review is **positive**. \n\nThe reviewer highlights several favorable aspects of the PS5, such as its quick arrival, good condition, impressive loading speeds for games, and the appealing design and functionality of the DualSense controller. They also appreciate the improvements in Wi-Fi performance and the backwards compatibility with PS4 games. While the reviewer mentions some drawbacks, such as the console's size, limited usable storage, and some issues with the user interface and software, these concerns do not overshadow their overall satisfaction with the product. The conclusion explicitly states that they are \"pretty satisfied\" and consider the PS5 a \"worthwhile upgrade,\" reinforcing the positive sentiment.",
-              "usage": {
-                "completionTokens": 137,
-                "promptTokens": 779,
-                "totalTokens": 916
-              },
-              "timingMs": 2456
-            },
-            {
-              "stepId": "filter-negative-reviews",
-              "timingMs": 0
-            }
-          ]
-        },
-        {
-          "id": "1",
-          "name": "Negative",
-          "content": "Very disappointing experience:\n\n- Most games require always online connection, regardless if you buy the disk version of these games and/or you intend to only play single player. This means that developer can shut down the game at any time and you never truly own anything. It also means that if developer's servers are down, you can't play even the single player portion of the game you have just paid for.\n- EA Games require you agreeing to give away ALL your privacy and let EA monitor everything you do on the PS5. If you decline this, you can no longer play the games you bought and thought you were owning. I chose to decline this.\n- Ubisoft Games require you creating an account, even for playing demos! This is so ridiculous that we decided not to play any Ubisoft games. Again, once you create an account with them, they can track anything you do on the PS5. Would not be surprised if they require a credit card too.\n- Other PS5 games have only the first chapter of the game on the disk, then require huge downloads to actually continue the game past the first chapter. This impacts the resale values of the games and also means developer can take that functionality away anytime they want to.\n- Yes, graphics are better, but games that truly take advantage of what the PS5 can do are still very few.\n- Deleting games or demos from the menu is not possible, which is another ridiculous change. You have to go under your account and through multiple menus for this simple function.\n- Compared to PS3 where we owned 100+ games, we have around 5 games on the PS5 and most of these are PS4 games that don't require an internet connection. The PS5 has been a waste of money. Wish we would have known the scam being run with regard to owning the games.\n\nOverall, this console is junk and I wish we would have kept our PS3 and the games we owned for it. These PS3 games had more fun gameplay and you truly owned the games you bought. We will not buy any further consoles from Sony.",
-          "test": true,
-          "processingResults": [
-            {
-              "stepId": "sentiment-analysis",
-              "result": "The overall sentiment expressed in the review is negative. \n\nThe reviewer articulates a series of frustrations and disappointments regarding the PS5, highlighting issues such as the requirement for an always-online connection, privacy concerns with EA and Ubisoft, limitations on game ownership, and the cumbersome process of managing games on the console. The use of phrases like \"very disappointing experience,\" \"this console is junk,\" and \"a waste of money\" clearly indicates dissatisfaction. Additionally, the reviewer expresses a strong preference for the previous generation console (PS3) and regrets the decision to purchase the PS5, further reinforcing the negative sentiment.",
-              "usage": {
-                "completionTokens": 122,
-                "promptTokens": 473,
-                "totalTokens": 595
-              },
-              "timingMs": 1689
-            },
-            {
-              "stepId": "filter-negative-reviews",
-              "result": "The overall sentiment expressed in the review is negative. \n\nThe reviewer articulates a series of frustrations and disappointments regarding the PS5, highlighting issues such as the requirement for an always-online connection, privacy concerns with EA and Ubisoft, limitations on game ownership, and the cumbersome process of managing games on the console. The use of phrases like \"very disappointing experience,\" \"this console is junk,\" and \"a waste of money\" clearly indicates dissatisfaction. Additionally, the reviewer expresses a strong preference for the previous generation console (PS3) and regrets the decision to purchase the PS5, further reinforcing the negative sentiment.",
-              "timingMs": 0
-            },
-            {
-              "stepId": "extract-complaints",
-              "result": "The common complaints extracted from the text document highlight several recurring themes regarding the PS5 gaming experience:\n\n1. **Always Online Requirement**: Many games necessitate a constant internet connection, even for single-player modes, leading to concerns about game accessibility if servers are down.\n\n2. **Privacy Concerns**: Players are frustrated with the requirement to agree to extensive privacy policies, particularly with EA Games, which they feel compromises their personal data.\n\n3. **Account Creation for Access**: Ubisoft games require account creation even for demos, which users find excessive and intrusive, leading to a reluctance to engage with their games.\n\n4. **Incomplete Game Discs**: Some PS5 games only include the first chapter on the disc, requiring large downloads to access the full game, which affects resale value and raises concerns about future access to content.\n\n5. **Limited Game Library**: Users express disappointment in the limited number of games available for PS5, especially compared to previous consoles like the PS3, where they owned many more games.\n\n6. **Inconvenient User Interface**: The inability to easily delete games or demos from the menu is criticized as a cumbersome change from previous systems.\n\n7. **Overall Discontent with Value**: Many users feel that the PS5 does not provide good value for money, expressing regret over their purchase and a desire to return to older consoles.\n\nThese complaints reflect a broader dissatisfaction with the direction of gaming consoles, particularly regarding ownership, privacy, and user experience.",
-              "usage": {
-                "completionTokens": 300,
-                "promptTokens": 494,
-                "totalTokens": 794
-              },
-              "timingMs": 6994
-            }
-          ]
-        },
-        {
-          "id": "2",
-          "name": "Negative 2",
-          "content": "Very disappointed.\n\nYes, the loading times are fast. Yes, it seems to be a nice system. Yes, the little Astro game included is cute. But…\n\n1. How is it that Sony thought voice chat should come through the controller? There is no setting that will allow voice chat to come through the TV. The only options are to have it come through the controller (which sounds like broken static and is too quiet to hear voices) or through a headset. Some peeps r probably fine with this bc they use a headset. But for those of us with different audio settings, Sony screwed up! The PS4 had more flexibility for voice chat.\n\n2. Why is it so difficult to turn off the PS5? On the PS4, it was super fast to turn off the system from the controller. On PS5, you have to push the middle button, scroll along the small symbols at the bottom of the screen to the very last one, then hit it, then select to power off. Way too many steps!\n\n3. Why isn’t there a simple way to access messages? If you’re accustomed to texting with peeps directly from your console, you’re gonna hate this new design! To message a friend, you gotta hit the middle PS button, scroll along the small symbols at the bottom, click on the “base”, then scroll down to messages, search your friend, then type. What the heck!! The PS4 made accessing messages so easy. If u use the app, this may not matter much. But if u type on console, this is so not cool.\n\n4. My first Ps5 got stolen (no, I hadn’t been irresponsible)…maybe there should be a GPS chip in these to detour people from stealing them.\n\nI still recommend it due to how much faster it operates than the PS4, but come on Sony, fix this crap! Too many strange inconveniences for a modern, pricey console.",
-          "test": true,
-          "processingResults": [
-            {
-              "stepId": "sentiment-analysis",
-              "result": "The overall sentiment expressed in the review is **negative**. \n\nThe reviewer starts with a clear expression of disappointment and lists several specific frustrations regarding the PS5's features, such as the voice chat functionality, the complexity of turning off the console, and the difficulty in accessing messages. Although they acknowledge some positive aspects, like fast loading times and the cute Astro game, the overwhelming focus is on the inconveniences and shortcomings of the system. The reviewer concludes by recommending the console but emphasizes the need for improvements, indicating that their overall experience is marred by these issues. This combination of dissatisfaction with key features and the initial expression of disappointment leads to a negative sentiment classification.",
-              "usage": {
-                "completionTokens": 133,
-                "promptTokens": 448,
-                "totalTokens": 581
-              },
-              "timingMs": 2375
-            },
-            {
-              "stepId": "filter-negative-reviews",
-              "result": "The overall sentiment expressed in the review is **negative**. \n\nThe reviewer starts with a clear expression of disappointment and lists several specific frustrations regarding the PS5's features, such as the voice chat functionality, the complexity of turning off the console, and the difficulty in accessing messages. Although they acknowledge some positive aspects, like fast loading times and the cute Astro game, the overwhelming focus is on the inconveniences and shortcomings of the system. The reviewer concludes by recommending the console but emphasizes the need for improvements, indicating that their overall experience is marred by these issues. This combination of dissatisfaction with key features and the initial expression of disappointment leads to a negative sentiment classification.",
-              "timingMs": 0
-            },
-            {
-              "stepId": "extract-complaints",
-              "result": "The common complaints from the review can be summarized as follows:\n\n1. **Voice Chat Issues**: Users are frustrated that voice chat can only be heard through the controller or a headset, with no option to use the TV. The audio quality through the controller is described as poor, with static and low volume.\n\n2. **Complicated Power Off Process**: The process to turn off the PS5 is seen as overly complicated compared to the PS4, requiring multiple steps that users find inconvenient.\n\n3. **Difficult Access to Messages**: The new design for accessing messages is criticized for being cumbersome and less user-friendly than the previous system, making it hard to quickly communicate with friends.\n\n4. **Security Concerns**: There is a concern about the lack of security features, such as a GPS chip, to deter theft, especially after the reviewer experienced their console being stolen.\n\nOverall, the reviewer expresses disappointment with these design and functionality issues, despite acknowledging the system's improved performance.",
-              "usage": {
-                "completionTokens": 198,
-                "promptTokens": 469,
-                "totalTokens": 667
-              },
-              "timingMs": 3252
-            }
-          ]
-        },
-        {
-          "id": "da055faa-50d5-403e-9702-235ca6a7d8f3",
-          "name": "Aggregate result",
-          "content": "",
-          "processingResults": [
-            {
-              "stepId": "summarize-complaints",
-              "result": "The extracted complaints from the negative reviews of the PS5 highlight several key themes and concerns:\n\n1. **Connectivity Issues**: A significant number of users are frustrated with the requirement for a constant internet connection for many games, even in single-player modes, raising concerns about accessibility during server outages.\n\n2. **Privacy and Data Security**: Reviewers express dissatisfaction with extensive privacy policies, particularly with EA Games, feeling that their personal data is compromised. Additionally, there are concerns about the lack of robust security features to prevent theft.\n\n3. **Account and Access Barriers**: The necessity of creating accounts for accessing games, including demos from Ubisoft, is viewed as excessive and intrusive, leading to reluctance in engaging with their titles.\n\n4. **Incomplete Game Content**: Users are unhappy that some PS5 game discs only contain the first chapter, requiring large downloads for full access, which affects resale value and raises concerns about future content availability.\n\n5. **Limited Game Library**: There is disappointment regarding the relatively small number of available games for the PS5 compared to previous consoles, with many users feeling they had a more extensive library on older systems.\n\n6. **User Interface Challenges**: The PS5's user interface is criticized for being inconvenient, particularly in terms of deleting games or demos and accessing messages, which is seen as less user-friendly than previous systems.\n\n7. **Value for Money**: Many users feel that the PS5 does not offer good value for the price, leading to regrets about their purchase and a desire to return to older consoles.\n\n8. **Voice Chat Limitations**: Users are frustrated with the voice chat functionality, which can only be heard through the controller or a headset, with poor audio quality reported.\n\n9. **Complicated Power Off Process**: The process to turn off the PS5 is viewed as overly complicated compared to the PS4, requiring multiple steps that users find inconvenient.\n\nOverall, these complaints reflect a broader dissatisfaction with the PS5's design, functionality, and the direction of gaming consoles, particularly concerning ownership, privacy, and user experience.",
-              "usage": {
-                "completionTokens": 419,
-                "promptTokens": 548,
-                "totalTokens": 967
-              },
-              "timingMs": 6677
-            }
-          ]
-        }
-      ]
+      "type": "docs"
     },
-    "connectsTo": [],
+    "connectsTo": [
+      "sentiment-analysis"
+    ],
     "expanded": true
   },
   "steps": [
@@ -235,7 +114,9 @@
       "type": "llm",
       "input": "doc",
       "prompt": "Analyze the provided product review document to determine the overall sentiment expressed within it. Classify the sentiment as positive, negative, or neutral based on the content of the review. Provide a brief explanation for the assigned sentiment classification.",
-      "connectsTo": ["filter-negative-reviews"],
+      "connectsTo": [
+        "filter-negative-reviews"
+      ],
       "expanded": true
     },
     {
@@ -245,7 +126,9 @@
       "type": "code",
       "input": "result",
       "code": "export default function filterNegativeReviews(input) {\n    const isNegativeReview = (review) => {\n        // Assuming negative reviews contain specific keywords\n        const negativeKeywords = ['negativ', 'bad', 'neutral'];\n        return negativeKeywords.some(keyword => review.toLowerCase().includes(keyword));\n    };\n\n    if (Array.isArray(input)) {\n        return input.filter(review => !isNegativeReview(review));\n    } else if (typeof input === 'string') {\n        return isNegativeReview(input) ? input : undefined;\n    }\n    return undefined;\n}\n",
-      "connectsTo": ["extract-complaints"],
+      "connectsTo": [
+        "extract-complaints"
+      ],
       "expanded": true
     },
     {
@@ -255,7 +138,9 @@
       "type": "llm",
       "input": "doc",
       "prompt": "Extract the common complaints from the provided text document by identifying recurring themes or phrases in the negative reviews. Focus on highlighting specific issues mentioned, such as product quality, customer service, delivery problems, or any other relevant concerns. Summarize these complaints in a concise manner, ensuring that the key points are clear and easily understandable.",
-      "connectsTo": ["summarize-complaints"],
+      "connectsTo": [
+        "summarize-complaints"
+      ],
       "expanded": true
     },
     {
@@ -265,7 +150,9 @@
       "type": "llm",
       "input": "aggregate-results",
       "prompt": "Please summarize the list of extracted complaints from the negative reviews in the document, providing a concise overview of the main issues identified. Focus on highlighting the key themes and concerns raised by the reviewers.",
-      "connectsTo": ["output_0"],
+      "connectsTo": [
+        "litlytics_output"
+      ],
       "expanded": true
     }
   ],
