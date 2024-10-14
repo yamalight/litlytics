@@ -32,11 +32,6 @@ jobs:
             echo "should_publish=true" >> $GITHUB_ENV
           fi
 
-      # Stop if no changes detected
-      - name: Stop if no changes
-        if: ${{ env.should_publish == 'false' }}
-        run: exit 0
-
       # install node (for npm utils)
       - name: Install node for npm checks
         uses: actions/setup-node@v4
@@ -88,7 +83,7 @@ jobs:
 
       # install and publish if local version is not the same as published
       - name: publish
-        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        if: ${{ env.should_publish == 'true' }}
         working-directory: ./packages/litlytics
         run: bun publish --access public --tag next
         env:
