@@ -9,7 +9,14 @@
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
-    "types": ["@remix-run/node", "vite/client", "@webgpu/types", "@types/bun"],
+    "types": [
+      "@remix-run/node",
+      "vite/client",
+      "@webgpu/types",
+      "@types/bun",
+      "vitest/globals",
+      "@testing-library/jest-dom"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",

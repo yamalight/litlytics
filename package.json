@@ -9,7 +9,8 @@
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
-    "test": "bun test"
+    "test": "vitest",
+    "test:ci": "vitest --coverage --run"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.8",
@@ -39,7 +40,6 @@
     "turndown": "^7.2.0"
   },
   "devDependencies": {
-    "@happy-dom/global-registrator": "^15.7.4",
     "@remix-run/dev": "^2.12.1",
     "@tailwindcss/typography": "^0.5.15",
     "@testing-library/dom": "^10.4.0",
