@@ -50,9 +50,8 @@ export function OutputNode() {
 
   const { timing, prompt, completion, cost } = useMemo(() => {
     // const timings = data.
-    const results = litlytics.docs;
-    const resultDocs = litlytics.pipeline.results?.map((r) => r.doc) ?? [];
-    const res = results.concat(resultDocs).filter((doc) => doc);
+    const results = litlytics.pipeline.resultDocs ?? [];
+    const res = results.filter((doc) => doc);
     if (!res.length) {
       return {};
     }
@@ -88,6 +87,9 @@ export function OutputNode() {
         litlytics.setPipelineStatus(status);
       },
     });
+
+    // write final status to update on end
+    litlytics.setPipelineStatus({ status: 'done' });
   };
 
   const running =

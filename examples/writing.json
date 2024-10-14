@@ -75,13 +75,13 @@
   "results": [
     {
       "stepId": "step_1",
-      "result": "🐾 Meet my adorable little buddy! 🐱✨ This is my cute black cat with a charming white mustache! Isn’t he just the cutest? 😻 He always knows how to put a smile on my face!\n\nWhat do you think of his mustache? Let me know in the comments! 💬👇\n\n#CatLovers #CuteCats #BlackCat #CatMustache #FurryFriend #PetLove #Caturday",
+      "result": "🐾 Meet my adorable little buddy! 🐱✨ This is my cute black cat with a charming white mustache! Isn’t he just the cutest? 😻 He always knows how to put a smile on my face! \n\nWhat do you think of his mustache? Let me know in the comments! 💬👇\n\n#CatLovers #CuteCats #BlackCat #CatMustache #FurryFriend #PetLove #Caturday",
       "usage": {
-        "completionTokens": 90,
+        "completionTokens": 91,
         "promptTokens": 139,
-        "totalTokens": 229
+        "totalTokens": 230
       },
-      "timingMs": 1649,
+      "timingMs": 4028,
       "doc": {
         "id": "textdoc",
         "name": "Default document",
@@ -90,16 +90,46 @@
         "processingResults": [
           {
             "stepId": "step_1",
-            "result": "🐾 Meet my adorable little buddy! 🐱✨ This is my cute black cat with a charming white mustache! Isn’t he just the cutest? 😻 He always knows how to put a smile on my face!\n\nWhat do you think of his mustache? Let me know in the comments! 💬👇\n\n#CatLovers #CuteCats #BlackCat #CatMustache #FurryFriend #PetLove #Caturday",
+            "result": "🐾 Meet my adorable little buddy! 🐱✨ This is my cute black cat with a charming white mustache! Isn’t he just the cutest? 😻 He always knows how to put a smile on my face! \n\nWhat do you think of his mustache? Let me know in the comments! 💬👇\n\n#CatLovers #CuteCats #BlackCat #CatMustache #FurryFriend #PetLove #Caturday",
             "usage": {
-              "completionTokens": 90,
+              "completionTokens": 91,
               "promptTokens": 139,
-              "totalTokens": 229
+              "totalTokens": 230
             },
-            "timingMs": 1649
+            "timingMs": 4028
           }
         ]
       }
+    }
+  ],
+  "resultDocs": [
+    {
+      "id": "textdoc",
+      "name": "Default document",
+      "content": "Post is a photo of my cute black cat with white mustache.",
+      "test": true,
+      "processingResults": [
+        {
+          "stepId": "step_0",
+          "result": "🐾 Meet my adorable little buddy! 🐱✨ This is my cute black cat with a charming white mustache! Isn’t he just the cutest? 😻 He always knows how to make me smile! \n\nWhat do you think of his mustache? Let me know in the comments! 💬👇\n\n#CatLovers #CuteCats #BlackCat #CatMustache #FurryFriend #PetLove #Caturday",
+          "usage": {
+            "completionTokens": 88,
+            "promptTokens": 89,
+            "totalTokens": 177
+          },
+          "timingMs": 3736
+        },
+        {
+          "stepId": "step_1",
+          "result": "🐾 Meet my adorable little buddy! 🐱✨ This is my cute black cat with a charming white mustache! Isn’t he just the cutest? 😻 He always knows how to put a smile on my face! \n\nWhat do you think of his mustache? Let me know in the comments! 💬👇\n\n#CatLovers #CuteCats #BlackCat #CatMustache #FurryFriend #PetLove #Caturday",
+          "usage": {
+            "completionTokens": 91,
+            "promptTokens": 139,
+            "totalTokens": 230
+          },
+          "timingMs": 4028
+        }
+      ]
     }
   ]
 }

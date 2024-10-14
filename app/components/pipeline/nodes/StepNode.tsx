@@ -44,9 +44,8 @@ export function StepNode({ data }: { data: ProcessingStep }) {
   const { averageTiming, averagePrompt, averageCompletion, averageCost } =
     useMemo(() => {
       // const timings = data.
-      const results = litlytics.docs;
-      const resultDocs = litlytics.pipeline.results?.map((r) => r.doc) ?? [];
-      const res = results.concat(resultDocs).filter((doc) => doc);
+      const results = litlytics.pipeline.resultDocs ?? [];
+      const res = results.filter((doc) => doc);
       if (!res.length) {
         return {};
       }

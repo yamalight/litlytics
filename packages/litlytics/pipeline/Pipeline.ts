@@ -1,3 +1,4 @@
+import type { Doc } from '../doc/Document';
 import type { Result } from '../output/Output';
 import type { ProcessingStep, SourceStep } from '../step/Step';
 
@@ -6,6 +7,7 @@ export interface Pipeline {
   pipelineDescription?: string;
   pipelinePlan?: string;
   source: SourceStep;
+  resultDocs?: Doc[];
   results?: Result[];
   steps: ProcessingStep[];
   provider?: string;

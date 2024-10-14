@@ -8,8 +8,10 @@ export async function runPipeline(
   litlytics: LitLytics,
   onStatus: (status: PipelineStatus) => void
 ) {
+  const pipeline = structuredClone(litlytics.pipeline);
+
   // get source
-  const source = litlytics.pipeline.source;
+  const source = pipeline.source;
   // validate source
   if (!source) {
     throw new Error('Source is required!');
@@ -19,7 +21,7 @@ export async function runPipeline(
   onStatus({ status: 'sourcing' });
 
   // get all documents from the source
-  const docs: Doc[] = litlytics.pipeline.source.docs;
+  const docs: Doc[] = pipeline.source.docs;
   // validate docs
   if (!docs?.length) {
     throw new Error('At least one document is required!');
@@ -31,7 +33,7 @@ export async function runPipeline(
   // get all connections to source
   let stepIds = source.connectsTo;
   // find all connected steps
-  let nextStep = litlytics.pipeline.steps.find((s) => stepIds.includes(s.id));
+  let nextStep = pipeline.steps.find((s) => stepIds.includes(s.id));
   // while there are follow-up steps - continue;
   while (nextStep !== undefined) {
     onStatus({ status: 'step', currentStep: nextStep });
@@ -43,7 +45,7 @@ export async function runPipeline(
           litlytics.runStep({
             step: nextStep!,
             source,
-            allSteps: litlytics.pipeline.steps,
+            allSteps: pipeline.steps,
             doc,
             allDocs: docs,
           })
@@ -64,7 +66,7 @@ export async function runPipeline(
       aggregateResult = (await litlytics.runStep({
         step: nextStep!,
         source,
-        allSteps: litlytics.pipeline.steps,
+        allSteps: pipeline.steps,
         doc: aggregateResult,
         allDocs: docs,
       })) as Doc;
@@ -74,16 +76,18 @@ export async function runPipeline(
     stepIds = nextStep.connectsTo;
     // if we're at the output - handle results and break
     if (stepIds.includes(OUTPUT_ID)) {
+      // store processed docs
+      pipeline.resultDocs = newDocs.filter((doc) => doc);
       // process and store final results
-      litlytics.pipeline.results = getResults(litlytics, newDocs);
+      pipeline.results = getResults(litlytics, newDocs);
       break;
     }
-    nextStep = litlytics.pipeline.steps.find((s) => stepIds.includes(s.id));
+    nextStep = pipeline.steps.find((s) => stepIds.includes(s.id));
   }
 
   onStatus({ status: 'done' });
 
   // save result to pipeline
   // pipeline.results = finalResult;
-  return litlytics.pipeline;
+  return pipeline;
 }
