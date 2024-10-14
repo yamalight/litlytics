@@ -1,0 +1,29 @@
+{
+  "name": "litlytics",
+  "module": "dist/litlytics.js",
+  "types": "litlytics.ts",
+  "type": "module",
+  "version": "0.2.0",
+  "scripts": {
+    "build": "bun run build.ts",
+    "typecheck": "tsc",
+    "test": "vitest",
+    "test:ci": "vitest --coverage --run"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@vitest/coverage-v8": "^2.1.2",
+    "vitest": "^2.1.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^0.0.51",
+    "@ai-sdk/google": "^0.0.51",
+    "@ai-sdk/openai": "^0.0.66",
+    "@mlc-ai/web-llm": "^0.2.73",
+    "ai": "^3.4.9",
+    "ollama-ai-provider": "^0.15.1"
+  }
+}

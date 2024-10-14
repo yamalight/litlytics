@@ -1,8 +1,6 @@
-import { LitLytics } from '@/src/litlytics';
-import { LLMModel, LLMProvider } from '@/src/llm/types';
-import { Pipeline } from '@/src/pipeline/Pipeline';
 import type { ActionFunctionArgs } from '@remix-run/node';
 import { json } from '@remix-run/node';
+import { LitLytics, LLMModel, LLMProvider, Pipeline } from 'litlytics';
 
 interface ExecuteRequest {
   provider?: LLMProvider;
@@ -29,6 +27,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     model,
     key,
   });
-  const newPipeline = await litlytics.runPipeline(pipeline, () => {});
+  litlytics.setPipeline(pipeline);
+  const newPipeline = await litlytics.runPipeline();
   return json(newPipeline);
 };

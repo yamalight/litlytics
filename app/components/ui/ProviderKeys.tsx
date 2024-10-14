@@ -1,4 +1,4 @@
-import { LLMProvider } from '@/src/llm/types';
+import { LLMProvider } from 'litlytics';
 
 export const providerNames: Record<LLMProvider, string> = {
   anthropic: 'Anthropic',

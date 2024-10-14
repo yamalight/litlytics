@@ -1,22 +1,15 @@
-import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import { Textarea } from '~/components/catalyst/textarea';
 import { CustomMarkdown } from '~/components/markdown/Markdown';
 import { Spinner } from '~/components/Spinner';
-import {
-  litlyticsStore,
-  pipelineAtom,
-  pipelineStatusAtom,
-} from '~/store/store';
+import { useLitlytics } from '~/store/WithLitLytics';
 
 export function RefinePipeline({ hide }: { hide: () => void }) {
-  const litlytics = useAtomValue(litlyticsStore);
-  const [status, setStatus] = useAtom(pipelineStatusAtom);
+  const litlytics = useLitlytics();
   const [error, setError] = useState<Error>();
   const [refine, setRefine] = useState(``);
   const [progress, setProgress] = useState('');
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
 
   const doRefine = async () => {
     if (!refine?.length) {
@@ -24,73 +17,41 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
     }
 
     try {
-      setStatus((s) => ({ ...s, status: 'refine' }));
-
       // generate plan from LLM
-      const plan = await litlytics.refinePipeline({
+      litlytics.setPipelineStatus({ status: 'refine' });
+      await litlytics.refinePipeline({
         refineRequest: refine,
-        pipeline,
       });
-
-      // save
-      setPipeline({
-        ...pipeline,
-        pipelinePlan: plan ?? '',
-      });
+      litlytics.setPipelineStatus({ status: 'init' });
       setRefine('');
-      setStatus((s) => ({ ...s, status: 'init' }));
     } catch (err) {
       setError(err as Error);
-      setStatus((s) => ({ ...s, status: 'error' }));
+      litlytics.setPipelineStatus({ status: 'error' });
     }
   };
 
   const doCreate = async () => {
-    if (!pipeline.pipelinePlan?.length) {
-      return;
-    }
-
     try {
       // generate plan from LLM
-      setStatus((s) => ({ ...s, status: 'sourcing' }));
-      const newSteps = await litlytics.pipelineFromText(
-        pipeline.pipelinePlan,
-        ({ step, totalSteps }) => {
-          if (step > totalSteps) {
-            setProgress('');
-            return;
-          }
-
-          setProgress(`Generating steps: ${step} / ${totalSteps}`);
+      await litlytics.pipelineFromText(({ step, totalSteps }) => {
+        if (step > totalSteps) {
+          setProgress('');
+          return;
         }
-      );
 
-      // assign output to last step
-      newSteps.at(-1)!.connectsTo = [pipeline.output.id];
-
-      // save
-      setPipeline({
-        ...pipeline,
-        // assign input to first step
-        source: {
-          ...pipeline.source,
-          connectsTo: [newSteps.at(0)!.id],
-        },
-        // assign steps
-        steps: newSteps,
+        setProgress(`Generating steps: ${step} / ${totalSteps}`);
       });
-      setStatus((s) => ({ ...s, status: 'done' }));
       hide();
     } catch (err) {
       setError(err as Error);
-      setStatus((s) => ({ ...s, status: 'error' }));
+      litlytics.setPipelineStatus({ status: 'error' });
     }
   };
 
   const inProgress =
-    status.status === 'refine' ||
-    status.status === 'sourcing' ||
-    status.status === 'step';
+    litlytics.pipelineStatus.status === 'refine' ||
+    litlytics.pipelineStatus.status === 'sourcing' ||
+    litlytics.pipelineStatus.status === 'step';
 
   return (
     <div className="w-full h-full p-4 prose prose-sm prose-no-nr dark:prose-invert ">
@@ -98,7 +59,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
         <h1 className="m-0">Suggested pipeline:</h1>
       </div>
 
-      <CustomMarkdown>{pipeline.pipelinePlan}</CustomMarkdown>
+      <CustomMarkdown>{`${litlytics.pipeline.pipelinePlan}`}</CustomMarkdown>
       <div className="flex gap-1">
         <Textarea
           rows={2}
@@ -108,7 +69,9 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
           onChange={(e) => setRefine(e.target.value)}
         />
         <Button onClick={doRefine} disabled={inProgress}>
-          {status.status === 'refine' && <Spinner className="h-5 w-5" />}
+          {litlytics.pipelineStatus.status === 'refine' && (
+            <Spinner className="h-5 w-5" />
+          )}
           Refine
         </Button>
       </div>
@@ -121,12 +84,14 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
 
       <div className="flex mt-8">
         <Button onClick={doCreate} disabled={inProgress}>
-          {(status.status === 'sourcing' || status.status === 'step') && (
+          {(litlytics.pipelineStatus.status === 'sourcing' ||
+            litlytics.pipelineStatus.status === 'step') && (
             <div className="flex items-center">
               <Spinner className="h-5 w-5" />
             </div>
           )}
-          {status.status === 'sourcing' || status.status === 'step'
+          {litlytics.pipelineStatus.status === 'sourcing' ||
+          litlytics.pipelineStatus.status === 'step'
             ? progress.length > 0
               ? progress
               : `Generating pipeline...`

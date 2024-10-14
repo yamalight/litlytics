@@ -1,19 +1,13 @@
-import { Doc } from '@/src/doc/Document';
-import { Pipeline } from '@/src/pipeline/Pipeline';
-import { getDocs } from '@/src/source/getDocs';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useLitlytics } from '~/store/WithLitLytics';
 
-export function useTestDocs(pipeline: Pipeline) {
-  const [allDocs, setDocs] = useState<Doc[]>([]);
+export function useTestDocs() {
+  const litlytics = useLitlytics();
+  const allDocs = useMemo(
+    () => litlytics.pipeline.source.docs,
+    [litlytics.pipeline.source.docs]
+  );
   const testDocs = useMemo(() => allDocs.filter((d) => d?.test), [allDocs]);
-
-  useEffect(() => {
-    async function getTestDocs() {
-      const newAllDocs = await getDocs(pipeline);
-      setDocs(newAllDocs ?? []);
-    }
-    getTestDocs();
-  }, [pipeline]);
 
   return { allDocs, testDocs };
 }

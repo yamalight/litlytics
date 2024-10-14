@@ -1,0 +1,53 @@
+{
+  "name": "instagram-example",
+  "pipelinePlan": "",
+  "pipelineDescription": "",
+  "source": {
+    "id": "source_0",
+    "name": "Source",
+    "description": "Primary source",
+    "type": "source",
+    "sourceType": "text",
+    "docs": [
+      {
+        "id": "textdoc",
+        "name": "Default document",
+        "content": "Post is a photo of my cute black cat with white mustache.",
+        "test": true,
+        "processingResults": []
+      }
+    ],
+    "config": {},
+    "connectsTo": [
+      "step_0"
+    ],
+    "expanded": true
+  },
+  "steps": [
+    {
+      "id": "step_0",
+      "name": "Write an instagram post",
+      "description": "Write a post for instagram based on text description of the image.",
+      "type": "llm",
+      "input": "doc",
+      "prompt": "Create an engaging Instagram post based on the provided text description of the image.\nHighlight key elements, emotions, and any relevant hashtags to enhance visibility and engagement.\nEnsure the tone is suitable for Instagram, aiming to captivate the audience and encourage interaction.\nUse simpler language. Write as if you are not a native English speaker.",
+      "connectsTo": [
+        "step_1"
+      ],
+      "expanded": true
+    },
+    {
+      "id": "step_1",
+      "name": "Proof-read and edit instagram post text",
+      "description": "Proof-read and edit instagram post text to make it more natural and engaging.",
+      "type": "llm",
+      "input": "result",
+      "prompt": "Please proofread and edit the provided Instagram post text to enhance its natural flow and engagement.\nFocus on improving grammar, clarity, and overall appeal to the audience, while maintaining the original message and tone.",
+      "connectsTo": [
+        "litlytics_output"
+      ],
+      "expanded": true
+    }
+  ],
+  "results": []
+}

@@ -1,6 +1,6 @@
-import { ProcessingStep, SourceStep } from '@/src/step/Step';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
+import { ProcessingStep, SourceStep } from 'litlytics';
 import { useState } from 'react';
 import { Button } from '~/components/catalyst/button';
 import { Dialog, DialogBody, DialogTitle } from '~/components/catalyst/dialog';

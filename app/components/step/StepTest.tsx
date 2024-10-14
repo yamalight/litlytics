@@ -9,19 +9,16 @@ import {
 import { Field, FieldGroup, Label } from '@/app/components/catalyst/fieldset';
 import { Select } from '@/app/components/catalyst/select';
 import { Spinner } from '@/app/components/Spinner';
-import { litlyticsStore, pipelineAtom } from '@/app/store/store';
-import { setDocs } from '@/src/source/setDocs';
-import { ProcessingStep } from '@/src/step/Step';
 import { BeakerIcon } from '@heroicons/react/24/solid';
-import { useAtom, useAtomValue } from 'jotai';
+import { ProcessingStep } from 'litlytics';
 import { useEffect, useMemo, useState } from 'react';
+import { useLitlytics } from '~/store/WithLitLytics';
 import { CustomMarkdown } from '../markdown/Markdown';
 import { useTestDocs } from '../pipeline/source/useTestDocs';
 
 export function StepTest({ data }: { data: ProcessingStep }) {
-  const litlytics = useAtomValue(litlyticsStore);
-  const [pipeline, setPipeline] = useAtom(pipelineAtom);
-  const { testDocs, allDocs } = useTestDocs(pipeline);
+  const litlytics = useLitlytics();
+  const { testDocs, allDocs } = useTestDocs();
   const [testDocId, setTestDocId] = useState(testDocs.at(0)?.id ?? '');
   const [isTestOpen, setTestOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -51,7 +48,6 @@ export function StepTest({ data }: { data: ProcessingStep }) {
     try {
       const startTime = performance.now();
       const doc = await litlytics.testPipelineStep({
-        pipeline,
         step: data,
         docId: testDocId,
       });
@@ -69,12 +65,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
           }
           return d;
         });
-        const newSource = await setDocs(pipeline, newDocs);
-        // update result manually with no execution
-        setPipeline({
-          ...pipeline,
-          source: newSource,
-        });
+        litlytics.setDocs(newDocs);
       } else {
         const newDocs = allDocs.map((d) => {
           if (d.id === doc?.id) {
@@ -82,12 +73,7 @@ export function StepTest({ data }: { data: ProcessingStep }) {
           }
           return d;
         });
-        const newSource = await setDocs(pipeline, newDocs);
-        // update test doc results
-        setPipeline({
-          ...pipeline,
-          source: newSource,
-        });
+        litlytics.setDocs(newDocs);
       }
     } catch (err) {
       setError(err as Error);
