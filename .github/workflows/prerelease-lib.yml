@@ -30,6 +30,7 @@ jobs:
           else
             echo "Changes detected in ./packages/litlytics."
             echo "should_publish=true" >> $GITHUB_ENV
+          fi
 
       # Stop if no changes detected
       - name: Stop if no changes
