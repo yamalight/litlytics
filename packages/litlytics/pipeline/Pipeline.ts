@@ -33,6 +33,7 @@ export const emptyPipeline: Pipeline = {
     sourceType: 'text',
     docs: [],
     connectsTo: [],
+    config: {},
     expanded: true,
   },
   // pipeline steps

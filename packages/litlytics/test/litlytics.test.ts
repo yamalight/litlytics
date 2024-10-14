@@ -15,7 +15,7 @@ test('should create new instance and import/export config', async () => {
     llmKey: 'test1',
     pipeline: {} as Pipeline,
   });
-  const exportedConfig = litlytics.config;
+  const exportedConfig = litlytics.exportConfig();
   expect(exportedConfig).toEqual({
     // model config
     provider: 'openai',

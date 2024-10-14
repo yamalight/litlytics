@@ -17,6 +17,7 @@
         "processingResults": []
       }
     ],
+    "config": {},
     "connectsTo": [
       "step_0"
     ],

@@ -38,6 +38,7 @@ export interface BaseStep extends Record<string, unknown> {
 export interface SourceStep extends BaseStep {
   type: SourceStepType;
   docs: Doc[];
+  config: object;
 }
 
 export interface ProcessingStep extends BaseStep {

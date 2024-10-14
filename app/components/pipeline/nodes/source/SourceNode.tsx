@@ -29,6 +29,10 @@ import { NodeContent, NodeFrame, NodeHeader } from '../NodeFrame';
 import { sourceRenders } from './providers';
 import { SourceType, SourceTypes } from './types';
 
+interface SourceConfig {
+  type: string;
+}
+
 const UnknownSource = ({
   docs: _data,
 }: {
@@ -38,7 +42,6 @@ const UnknownSource = ({
 
 export function SourceNode() {
   const [isOpen, setIsOpen] = useState(false);
-  const [sourceType, setSourceType] = useState<SourceType>('text');
   const litlytics = useLitlytics();
 
   const source = useMemo(() => {
@@ -47,6 +50,11 @@ export function SourceNode() {
   const docs = useMemo(
     () => litlytics.pipeline.source.docs,
     [litlytics.pipeline.source.docs]
+  );
+
+  const sourceType = useMemo(
+    () => ((source.config as SourceConfig)?.type ?? 'text') as SourceType,
+    [source]
   );
 
   const Render = useMemo(() => {
@@ -134,8 +142,17 @@ export function SourceNode() {
               <Label>Source type</Label>
               <Select
                 name="step-input"
-                value={source.sourceType as string}
-                onChange={(e) => setSourceType(e.target.value as SourceType)}
+                value={sourceType as string}
+                onChange={(e) =>
+                  litlytics.setPipeline({
+                    source: {
+                      ...litlytics.pipeline.source,
+                      config: {
+                        type: e.target.value as SourceType,
+                      } as SourceConfig,
+                    },
+                  })
+                }
               >
                 {Object.keys(SourceTypes).map((type) => (
                   <option

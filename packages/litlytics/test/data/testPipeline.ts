@@ -47,6 +47,7 @@ export const source: SourceStep = {
   type: 'source',
   sourceType: 'docs',
   docs: allDocs,
+  config: {},
 };
 
 // pipeline
