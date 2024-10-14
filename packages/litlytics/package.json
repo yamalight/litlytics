@@ -12,8 +12,8 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@vitest/coverage-v8": "^2.1.2",
-    "vitest": "^2.1.2"
+    "@vitest/coverage-v8": "^2.1.3",
+    "vitest": "^2.1.3"
   },
   "peerDependencies": {
     "typescript": "^5.6.3"
@@ -24,6 +24,6 @@
     "@ai-sdk/openai": "^0.0.66",
     "@mlc-ai/web-llm": "^0.2.73",
     "ai": "^3.4.9",
-    "ollama-ai-provider": "^0.15.1"
+    "ollama-ai-provider": "^0.15.2"
   }
 }
