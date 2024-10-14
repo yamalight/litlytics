@@ -1,0 +1,60 @@
+import { TextGenerationPipeline, type Chat } from '@xenova/transformers';
+import type { CoreMessage, LanguageModelUsage } from 'ai';
+
+export const runWithWebLLM = async ({
+  pipeline,
+  messages,
+  args,
+}: {
+  pipeline: TextGenerationPipeline;
+  messages: CoreMessage[];
+  args?: { max_tokens?: number; temperature?: number };
+}) => {
+  if (!pipeline) {
+    throw new Error('Transformers pipeline is required for generation!');
+  }
+  console.log(messages);
+
+  // map messages to chat
+  const msgs: Chat[] = messages.map((m) => {
+    return {
+      role: m.role,
+      content: m.content as string,
+    } as unknown as Chat;
+  });
+
+  // generate
+  const out = await pipeline(msgs, {
+    max_new_tokens: args?.max_tokens,
+    temperature: args?.temperature,
+  });
+  console.log(JSON.stringify(out, null, 2));
+  // [{'label': 'POSITIVE', 'score': 0.999817686}]
+
+  const usage: LanguageModelUsage = {
+    completionTokens: 0,
+    promptTokens: 0,
+    totalTokens: 0,
+  };
+  return {
+    result: out,
+    usage,
+  };
+
+  /* const reply = await generate.chat.completions.create({
+    messages: messages as ChatCompletionMessageParam[],
+    ...args,
+  });
+  const answers = reply.choices;
+  const usage: LanguageModelUsage = {
+    completionTokens: reply.usage?.completion_tokens ?? 0,
+    promptTokens: reply.usage?.prompt_tokens ?? 0,
+    totalTokens: reply.usage?.total_tokens ?? 0,
+  };
+  console.log(answers.map((a) => a.message.content));
+  const result = answers[0].message.content;
+  return {
+    result,
+    usage,
+  };*/
+};

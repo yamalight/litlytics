@@ -1,0 +1,29 @@
+import { pipeline } from '@xenova/transformers';
+import { beforeAll, expect, test } from 'vitest';
+import { runWithWebLLM } from './transformers';
+
+// Allocate a pipeline for generation
+beforeAll(async () => {
+  const model = 'Xenova/LaMini-Neo-125M';
+  const pipe = await pipeline('text-generation', model, {
+    progress_callback: (p) => console.log(p),
+  });
+});
+
+test.skip('should generate a reply', async () => {
+  const result = await runWithWebLLM({
+    messages: [
+      {
+        role: 'system',
+        content: 'You are a helpful assistant',
+      },
+      {
+        role: 'user',
+        content: 'Hello.',
+      },
+    ],
+    pipeline: pipe,
+    args: { max_tokens: 32 },
+  });
+  expect(result).toEqual({});
+});
