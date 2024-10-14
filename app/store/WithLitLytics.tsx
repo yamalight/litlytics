@@ -1,6 +1,12 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { LitLytics } from 'litlytics';
-import { createContext, useContext, useEffect, useReducer } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react';
 import {
   configAtom,
   litlyticsAtom,
@@ -14,6 +20,7 @@ const LitLyticsContext = createContext<{ litlytics?: LitLytics }>({
 });
 
 export function WithLitLytics({ children }: { children: React.ReactNode }) {
+  const saveConfigRef = useRef<Timer>();
   const webllm = useAtomValue(webllmAtom);
   const [config, setConfig] = useAtom(configAtom);
   const [isInited, setIsInited] = useAtom(litlyticsInitedAtom);
@@ -33,8 +40,14 @@ export function WithLitLytics({ children }: { children: React.ReactNode }) {
     });
     setLitlytics(
       createReactiveProxy(ll, () => {
-        // persist changes in localStorage
-        setConfig(ll.exportConfig());
+        // if there's current save timeout - reset it
+        if (saveConfigRef.current) {
+          clearTimeout(saveConfigRef.current);
+        }
+        // persist changes in localStorage after some time of inactivity
+        saveConfigRef.current = setTimeout(() => {
+          setConfig(ll.exportConfig());
+        }, 500);
         // force UI update
         forceUpdate();
       })
