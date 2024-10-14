@@ -80,7 +80,13 @@ export function OutputNode() {
   }, [litlytics]);
 
   const doRunPipeline = async () => {
-    await litlytics.runPipeline();
+    await litlytics.runPipeline({
+      // very hacky, but will trigger UI re-renders
+      // while setting status internally won't because proxy doesn't see those triggers
+      onStatus: (status) => {
+        litlytics.setPipelineStatus(status);
+      },
+    });
   };
 
   const running =
