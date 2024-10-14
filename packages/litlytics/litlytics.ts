@@ -131,7 +131,6 @@ export class LitLytics {
   }
 
   setPipeline = (newPipeline: Partial<Pipeline>) => {
-    console.log('set pipeline', newPipeline);
     this._pipeline = {
       ...this._pipeline,
       ...newPipeline,
@@ -139,7 +138,6 @@ export class LitLytics {
   };
 
   resetPipeline = () => {
-    console.log('reset pipeline');
     this._pipeline = emptyPipeline;
     this._pipelineStatus = { status: 'init' };
   };

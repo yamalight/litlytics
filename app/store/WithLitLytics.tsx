@@ -28,7 +28,7 @@ export function WithLitLytics({ children }: { children: React.ReactNode }) {
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
   // create proxy that triggers state updates
-  // only create it once
+  // only create it once and use context to pass it around
   useEffect(() => {
     if (isInited) {
       return;
@@ -55,7 +55,6 @@ export function WithLitLytics({ children }: { children: React.ReactNode }) {
     // set inited flag
     setIsInited(true);
     // assign initial config and webEngine instance
-    console.log('set', config);
     ll.importConfig(config);
     ll.setWebEngine(webllm.engine);
   }, [isInited, config, webllm, setIsInited, setLitlytics, setConfig]);
