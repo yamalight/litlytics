@@ -1,0 +1,94 @@
+name: Prerelease litlytics library
+
+on:
+  workflow_run:
+    # Run after "Test and lint" workflow
+    workflows: ['Test and lint']
+    types:
+      - completed # Only when it's completed
+    branches:
+      - main # Only run the publish workflow for pushes to main
+
+jobs:
+  publish-lib:
+    environment: Github CI
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # Only proceed if the tests passed
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Check for changes in ./packages/litlytics
+      - name: Check if changed
+        id: changes
+        run: |
+          # Check if any files changed in the specified directory
+          if git diff --quiet HEAD^ HEAD ./packages/litlytics; then
+            echo "No changes in ./packages/litlytics. Skipping publish."
+            echo "should_publish=false" >> $GITHUB_ENV
+          else
+            echo "Changes detected in ./packages/litlytics."
+            echo "should_publish=true" >> $GITHUB_ENV
+
+      # Stop if no changes detected
+      - name: Stop if no changes
+        if: ${{ env.should_publish == 'false' }}
+        run: exit 0
+
+      # install node (for npm utils)
+      - name: Install node for npm checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # install bun
+      - name: Install bun for deployment
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # Install dependencies
+      - name: Install dependencies
+        working-directory: ./packages/litlytics
+        run: bun install --frozen-lockfile
+
+      # Build package
+      - name: Build package
+        working-directory: ./packages/litlytics
+        run: bun run build
+
+      # Determine @next version and update package.json
+      - name: Determine @next version
+        id: get_version
+        working-directory: ./packages/litlytics
+        run: |
+          # Extract the current version from package.json
+          # Fetch the latest @next version from npm
+          current_version=$(node -pe "require('./package.json').version")
+          latest_next_version=$(npm show litlytics@next version || $current_version)
+          echo "Latest @next version: $latest_next_version"
+
+          # Bump the version by minor update and append `-next`
+          # We now use bash for splitting the version
+          major=$(echo "$latest_next_version" | cut -d'.' -f1)
+          minor=$(echo "$latest_next_version" | cut -d'.' -f2)
+          patch=$(echo "$latest_next_version" | cut -d'.' -f3)
+
+          next_patch=$((patch + 1))
+          next_version="$major.$minor.$next_patch-next"
+
+          echo "Next version: $next_version"
+
+          # Update package.json with the new version
+          npm version "$next_version" --no-git-tag-version
+
+          echo "version=$next_version" >> $GITHUB_ENV
+
+      # install and publish if local version is not the same as published
+      - name: publish
+        if: ${{ steps.versions.outputs.current != steps.versions.outputs.new }}
+        working-directory: ./packages/litlytics
+        run: bun publish --access public --tag next
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

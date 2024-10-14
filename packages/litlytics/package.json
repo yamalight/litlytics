@@ -3,6 +3,7 @@
   "module": "dist/litlytics.js",
   "types": "litlytics.ts",
   "type": "module",
+  "version": "0.2.0",
   "scripts": {
     "build": "bun run build.ts",
     "typecheck": "tsc",

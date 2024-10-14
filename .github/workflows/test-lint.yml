@@ -5,8 +5,6 @@ on:
     paths-ignore:
       - '**/*.md' # Ignore changes to markdown files
   pull_request:
-    branches:
-      - main
     paths-ignore:
       - '**/*.md' # Ignore changes to markdown files
 
@@ -29,9 +27,9 @@ jobs:
       # install deps
       - name: Install lib deps
         working-directory: ./packages/litlytics
-        run: bun install
+        run: bun install --frozen-lockfile
       - name: Install app deps
-        run: bun install
+        run: bun install --frozen-lockfile
 
       # lib lint/check/test
       - name: Run lib typecheck
