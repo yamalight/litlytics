@@ -74,14 +74,14 @@ jobs:
 
       # deploy nightly
       - name: Deploy docker image to staging
-        if: github.event_name != 'release'
+        if: ${{ github.event_name != 'release' }}
         env:
           EXO_TOKEN: ${{ secrets.EXO_TOKEN }}
         run: bunx exoframe -u -c exoframe-nightly.json -e https://exoframe.codezen.net -t $EXO_TOKEN
 
       # deploy to prod
       - name: Deploy docker image to production
-        if: github.event_name == 'release'
+        if: ${{ github.event_name == 'release' }}
         env:
           EXO_TOKEN: ${{ secrets.EXO_TOKEN }}
         run: bunx exoframe -u -e https://exoframe.codezen.net -t $EXO_TOKEN
