@@ -91,9 +91,18 @@ export function SourceNode() {
       <NodeFrame
         hasConnector={litlytics.pipeline.steps.length > 0 ? true : 'auto'}
         currentStep={source}
-        size={source.expanded ? 'lg' : 'collapsed'}
+        size={
+          // always collapse empty
+          sourceType === 'empty'
+            ? 'collapsed'
+            : source.expanded
+            ? 'lg'
+            : 'collapsed'
+        }
       >
-        <NodeHeader collapsed={!source.expanded}>
+        <NodeHeader
+          collapsed={sourceType === 'empty' ? true : !source.expanded}
+        >
           <div className="flex flex-1 gap-2 items-center">
             {litlytics.pipelineStatus.status === 'sourcing' ? (
               <Spinner className="w-4 h-4" />
@@ -103,7 +112,13 @@ export function SourceNode() {
                 className="!p-0"
                 onClick={() => updateNodeByKey(!source.expanded, 'expanded')}
               >
-                {source.expanded ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                {sourceType === 'empty' ? (
+                  <ChevronRightIcon />
+                ) : source.expanded ? (
+                  <ChevronDownIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
               </Button>
             )}
             <RectangleStackIcon className="w-4 h-4" /> Source

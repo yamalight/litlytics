@@ -1,0 +1,126 @@
+{
+  "name": "code-source",
+  "pipelinePlan": "",
+  "pipelineDescription": "Fetch github user profile and verbalize it",
+  "source": {
+    "id": "source_0",
+    "name": "Source",
+    "description": "Primary source",
+    "type": "source",
+    "sourceType": "text",
+    "docs": [
+      {
+        "id": "textdoc",
+        "name": "Default document",
+        "content": "empty",
+        "test": true,
+        "processingResults": [
+          {
+            "stepId": "step_0",
+            "result": "Username: yamalight\nName: Tim Ermilov\nBio: Hi, I'm Tim. I do javascript, webdev and knowledge graphs.\n\n\nRepositories:\n- actions-mongo-test: Basic test of importing dump into mongodb in github actions\n- feedly-colorful-list-view: Tiny userscript that colorizes Feedly news entries by source.\n- gaming-knowledge-graph: Building a gaming knowledge graph\n- gatsby-mdx-bug-demo: Simple demo for MDX graphql issue\n- generator-powder: Powder.js Yeoman generator\n- graffiti: Minimalistic GraphQL framework\n- gsmCharacteristics: gsmCharacteristics parsing and transforming project\n- HumblePlayer: HumblePlayer - music player for your HumbleBundle soundtracks\n- libcodezen: Adobe AIR, flex, as3 classes and components library\n- litlytics: 🔥 LitLytics - an affordable, simple analytics platform that leverages LLMs to automate data analysis\n- microcore: Core library for simple creation of pipelinening microservices in Node.js with RabbitMQ\n- microwork: Microwork - simple creation of distributed scalable microservices in node.js with RabbitMQ\n- MobilePOIStudentProject: null\n- node-docker-pkg-demo: Demo of using Docker multi-stage builds with Zeit pkg to build small node-based images\n- outstated: Simple hooks-based state management for React\n- particula: Zero-config Express.js Framework\n- particula-core-fastify: Fastify.js core for Particula\n- particula-plugin-next: Particula plugin that adds Next.js integration\n- postal.observe: A postal.js plugin that provides a way to get a subscription as Rx.Observable\n- presentation-asyncjs: Presentation on working with asynchronous javascript (promises, async/await, functional programming, reactive programming)\n- presentation-rdf-intro: Intoduction to RDF and the Web of Data (presentation)\n- reddmix: Remix-based Reddit client\n- rethinkdb-pubsub: Implementation of message queueing on top of RethinkDB changefeeds as a library",
+            "timingMs": 713
+          },
+          {
+            "stepId": "step_1",
+            "result": "**GitHub Profile Summary for Tim Ermilov (yamalight)**\n\nTim Ermilov, known by the username yamalight, is a proficient developer specializing in JavaScript, web development, and knowledge graphs. His GitHub profile showcases a diverse array of projects, reflecting his expertise in both front-end and back-end technologies.\n\nKey projects include:\n- **Gaming Knowledge Graph**: A project focused on building a comprehensive knowledge graph for gaming.\n- **LitLytics**: An innovative analytics platform that utilizes large language models (LLMs) for automated data analysis.\n- **Graffiti**: A minimalistic GraphQL framework, demonstrating his skills in modern web technologies.\n- **Particula**: A zero-config Express.js framework, along with its Fastify.js core and Next.js integration, highlighting his work in creating streamlined development tools.\n\nTim has also contributed to various utility projects, such as a music player for HumbleBundle soundtracks and a simple state management solution for React. His repositories indicate a strong focus on microservices, with multiple projects utilizing Node.js and RabbitMQ for scalable applications.\n\nOverall, Tim's GitHub profile reflects a commitment to open-source development and a passion for creating tools that enhance web development and data management.",
+            "usage": {
+              "completionTokens": 251,
+              "promptTokens": 607,
+              "totalTokens": 858
+            },
+            "timingMs": 3281
+          }
+        ]
+      }
+    ],
+    "connectsTo": [
+      "step_0"
+    ],
+    "config": {
+      "type": "empty"
+    },
+    "expanded": false
+  },
+  "steps": [
+    {
+      "id": "step_0",
+      "name": "Fetch github profile",
+      "description": "Fetch public github profile for given username",
+      "type": "code",
+      "input": "doc",
+      "code": "export default async function fetchGithubProfileAndRepos(_doc) {\n    const doc = 'yamalight';\n    const profileUrl = `https://api.github.com/users/${doc}`;\n    \n    try {\n        const profileResponse = await fetch(profileUrl);\n        if (!profileResponse.ok) {\n            return undefined;\n        }\n        const profileData = await profileResponse.json();\n        \n        let result = `Username: ${profileData.login}\nName: ${profileData.name}\nBio: ${profileData.bio}\n`;\n\n        const reposUrl = `https://api.github.com/users/${doc}/repos`;\n        const reposResponse = await fetch(reposUrl);\n        if (!reposResponse.ok) {\n            return undefined;\n        }\n        const reposData = await reposResponse.json();\n        \n        const reposList = reposData.filter(repo => !repo.fork).map(repo => `- ${repo.name}: ${repo.description}`).join('\\n');\n        result += `\n\nRepositories:\n${reposList}`;\n\n        return result;\n    } catch (error) {\n        return undefined;\n    }\n}",
+      "codeExplanation": "This function retrieves information from GitHub about a specific user and their repositories. It starts by taking the user's username and fetching their profile details, such as their username, name, and bio. If this information is successfully obtained, it then looks for the user's repositories and compiles a list of them. Finally, it combines all this information into a clear format and returns it. If there are any issues during this process, it simply indicates that the information could not be retrieved.",
+      "connectsTo": [
+        "step_1"
+      ],
+      "expanded": true
+    },
+    {
+      "id": "step_1",
+      "name": "Summarize github profile",
+      "description": "Look at given github profile and user repos and write a short summary of the user profile.",
+      "type": "llm",
+      "input": "result",
+      "prompt": "You are tasked with summarizing a GitHub profile based on the provided information. Please follow these steps:\n\n1. **Analyze the Profile**: Carefully examine the user's GitHub profile, including their repositories, contributions, and any other relevant information.\n2. **Identify Key Aspects**: Look for important details such as the user's primary programming languages, types of projects they work on, and any notable contributions to open-source projects.\n3. **Summarize**: Write a concise summary that captures the essence of the user's GitHub profile. Highlight their skills, areas of expertise, and any significant achievements or projects.\n4. **Clarity and Brevity**: Ensure that the summary is clear and to the point, avoiding unnecessary jargon or overly complex language.\n\nPlease provide a short summary of the user profile based on the information given.",
+      "connectsTo": [
+        "litlytics_output"
+      ],
+      "expanded": true
+    }
+  ],
+  "results": [
+    {
+      "stepId": "step_1",
+      "result": "**GitHub Profile Summary for Tim Ermilov (yamalight)**\n\nTim Ermilov, known by the username yamalight, is a proficient developer specializing in JavaScript, web development, and knowledge graphs. His GitHub profile showcases a diverse array of projects, reflecting his expertise in both front-end and back-end technologies.\n\nKey projects include:\n- **Gaming Knowledge Graph**: A project focused on building a comprehensive knowledge graph for gaming.\n- **LitLytics**: An innovative analytics platform that utilizes large language models (LLMs) for automated data analysis.\n- **Graffiti**: A minimalistic GraphQL framework, demonstrating his capability in modern web technologies.\n- **Particula**: A zero-config Express.js framework, along with its Fastify.js core and Next.js integration, highlighting his work in creating streamlined development tools.\n\nTim has also contributed to various utility projects, such as a music player for HumbleBundle soundtracks and a simple state management solution for React. His repositories indicate a strong focus on microservices architecture, with multiple projects utilizing Node.js and RabbitMQ.\n\nOverall, Tim's GitHub profile reflects a commitment to open-source development and a passion for creating tools that enhance web development and data management.",
+      "usage": {
+        "completionTokens": 249,
+        "promptTokens": 607,
+        "totalTokens": 856
+      },
+      "timingMs": 3012,
+      "doc": {
+        "id": "textdoc",
+        "name": "Default document",
+        "content": "empty",
+        "test": true,
+        "processingResults": [
+          {
+            "stepId": "step_1",
+            "result": "**GitHub Profile Summary for Tim Ermilov (yamalight)**\n\nTim Ermilov, known by the username yamalight, is a proficient developer specializing in JavaScript, web development, and knowledge graphs. His GitHub profile showcases a diverse array of projects, reflecting his expertise in both front-end and back-end technologies.\n\nKey projects include:\n- **Gaming Knowledge Graph**: A project focused on building a comprehensive knowledge graph for gaming.\n- **LitLytics**: An innovative analytics platform that utilizes large language models (LLMs) for automated data analysis.\n- **Graffiti**: A minimalistic GraphQL framework, demonstrating his capability in modern web technologies.\n- **Particula**: A zero-config Express.js framework, along with its Fastify.js core and Next.js integration, highlighting his work in creating streamlined development tools.\n\nTim has also contributed to various utility projects, such as a music player for HumbleBundle soundtracks and a simple state management solution for React. His repositories indicate a strong focus on microservices architecture, with multiple projects utilizing Node.js and RabbitMQ.\n\nOverall, Tim's GitHub profile reflects a commitment to open-source development and a passion for creating tools that enhance web development and data management.",
+            "usage": {
+              "completionTokens": 249,
+              "promptTokens": 607,
+              "totalTokens": 856
+            },
+            "timingMs": 3012
+          }
+        ]
+      }
+    }
+  ],
+  "resultDocs": [
+    {
+      "id": "textdoc",
+      "name": "Default document",
+      "content": "empty",
+      "test": true,
+      "processingResults": [
+        {
+          "stepId": "step_0",
+          "result": "Username: yamalight\nName: Tim Ermilov\nBio: Hi, I'm Tim. I do javascript, webdev and knowledge graphs.\n\n\nRepositories:\n- actions-mongo-test: Basic test of importing dump into mongodb in github actions\n- feedly-colorful-list-view: Tiny userscript that colorizes Feedly news entries by source.\n- gaming-knowledge-graph: Building a gaming knowledge graph\n- gatsby-mdx-bug-demo: Simple demo for MDX graphql issue\n- generator-powder: Powder.js Yeoman generator\n- graffiti: Minimalistic GraphQL framework\n- gsmCharacteristics: gsmCharacteristics parsing and transforming project\n- HumblePlayer: HumblePlayer - music player for your HumbleBundle soundtracks\n- libcodezen: Adobe AIR, flex, as3 classes and components library\n- litlytics: 🔥 LitLytics - an affordable, simple analytics platform that leverages LLMs to automate data analysis\n- microcore: Core library for simple creation of pipelinening microservices in Node.js with RabbitMQ\n- microwork: Microwork - simple creation of distributed scalable microservices in node.js with RabbitMQ\n- MobilePOIStudentProject: null\n- node-docker-pkg-demo: Demo of using Docker multi-stage builds with Zeit pkg to build small node-based images\n- outstated: Simple hooks-based state management for React\n- particula: Zero-config Express.js Framework\n- particula-core-fastify: Fastify.js core for Particula\n- particula-plugin-next: Particula plugin that adds Next.js integration\n- postal.observe: A postal.js plugin that provides a way to get a subscription as Rx.Observable\n- presentation-asyncjs: Presentation on working with asynchronous javascript (promises, async/await, functional programming, reactive programming)\n- presentation-rdf-intro: Intoduction to RDF and the Web of Data (presentation)\n- reddmix: Remix-based Reddit client\n- rethinkdb-pubsub: Implementation of message queueing on top of RethinkDB changefeeds as a library",
+          "timingMs": 713
+        },
+        {
+          "stepId": "step_1",
+          "result": "**GitHub Profile Summary for Tim Ermilov (yamalight)**\n\nTim Ermilov, known by the username yamalight, is a proficient developer specializing in JavaScript, web development, and knowledge graphs. His GitHub profile showcases a diverse array of projects, reflecting his expertise in both front-end and back-end technologies.\n\nKey projects include:\n- **Gaming Knowledge Graph**: A project focused on building a comprehensive knowledge graph for gaming.\n- **LitLytics**: An innovative analytics platform that utilizes large language models (LLMs) for automated data analysis.\n- **Graffiti**: A minimalistic GraphQL framework, demonstrating his capability in modern web technologies.\n- **Particula**: A zero-config Express.js framework, along with its Fastify.js core and Next.js integration, highlighting his work in creating streamlined development tools.\n\nTim has also contributed to various utility projects, such as a music player for HumbleBundle soundtracks and a simple state management solution for React. His repositories indicate a strong focus on microservices architecture, with multiple projects utilizing Node.js and RabbitMQ.\n\nOverall, Tim's GitHub profile reflects a commitment to open-source development and a passion for creating tools that enhance web development and data management.",
+          "usage": {
+            "completionTokens": 249,
+            "promptTokens": 607,
+            "totalTokens": 856
+          },
+          "timingMs": 3012
+        }
+      ]
+    }
+  ]
+}

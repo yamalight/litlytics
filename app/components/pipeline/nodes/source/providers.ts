@@ -1,4 +1,5 @@
 import { DocsListSourceRender } from './docsList/DocsListRender';
+import { EmptySourceRender } from './EmptySource';
 import { FileSourceRender } from './file/FileSource';
 import { TextSourceRender } from './TextSource';
 import { SourceTypes } from './types';
@@ -9,4 +10,5 @@ export const sourceRenders = {
   [SourceTypes.TEXT]: TextSourceRender,
   [SourceTypes.FILE]: FileSourceRender,
   [SourceTypes.URL]: URLSourceRender,
+  [SourceTypes.EMPTY]: EmptySourceRender,
 };
