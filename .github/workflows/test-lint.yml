@@ -1,6 +1,8 @@
 name: Test and lint
 
 on:
+  release:
+    types: [published]
   push:
     paths-ignore:
       - '**/*.md' # Ignore changes to markdown files
