@@ -1,9 +1,10 @@
 {
   "name": "litlytics",
   "module": "dist/litlytics.js",
+  "main": "dist/litlytics.js",
   "types": "litlytics.ts",
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "scripts": {
     "build": "bun run build.ts",
     "typecheck": "tsc",

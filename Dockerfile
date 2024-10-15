@@ -15,10 +15,16 @@ COPY . .
 RUN bun run build
 
 # run app
+FROM node:22-slim AS runner
+ENV CI=true
+ENV NODE_ENV=production
+
 WORKDIR /app
+
+COPY --from=base /app /app
 
 EXPOSE 3000
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
-CMD ["bun", "run", "start"]
+CMD ["npm", "run", "start"]
