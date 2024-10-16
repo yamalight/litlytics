@@ -47,7 +47,7 @@ export function SourceNode() {
   const source = useMemo(() => {
     return pipeline.source;
   }, [pipeline.source]);
-  const docs = useMemo(() => source.docs, [source.docs]);
+  const docs = useMemo(() => source.docs ?? [], [source.docs]);
 
   const sourceType = useMemo(
     () => ((source.config as SourceConfig)?.type ?? 'text') as SourceType,

@@ -79,13 +79,18 @@ export function OutputNode() {
   }, [litlytics, pipeline]);
 
   const doRunPipeline = async () => {
-    const newPipeline = await litlytics.runPipeline({
-      onStatus: (status) => setPipelineStatus(status),
-    });
-    setPipeline(newPipeline);
+    try {
+      const newPipeline = await litlytics.runPipeline({
+        onStatus: (status) => setPipelineStatus(status),
+      });
+      setPipeline(newPipeline);
 
-    // write final status to update on end
-    setPipelineStatus({ status: 'done' });
+      // write final status to update on end
+      setPipelineStatus({ status: 'done' });
+    } catch (err) {
+      console.error('Error executing pipeline', err);
+      setPipelineStatus({ status: 'error' });
+    }
   };
 
   const running =

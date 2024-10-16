@@ -340,7 +340,9 @@ export function OverlayUI() {
                 placeholder="Pipeline name"
                 autoFocus
                 value={pipeline.name}
-                onChange={(e) => (pipeline.name = e.target.value)}
+                onChange={(e) =>
+                  setPipeline({ ...pipeline, name: e.target.value })
+                }
               />
             </Field>
           </FieldGroup>
