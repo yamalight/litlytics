@@ -3,10 +3,15 @@ import type { ProcessingStep, StepInput } from '../step/Step';
 import { stepToJSONPrompt } from './prompts/stepToJSON';
 import { parseLLMJSON } from './util';
 
+export interface PipelineFromTextStatus {
+  step: number;
+  totalSteps: number;
+}
+
 export async function pipelineFromText(
   litlytics: LitLytics,
   description: string,
-  onStatus: ({ step, totalSteps }: { step: number; totalSteps: number }) => void
+  onStatus: ({ step, totalSteps }: PipelineFromTextStatus) => void
 ) {
   let steps = description
     .split('---')

@@ -12,7 +12,10 @@ import { runLLMStep, type RunLLMStepArgs } from './engine/step/runLLMStep';
 import { testPipelineStep } from './engine/testStep';
 import type { LLMModel, LLMProvider } from './llm/types';
 import { OUTPUT_ID } from './output/Output';
-import { pipelineFromText } from './pipeline/fromText';
+import {
+  pipelineFromText,
+  type PipelineFromTextStatus,
+} from './pipeline/fromText';
 import { generatePipeline } from './pipeline/generate';
 import {
   emptyPipeline,
@@ -59,15 +62,15 @@ export interface LitLyticsConfig {
 
 export class LitLytics {
   // model config
-  private _provider?: LLMProviders;
-  private _model?: LLMModel;
+  provider?: LLMProviders;
+  model?: LLMModel;
   #llmKey?: string;
   // local LLM engine
-  private _engine?: MLCEngine;
+  engine?: MLCEngine;
 
   // pipeline
-  private _pipeline: Pipeline = emptyPipeline;
-  private _pipelineStatus: PipelineStatus = {
+  pipeline: Pipeline = emptyPipeline;
+  pipelineStatus: PipelineStatus = {
     status: 'init',
   };
 
@@ -82,89 +85,66 @@ export class LitLytics {
     key: string;
     engine?: MLCEngine;
   }) {
-    this._provider = provider;
-    this._model = model;
+    this.provider = provider;
+    this.model = model;
     this.#llmKey = key;
-    this._engine = engine;
+    this.engine = engine;
   }
 
   /**
    * Config management
    */
-  public get config(): LitLyticsConfig {
-    return {
-      // model config
-      provider: this._provider,
-      model: this._model,
-      // pipeline
-      pipeline: this._pipeline,
-    };
-  }
-
   exportConfig = (): LitLyticsConfig => {
     return {
       // model config
-      provider: this._provider,
-      model: this._model,
+      provider: this.provider,
+      model: this.model,
       llmKey: this.#llmKey,
       // pipeline
-      pipeline: this._pipeline,
+      pipeline: this.pipeline,
     };
   };
 
   importConfig = (config: LitLyticsConfig) => {
-    this._provider = config.provider;
-    this._model = config.model;
+    this.provider = config.provider;
+    this.model = config.model;
     this.#llmKey = config.llmKey;
-    this._pipeline = config.pipeline ?? this._pipeline ?? emptyPipeline;
-  };
-
-  getEngine = (): MLCEngine | undefined => {
-    return this._engine;
-  };
-
-  setWebEngine = (engine?: MLCEngine) => {
-    this._engine = engine;
+    this.pipeline = config.pipeline ?? this.pipeline ?? emptyPipeline;
   };
 
   /**
    * Pipeline management
    */
-  public get pipeline(): Pipeline {
-    return this._pipeline;
-  }
-
   setPipeline = (newPipeline: Partial<Pipeline>) => {
-    this._pipeline = {
-      ...this._pipeline,
+    this.pipeline = {
+      ...this.pipeline,
       ...newPipeline,
     };
+    return this.pipeline;
   };
 
   resetPipeline = () => {
-    this._pipeline = emptyPipeline;
-    this._pipelineStatus = { status: 'init' };
+    this.pipeline = structuredClone(emptyPipeline);
+    this.pipelineStatus = { status: 'init' };
+    return this.pipeline;
   };
 
   /**
    * Pipeline status
    */
-  public get pipelineStatus(): PipelineStatus {
-    return this._pipelineStatus;
-  }
-
   setPipelineStatus = (status: PipelineStatus) => {
-    this._pipelineStatus = {
-      ...this._pipelineStatus,
+    this.pipelineStatus = {
+      ...this.pipelineStatus,
       ...status,
     };
+    return this.pipelineStatus;
   };
 
   /**
    * Document management
    */
   public get docs(): Doc[] {
-    return this._pipeline.source.docs;
+    return this.pipeline.source.docs;
   }
 
   setDocs = (docs: Doc[]) => {
@@ -186,18 +166,18 @@ export class LitLytics {
     args,
   }: Pick<RunPromptFromMessagesArgs, 'messages' | 'args'>) => {
     if (
-      !this._provider?.length ||
-      !this._model?.length ||
-      (!this.#llmKey?.length && this._provider !== 'local')
+      !this.provider?.length ||
+      !this.model?.length ||
+      (!this.#llmKey?.length && this.provider !== 'local')
     ) {
       throw new Error('No provider, model or key set!');
     }
 
     return await runPromptFromMessages({
-      provider: this._provider,
+      provider: this.provider,
       key: this.#llmKey ?? 'local',
-      model: this._model,
-      engine: this._engine,
+      model: this.model,
+      engine: this.engine,
       messages,
       args,
     });
@@ -209,18 +189,18 @@ export class LitLytics {
     args,
   }: Pick<RunPromptArgs, 'system' | 'user' | 'args'>) => {
     if (
-      !this._provider?.length ||
-      !this._model?.length ||
-      (!this.#llmKey?.length && this._provider !== 'local')
+      !this.provider?.length ||
+      !this.model?.length ||
+      (!this.#llmKey?.length && this.provider !== 'local')
     ) {
       throw new Error('No provider, model or key set!');
     }
 
     return await runPrompt({
-      provider: this._provider,
+      provider: this.provider,
       key: this.#llmKey ?? 'local',
-      model: this._model,
-      engine: this._engine,
+      model: this.model,
+      engine: this.engine,
       system,
       user,
       args,
@@ -231,19 +211,12 @@ export class LitLytics {
    * Pipeline
    */
   pipelineFromText = async (
-    onStatus: ({
-      step,
-      totalSteps,
-    }: {
-      step: number;
-      totalSteps: number;
-    }) => void
+    onStatus: ({ step, totalSteps }: PipelineFromTextStatus) => void
   ) => {
     if (!this.pipeline.pipelinePlan) {
       return;
     }
 
-    this.setPipelineStatus({ status: 'sourcing' });
     const newSteps = await pipelineFromText(
       this,
       this.pipeline.pipelinePlan,
@@ -254,7 +227,7 @@ export class LitLytics {
     newSteps.at(-1)!.connectsTo = [OUTPUT_ID];
 
     // save
-    this.setPipeline({
+    return this.setPipeline({
       // assign input to first step
       source: {
         ...this.pipeline.source,
@@ -263,8 +236,6 @@ export class LitLytics {
       // assign steps
       steps: newSteps,
     });
-
-    this.setPipelineStatus({ status: 'done' });
   };
 
   generatePipeline = async () => {
@@ -277,11 +248,9 @@ export class LitLytics {
       description: this.pipeline.pipelineDescription,
     });
 
-    this.setPipeline({
+    return this.setPipeline({
       pipelinePlan: plan ?? '',
     });
-
-    return this.pipeline;
   };
 
   refinePipeline = async ({ refineRequest }: { refineRequest: string }) => {
@@ -290,8 +259,7 @@ export class LitLytics {
       refineRequest,
       pipeline: this.pipeline,
     });
-    this.setPipeline({
-      ...this.pipeline,
+    return this.setPipeline({
       pipelinePlan: plan ?? '',
     });
   };
@@ -308,8 +276,7 @@ export class LitLytics {
     try {
       setStatus({ status: 'init' });
       const newPipeline = await runPipeline(this, setStatus);
-      this.setPipeline(newPipeline);
-      return newPipeline;
+      return this.setPipeline(newPipeline);
     } catch (err) {
       setStatus({ status: 'error', error: err as Error });
     }
