@@ -17,7 +17,7 @@ import { CustomMarkdown } from '../markdown/Markdown';
 import { useTestDocs } from '../pipeline/source/useTestDocs';
 
 export function StepTest({ data }: { data: ProcessingStep }) {
-  const litlytics = useLitlytics();
+  const { litlytics, setPipeline } = useLitlytics();
   const { testDocs, allDocs } = useTestDocs();
   const [testDocId, setTestDocId] = useState(testDocs.at(0)?.id ?? '');
   const [isTestOpen, setTestOpen] = useState(false);
@@ -65,7 +65,8 @@ export function StepTest({ data }: { data: ProcessingStep }) {
           }
           return d;
         });
-        litlytics.setDocs(newDocs);
+        const newPipeline = litlytics.setDocs(newDocs);
+        setPipeline(newPipeline);
       } else {
         const newDocs = allDocs.map((d) => {
           if (d.id === doc?.id) {
@@ -73,7 +74,8 @@ export function StepTest({ data }: { data: ProcessingStep }) {
           }
           return d;
         });
-        litlytics.setDocs(newDocs);
+        const newPipeline = litlytics.setDocs(newDocs);
+        setPipeline(newPipeline);
       }
     } catch (err) {
       setError(err as Error);

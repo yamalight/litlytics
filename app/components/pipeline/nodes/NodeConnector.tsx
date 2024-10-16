@@ -1,7 +1,6 @@
 import { PlusIcon } from '@heroicons/react/24/solid';
 import clsx from 'clsx';
 import {
-  OUTPUT_ID,
   ProcessingStep,
   ProcessingStepTypes,
   SourceStep,
@@ -47,7 +46,7 @@ export function NodeConnector({
   currentStep?: SourceStep | ProcessingStep;
   showAuto?: boolean;
 }) {
-  const litlytics = useLitlytics();
+  const { litlytics, setPipeline } = useLitlytics();
   const [step, setStep] = useState<ProcessingStep>(
     structuredClone(defaultStep)
   );
@@ -66,68 +65,13 @@ export function NodeConnector({
     }
 
     setLoading(true);
-    // generate new ID and double-check that it doesn't overlap with other steps
-    let id = litlytics.pipeline.steps.length;
-    let existingStep = litlytics.pipeline.steps.find(
-      (s) => s.id === `step_${id}`
-    );
-    while (existingStep) {
-      id += 1;
-      existingStep = litlytics.pipeline.steps.find(
-        (s) => s.id === `step_${id}`
-      );
-    }
-    // generate final id
-    const idStr = `step_${id}`;
 
-    let newStep: ProcessingStep | undefined = undefined;
-    if (manual) {
-      newStep = structuredClone(step);
-      newStep.id = idStr;
-    } else {
-      // generate new step
-      newStep = await litlytics.generateStep({
-        id: idStr,
-        name: step.name,
-        description: step.description,
-        input: step.input as StepInput,
-        type: step.type,
-      });
-    }
-
-    if (currentStep?.type === 'source') {
-      // connect new step to next node
-      const nextNodeId =
-        litlytics.pipeline.source.connectsTo.at(0) ?? OUTPUT_ID;
-      newStep.connectsTo = [nextNodeId];
-      // add
-      litlytics.setPipeline({
-        source: {
-          ...litlytics.pipeline.source,
-          connectsTo: [newStep.id],
-        },
-        steps: litlytics.pipeline.steps.concat(newStep),
-      });
-    } else {
-      // connect new step to next node
-      const nextNodeId =
-        litlytics.pipeline.steps
-          .find((s) => s.id === currentStep?.id)
-          ?.connectsTo.at(0) ?? OUTPUT_ID;
-      newStep.connectsTo = [nextNodeId];
-      // add
-      litlytics.setPipeline({
-        steps: litlytics.pipeline.steps
-          .map((s) => {
-            if (s.id === currentStep?.id) {
-              s.connectsTo = [newStep.id];
-              return s;
-            }
-            return s;
-          })
-          .concat(newStep),
-      });
-    }
+    const newPipeline = await litlytics.addStep({
+      step,
+      sourceStep: currentStep,
+      manual,
+    });
+    setPipeline(newPipeline);
 
     setIsOpen(false);
     setLoading(false);

@@ -26,7 +26,11 @@ import { refinePipeline } from './pipeline/refine';
 import { generateCodeExplain } from './step/explain';
 import { generateStep, type GenerateStepArgs } from './step/generate';
 import { refineStep } from './step/refine';
-import { type ProcessingStep } from './step/Step';
+import {
+  type ProcessingStep,
+  type SourceStep,
+  type StepInput,
+} from './step/Step';
 
 // export types and commonly used vars
 export type { MLCEngine } from '@mlc-ai/web-llm';
@@ -40,7 +44,11 @@ export {
   type LLMProvider,
 } from './llm/types';
 export { OUTPUT_ID } from './output/Output';
-export type { Pipeline, PipelineStatus } from './pipeline/Pipeline';
+export {
+  emptyPipeline,
+  type Pipeline,
+  type PipelineStatus,
+} from './pipeline/Pipeline';
 export {
   StepInputs,
   type ProcessingStep,
@@ -214,7 +222,7 @@ export class LitLytics {
     onStatus: ({ step, totalSteps }: PipelineFromTextStatus) => void
   ) => {
     if (!this.pipeline.pipelinePlan) {
-      return;
+      return this.pipeline;
     }
 
     const newSteps = await pipelineFromText(
@@ -240,7 +248,7 @@ export class LitLytics {
 
   generatePipeline = async () => {
     if (!this.pipeline.pipelineDescription?.length) {
-      return;
+      return this.pipeline;
     }
 
     const plan = await generatePipeline({
@@ -273,13 +281,9 @@ export class LitLytics {
       this.setPipelineStatus(status);
       onStatus?.(this.pipelineStatus);
     };
-    try {
-      setStatus({ status: 'init' });
-      const newPipeline = await runPipeline(this, setStatus);
-      return this.setPipeline(newPipeline);
-    } catch (err) {
-      setStatus({ status: 'error', error: err as Error });
-    }
+    setStatus({ status: 'init' });
+    const newPipeline = await runPipeline(this, setStatus);
+    return this.setPipeline(newPipeline);
   };
 
   /**
@@ -304,6 +308,74 @@ export class LitLytics {
 
   generateCodeExplain = async ({ code }: { code: string }) => {
     return await generateCodeExplain({ litlytics: this, code });
+  };
+
+  addStep = async ({
+    step,
+    sourceStep,
+    manual,
+  }: {
+    step: ProcessingStep;
+    sourceStep?: SourceStep | ProcessingStep;
+    manual?: boolean;
+  }) => {
+    // generate new ID and double-check that it doesn't overlap with other steps
+    let id = this.pipeline.steps.length;
+    let existingStep = this.pipeline.steps.find((s) => s.id === `step_${id}`);
+    while (existingStep) {
+      id += 1;
+      existingStep = this.pipeline.steps.find((s) => s.id === `step_${id}`);
+    }
+    // generate final id
+    const idStr = `step_${id}`;
+
+    let newStep: ProcessingStep | undefined = undefined;
+    if (manual) {
+      newStep = structuredClone(step);
+      newStep.id = idStr;
+    } else {
+      // generate new step
+      newStep = await this.generateStep({
+        id: idStr,
+        name: step.name,
+        description: step.description,
+        input: step.input as StepInput,
+        type: step.type,
+      });
+    }
+
+    if (sourceStep?.type === 'source') {
+      // connect new step to next node
+      const nextNodeId = this.pipeline.source.connectsTo.at(0) ?? OUTPUT_ID;
+      newStep.connectsTo = [nextNodeId];
+      // add
+      return this.setPipeline({
+        source: {
+          ...this.pipeline.source,
+          connectsTo: [newStep.id],
+        },
+        steps: this.pipeline.steps.concat(newStep),
+      });
+    }
+
+    // connect new step to next node
+    const nextNodeId =
+      this.pipeline.steps
+        .find((s) => s.id === sourceStep?.id)
+        ?.connectsTo.at(0) ?? OUTPUT_ID;
+    newStep.connectsTo = [nextNodeId];
+    // add
+    return this.setPipeline({
+      steps: this.pipeline.steps
+        .map((s) => {
+          if (s.id === sourceStep?.id) {
+            s.connectsTo = [newStep.id];
+            return s;
+          }
+          return s;
+        })
+        .concat(newStep),
+    });
   };
 
   refineStep = async ({

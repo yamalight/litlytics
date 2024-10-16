@@ -1,63 +1,38 @@
 import { useAtom, useAtomValue } from 'jotai';
-import { LitLytics } from 'litlytics';
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-} from 'react';
+import { emptyPipeline, LitLytics, Pipeline, PipelineStatus } from 'litlytics';
+import { createContext, useContext, useEffect } from 'react';
 import {
   configAtom,
   litlyticsAtom,
-  litlyticsInitedAtom,
+  pipelineAtom,
+  pipelineStatusAtom,
   webllmAtom,
 } from './store';
-import { createReactiveProxy } from './util';
 
-const LitLyticsContext = createContext<{ litlytics?: LitLytics }>({
-  litlytics: undefined,
+const LitLyticsContext = createContext<{
+  litlytics: LitLytics;
+  pipeline: Pipeline;
+  setPipeline: (p: Pipeline) => void;
+  pipelineStatus: PipelineStatus;
+  setPipelineStatus: (s: PipelineStatus) => void;
+}>({
+  litlytics: new LitLytics({
+    provider: 'openai',
+    model: 'gpt-4o-mini',
+    key: '',
+  }),
+  pipeline: emptyPipeline,
+  setPipeline: () => {},
+  pipelineStatus: { status: 'init' } as PipelineStatus,
+  setPipelineStatus: () => {},
 });
 
 export function WithLitLytics({ children }: { children: React.ReactNode }) {
-  const saveConfigRef = useRef<Timer>();
   const webllm = useAtomValue(webllmAtom);
-  const [config, setConfig] = useAtom(configAtom);
-  const [isInited, setIsInited] = useAtom(litlyticsInitedAtom);
-  const [litlytics, setLitlytics] = useAtom(litlyticsAtom);
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-
-  // create proxy that triggers state updates
-  // only create it once and use context to pass it around
-  useEffect(() => {
-    if (isInited) {
-      return;
-    }
-    const ll = new LitLytics({
-      provider: 'openai',
-      model: 'gpt-4o-mini',
-      key: '',
-    });
-    setLitlytics(
-      createReactiveProxy(ll, () => {
-        // if there's current save timeout - reset it
-        if (saveConfigRef.current) {
-          clearTimeout(saveConfigRef.current);
-        }
-        // persist changes in localStorage after some time of inactivity
-        saveConfigRef.current = setTimeout(() => {
-          setConfig(ll.exportConfig());
-        }, 500);
-        // force UI update
-        forceUpdate();
-      })
-    );
-    // set inited flag
-    setIsInited(true);
-    // assign initial config and webEngine instance
-    ll.importConfig(config);
-    ll.setWebEngine(webllm.engine);
-  }, [isInited, config, webllm, setIsInited, setLitlytics, setConfig]);
+  const config = useAtomValue(configAtom);
+  const litlytics = useAtomValue(litlyticsAtom);
+  const [pipeline, setPipeline] = useAtom(pipelineAtom);
+  const [pipelineStatus, setPipelineStatus] = useAtom(pipelineStatusAtom);
 
   // update config / llm on changes
   useEffect(() => {
@@ -71,19 +46,32 @@ export function WithLitLytics({ children }: { children: React.ReactNode }) {
       litlytics.importConfig(config);
     }
     // assign webllm engine
-    if (litlytics.getEngine() !== webllm.engine) {
-      litlytics.setWebEngine(webllm.engine);
+    if (litlytics.engine !== webllm.engine) {
+      litlytics.engine = webllm.engine;
     }
   }, [config, webllm, litlytics]);
 
+  // update pipeline on changes
+  useEffect(() => {
+    litlytics.setPipeline(pipeline);
+  }, [pipeline, litlytics]);
+
   return (
-    <LitLyticsContext.Provider value={{ litlytics }}>
+    <LitLyticsContext.Provider
+      value={{
+        litlytics,
+        pipeline,
+        setPipeline,
+        pipelineStatus,
+        setPipelineStatus,
+      }}
+    >
       {children}
     </LitLyticsContext.Provider>
   );
 }
 
 export const useLitlytics = () => {
-  const { litlytics } = useContext(LitLyticsContext);
-  return litlytics!;
+  const ctx = useContext(LitLyticsContext);
+  return ctx;
 };

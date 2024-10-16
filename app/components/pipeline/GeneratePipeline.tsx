@@ -24,7 +24,7 @@ const tabClass = clsx(
 );
 
 export default function GeneratePipeline() {
-  const litlytics = useLitlytics();
+  const { litlytics, pipeline, setPipeline, pipelineStatus } = useLitlytics();
   const [selectedTab, setSelectedTab] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,8 +36,8 @@ export default function GeneratePipeline() {
       setError(undefined);
 
       // generate plan from LLM
-      await litlytics.generatePipeline();
-
+      const newPipeline = await litlytics.generatePipeline();
+      setPipeline(newPipeline);
       setLoading(false);
       setSelectedTab(1);
     } catch (err) {
@@ -49,9 +49,9 @@ export default function GeneratePipeline() {
   const closeDialog = () => {
     if (
       loading ||
-      litlytics.pipelineStatus.status === 'refine' ||
-      litlytics.pipelineStatus.status === 'step' ||
-      litlytics.pipelineStatus.status === 'sourcing'
+      pipelineStatus.status === 'refine' ||
+      pipelineStatus.status === 'step' ||
+      pipelineStatus.status === 'sourcing'
     ) {
       return;
     }
@@ -65,8 +65,8 @@ export default function GeneratePipeline() {
         outline
         onClick={() => setIsOpen(true)}
         disabled={
-          litlytics.pipelineStatus.status === 'sourcing' ||
-          litlytics.pipelineStatus.status === 'step'
+          pipelineStatus.status === 'sourcing' ||
+          pipelineStatus.status === 'step'
         }
         className="border-sky-500 dark:border-sky-500"
       >
@@ -83,7 +83,7 @@ export default function GeneratePipeline() {
           <TabGroup selectedIndex={selectedTab} onChange={setSelectedTab}>
             <TabList className="flex gap-4">
               <Tab className={tabClass}>Plan</Tab>
-              {Boolean(litlytics.pipeline.pipelinePlan?.length) && (
+              {Boolean(pipeline.pipelinePlan?.length) && (
                 <Tab className={tabClass}>Refine plan</Tab>
               )}
             </TabList>
@@ -96,9 +96,10 @@ export default function GeneratePipeline() {
                       rows={5}
                       name="task"
                       placeholder="Task description"
-                      value={litlytics.pipeline.pipelineDescription}
+                      value={pipeline.pipelineDescription ?? ''}
                       onChange={(e) => {
-                        litlytics.setPipeline({
+                        setPipeline({
+                          ...pipeline,
                           pipelineDescription: e.target.value,
                         });
                       }}

@@ -1,8 +1,16 @@
 import { atom } from 'jotai';
 import { withUndo } from 'jotai-history';
 import { atomWithStorage } from 'jotai/utils';
-import { LitLytics, LitLyticsConfig, MLCEngine } from 'litlytics';
+import {
+  emptyPipeline,
+  LitLytics,
+  LitLyticsConfig,
+  MLCEngine,
+  Pipeline,
+  PipelineStatus,
+} from 'litlytics';
 
+// litlytics config, persisted in localStorage
 export const configAtom = atomWithStorage<LitLyticsConfig>(
   'litlytics.config',
   {
@@ -14,8 +22,20 @@ export const configAtom = atomWithStorage<LitLyticsConfig>(
   undefined,
   { getOnInit: true }
 );
-export const configUndoAtom = withUndo(configAtom, 10);
 
+// litlytics pipeline, persisted in localStorage
+export const pipelineAtom = atomWithStorage<Pipeline>(
+  'litlytics.pipeline',
+  emptyPipeline,
+  undefined,
+  { getOnInit: true }
+);
+export const pipelineUndoAtom = withUndo(pipelineAtom, 10);
+
+// pipeline status
+export const pipelineStatusAtom = atom<PipelineStatus>({ status: 'init' });
+
+// litlytics instance
 export const litlyticsAtom = atom<LitLytics>(
   new LitLytics({
     provider: 'openai',
@@ -24,6 +44,7 @@ export const litlyticsAtom = atom<LitLytics>(
   })
 );
 
+// webllm instance
 export const webllmAtom = atom<{
   engine?: MLCEngine;
   fetchProgress: number;
@@ -35,5 +56,3 @@ export const webllmAtom = atom<{
   loadProgress: -1,
   status: '',
 });
-
-export const litlyticsInitedAtom = atom(false);

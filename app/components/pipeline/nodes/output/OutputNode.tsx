@@ -38,19 +38,22 @@ import { BasicOutputRender } from './BasicOutput';
 import { OutputType, OutputTypes } from './types';
 
 export function OutputNode() {
-  const litlytics = useLitlytics();
+  const {
+    litlytics,
+    pipeline,
+    setPipeline,
+    pipelineStatus,
+    setPipelineStatus,
+  } = useLitlytics();
   const [isOpen, setIsOpen] = useState(false);
   const [expanded, setExpanded] = useState(true);
   const [outputType, setOutputType] = useState<OutputType>('basic');
 
-  const results = useMemo(
-    () => litlytics.pipeline.results,
-    [litlytics.pipeline]
-  );
+  const results = useMemo(() => pipeline.results, [pipeline]);
 
   const { timing, prompt, completion, cost } = useMemo(() => {
     // const timings = data.
-    const results = litlytics.pipeline.resultDocs ?? [];
+    const results = pipeline.resultDocs ?? [];
     const res = results.filter((doc) => doc);
     if (!res.length) {
       return {};
@@ -68,33 +71,25 @@ export function OutputNode() {
     const prompt = promptTokens.reduce((acc, val) => acc + val, 0);
     const completion = completionTokens.reduce((acc, val) => acc + val, 0);
     const inputCost =
-      litlytics.config.provider === 'ollama'
-        ? 0
-        : modelCosts[litlytics.config.model!].input;
+      litlytics.provider === 'ollama' ? 0 : modelCosts[litlytics.model!].input;
     const outputCost =
-      litlytics.config.provider === 'ollama'
-        ? 0
-        : modelCosts[litlytics.config.model!].output;
+      litlytics.provider === 'ollama' ? 0 : modelCosts[litlytics.model!].output;
     const cost = _.round(prompt * inputCost + completion * outputCost, 3);
     return { timing, prompt, completion, cost };
-  }, [litlytics]);
+  }, [litlytics, pipeline]);
 
   const doRunPipeline = async () => {
-    await litlytics.runPipeline({
-      // very hacky, but will trigger UI re-renders
-      // while setting status internally won't because proxy doesn't see those triggers
-      onStatus: (status) => {
-        litlytics.setPipelineStatus(status);
-      },
+    const newPipeline = await litlytics.runPipeline({
+      onStatus: (status) => setPipelineStatus(status),
     });
+    setPipeline(newPipeline);
 
     // write final status to update on end
-    litlytics.setPipelineStatus({ status: 'done' });
+    setPipelineStatus({ status: 'done' });
   };
 
   const running =
-    litlytics.pipelineStatus.status === 'sourcing' ||
-    litlytics.pipelineStatus.status === 'step';
+    pipelineStatus.status === 'sourcing' || pipelineStatus.status === 'step';
 
   return (
     <>
@@ -122,7 +117,7 @@ export function OutputNode() {
                 <PlayIcon aria-hidden="true" className="h-5 w-5" />
               )}
             </Button>
-            {litlytics.pipelineStatus.status === 'done' && (
+            {pipelineStatus.status === 'done' && (
               <div
                 className="flex flex-1 justify-end"
                 title="Successfully finished!"
@@ -130,7 +125,7 @@ export function OutputNode() {
                 <CheckIcon color="green" className="w-5 h-5" />
               </div>
             )}
-            {litlytics.pipelineStatus.status === 'error' && (
+            {pipelineStatus.status === 'error' && (
               <div
                 className="flex flex-1 justify-end"
                 title="Error during execution!"
@@ -182,7 +177,7 @@ export function OutputNode() {
                 </Badge>
               )}
             </div>
-            <BasicOutputRender pipeline={litlytics.pipeline} />
+            <BasicOutputRender pipeline={pipeline} />
           </NodeContent>
         ) : (
           <></>

@@ -29,7 +29,7 @@ import {
   DropdownMenu,
   DropdownShortcut,
 } from '~/components/catalyst/dropdown';
-import { configAtom, configUndoAtom, webllmAtom } from '~/store/store';
+import { configAtom, pipelineUndoAtom, webllmAtom } from '~/store/store';
 import { useLitlytics } from '~/store/WithLitLytics';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
@@ -62,10 +62,11 @@ function MenuHolder({
 export function OverlayUI() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const loadInputRef = useRef<HTMLTextAreaElement>(null);
-  const litlytics = useLitlytics();
+  const { litlytics, pipeline, setPipeline, setPipelineStatus } =
+    useLitlytics();
   const litlyticsConfig = useAtomValue(configAtom);
   const webllm = useAtomValue(webllmAtom);
-  const { undo, redo, canUndo, canRedo } = useAtomValue(configUndoAtom);
+  const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isLoadOpen, setIsLoadOpen] = useState(false);
@@ -95,12 +96,13 @@ export function OverlayUI() {
   };
 
   const resetPipeline = () => {
-    litlytics.resetPipeline();
+    const newPipeline = litlytics.resetPipeline();
+    setPipeline(newPipeline);
     setIsOpen(false);
   };
 
   const pipelineToJSON = () => {
-    const pipelineToSave = structuredClone(litlytics.pipeline);
+    const pipelineToSave = structuredClone(pipeline);
     // set model and provider
     pipelineToSave.provider = litlyticsConfig.provider;
     pipelineToSave.model = litlyticsConfig.model;
@@ -119,7 +121,7 @@ export function OverlayUI() {
     // Create a temporary anchor element
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${litlytics.pipeline.name}.json`;
+    a.download = `${pipeline.name}.json`;
     // Programmatically click the anchor to trigger the download
     a.click();
     // Clean up: revoke the object URL
@@ -151,8 +153,8 @@ export function OverlayUI() {
     }
     try {
       const pipelineJson = JSON.parse(inputStr);
-      litlytics.setPipeline(pipelineJson);
-      litlytics.setPipelineStatus({ status: 'init' });
+      setPipeline(pipelineJson);
+      setPipelineStatus({ status: 'init' });
       loadInputRef.current!.value = '';
       setIsLoadOpen(false);
     } catch (err) {
@@ -167,8 +169,8 @@ export function OverlayUI() {
       reader.onload = (e) => {
         try {
           const json = JSON.parse(e.target?.result as string) as Pipeline;
-          litlytics.setPipeline(json);
-          litlytics.setPipelineStatus({ status: 'init' });
+          setPipeline(json);
+          setPipelineStatus({ status: 'init' });
           setIsLoadOpen(false);
         } catch (error) {
           console.error('Error parsing JSON:', error);
@@ -337,8 +339,8 @@ export function OverlayUI() {
                 name="name"
                 placeholder="Pipeline name"
                 autoFocus
-                value={litlytics.pipeline.name}
-                onChange={(e) => (litlytics.pipeline.name = e.target.value)}
+                value={pipeline.name}
+                onChange={(e) => (pipeline.name = e.target.value)}
               />
             </Field>
           </FieldGroup>

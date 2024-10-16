@@ -6,7 +6,13 @@ import { Spinner } from '~/components/Spinner';
 import { useLitlytics } from '~/store/WithLitLytics';
 
 export function RefinePipeline({ hide }: { hide: () => void }) {
-  const litlytics = useLitlytics();
+  const {
+    litlytics,
+    pipeline,
+    setPipeline,
+    pipelineStatus,
+    setPipelineStatus,
+  } = useLitlytics();
   const [error, setError] = useState<Error>();
   const [refine, setRefine] = useState(``);
   const [progress, setProgress] = useState('');
@@ -18,40 +24,46 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
 
     try {
       // generate plan from LLM
-      litlytics.setPipelineStatus({ status: 'refine' });
-      await litlytics.refinePipeline({
+      setPipelineStatus({ status: 'refine' });
+      const newPipeline = await litlytics.refinePipeline({
         refineRequest: refine,
       });
-      litlytics.setPipelineStatus({ status: 'init' });
+      setPipeline(newPipeline);
+      setPipelineStatus({ status: 'init' });
       setRefine('');
     } catch (err) {
       setError(err as Error);
-      litlytics.setPipelineStatus({ status: 'error' });
+      setPipelineStatus({ status: 'error' });
     }
   };
 
   const doCreate = async () => {
     try {
+      setPipelineStatus({ status: 'sourcing' });
       // generate plan from LLM
-      await litlytics.pipelineFromText(({ step, totalSteps }) => {
-        if (step > totalSteps) {
-          setProgress('');
-          return;
-        }
+      const newPipeline = await litlytics.pipelineFromText(
+        ({ step, totalSteps }) => {
+          if (step > totalSteps) {
+            setProgress('');
+            return;
+          }
 
-        setProgress(`Generating steps: ${step} / ${totalSteps}`);
-      });
+          setProgress(`Generating steps: ${step} / ${totalSteps}`);
+        }
+      );
+      setPipeline(newPipeline);
+      setPipelineStatus({ status: 'done' });
       hide();
     } catch (err) {
       setError(err as Error);
-      litlytics.setPipelineStatus({ status: 'error' });
+      setPipelineStatus({ status: 'error' });
     }
   };
 
   const inProgress =
-    litlytics.pipelineStatus.status === 'refine' ||
-    litlytics.pipelineStatus.status === 'sourcing' ||
-    litlytics.pipelineStatus.status === 'step';
+    pipelineStatus.status === 'refine' ||
+    pipelineStatus.status === 'sourcing' ||
+    pipelineStatus.status === 'step';
 
   return (
     <div className="w-full h-full p-4 prose prose-sm prose-no-nr dark:prose-invert ">
@@ -59,7 +71,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
         <h1 className="m-0">Suggested pipeline:</h1>
       </div>
 
-      <CustomMarkdown>{`${litlytics.pipeline.pipelinePlan}`}</CustomMarkdown>
+      <CustomMarkdown>{`${pipeline.pipelinePlan}`}</CustomMarkdown>
       <div className="flex gap-1">
         <Textarea
           rows={2}
@@ -69,7 +81,7 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
           onChange={(e) => setRefine(e.target.value)}
         />
         <Button onClick={doRefine} disabled={inProgress}>
-          {litlytics.pipelineStatus.status === 'refine' && (
+          {pipelineStatus.status === 'refine' && (
             <Spinner className="h-5 w-5" />
           )}
           Refine
@@ -84,14 +96,14 @@ export function RefinePipeline({ hide }: { hide: () => void }) {
 
       <div className="flex mt-8">
         <Button onClick={doCreate} disabled={inProgress}>
-          {(litlytics.pipelineStatus.status === 'sourcing' ||
-            litlytics.pipelineStatus.status === 'step') && (
+          {(pipelineStatus.status === 'sourcing' ||
+            pipelineStatus.status === 'step') && (
             <div className="flex items-center">
               <Spinner className="h-5 w-5" />
             </div>
           )}
-          {litlytics.pipelineStatus.status === 'sourcing' ||
-          litlytics.pipelineStatus.status === 'step'
+          {pipelineStatus.status === 'sourcing' ||
+          pipelineStatus.status === 'step'
             ? progress.length > 0
               ? progress
               : `Generating pipeline...`

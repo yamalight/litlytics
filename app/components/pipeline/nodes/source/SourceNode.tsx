@@ -42,15 +42,12 @@ const UnknownSource = ({
 
 export function SourceNode() {
   const [isOpen, setIsOpen] = useState(false);
-  const litlytics = useLitlytics();
+  const { litlytics, pipeline, setPipeline, pipelineStatus } = useLitlytics();
 
   const source = useMemo(() => {
-    return litlytics.pipeline.source;
-  }, [litlytics.pipeline.source]);
-  const docs = useMemo(
-    () => litlytics.pipeline.source.docs,
-    [litlytics.pipeline.source.docs]
-  );
+    return pipeline.source;
+  }, [pipeline.source]);
+  const docs = useMemo(() => source.docs, [source.docs]);
 
   const sourceType = useMemo(
     () => ((source.config as SourceConfig)?.type ?? 'text') as SourceType,
@@ -72,13 +69,15 @@ export function SourceNode() {
   ) => {
     const newData = structuredClone(source!);
     newData[prop] = newVal;
-    litlytics.setPipeline({
+    setPipeline({
+      ...pipeline,
       source: newData,
     });
   };
 
   const updateDocs = (newDocs: Doc[]) => {
-    litlytics.setDocs(newDocs);
+    const newPipeline = litlytics.setDocs(newDocs);
+    setPipeline(newPipeline);
   };
 
   if (!source) {
@@ -89,7 +88,7 @@ export function SourceNode() {
     <>
       {/* Source node render */}
       <NodeFrame
-        hasConnector={litlytics.pipeline.steps.length > 0 ? true : 'auto'}
+        hasConnector={pipeline.steps.length > 0 ? true : 'auto'}
         currentStep={source}
         size={
           // always collapse empty
@@ -104,7 +103,7 @@ export function SourceNode() {
           collapsed={sourceType === 'empty' ? true : !source.expanded}
         >
           <div className="flex flex-1 gap-2 items-center">
-            {litlytics.pipelineStatus.status === 'sourcing' ? (
+            {pipelineStatus.status === 'sourcing' ? (
               <Spinner className="w-4 h-4" />
             ) : (
               <Button
@@ -159,9 +158,10 @@ export function SourceNode() {
                 name="step-input"
                 value={sourceType as string}
                 onChange={(e) =>
-                  litlytics.setPipeline({
+                  setPipeline({
+                    ...pipeline,
                     source: {
-                      ...litlytics.pipeline.source,
+                      ...pipeline.source,
                       config: {
                         type: e.target.value as SourceType,
                       } as SourceConfig,
