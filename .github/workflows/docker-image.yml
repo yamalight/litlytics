@@ -6,7 +6,7 @@ on:
     paths-ignore:
       - '**/*.md' # Ignore changes to markdown files
   release:
-    types: [created]
+    types: [published]
 
 env:
   # Use docker.io for Docker Hub if empty
