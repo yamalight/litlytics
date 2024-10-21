@@ -11,21 +11,28 @@ runs:
     # install deps
     - name: Install lib deps
       working-directory: ./packages/litlytics
+      shell: bash
       run: bun install --frozen-lockfile
     - name: Install app deps
+      shell: bash
       run: bun install --frozen-lockfile
     # lib lint/check/test
     - name: Run lib typecheck
       working-directory: ./packages/litlytics
+      shell: bash
       run: bun run typecheck
     - name: Run lib tests
       working-directory: ./packages/litlytics
+      shell: bash
       run: bun run test:ci
 
     # main app lint/check/test
     - name: Run app eslint
+      shell: bash
       run: bun run lint
     - name: Run app typecheck
+      shell: bash
       run: bun run typecheck
     - name: Run app test
+      shell: bash
       run: bun run test:ci
