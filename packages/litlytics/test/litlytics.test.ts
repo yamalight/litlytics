@@ -3,6 +3,7 @@ import { expect, test } from 'vitest';
 import {
   LitLytics,
   OUTPUT_ID,
+  type Doc,
   type Pipeline,
   type StepInput,
 } from '../litlytics';
@@ -187,4 +188,44 @@ Step input: doc`);
   // validate connections
   expect(newPipeline.steps.at(1)!.connectsTo).toEqual([newStep!.id]);
   expect(newStep?.connectsTo).toEqual([OUTPUT_ID]);
+});
+
+test('should generate suggested tasks for current pipeline', async () => {
+  const litlytics = new LitLytics({
+    provider: 'openai',
+    model: 'test',
+    key: 'test',
+  });
+  const doc: Doc = {
+    id: '0',
+    name: 'test',
+    content: 'test doc',
+    processingResults: [],
+    test: true,
+  };
+  const docNonTest: Doc = {
+    id: '1',
+    name: 'non-test',
+    content: 'non test doc',
+    processingResults: [],
+  };
+  litlytics.setDocs([doc, docNonTest]);
+  // mock prompt replies
+  litlytics.runPrompt = async ({ user }: { system: string; user: string }) => {
+    if (user === doc.content) {
+      return { result: 'test summary', usage: {} as LanguageModelUsage };
+    }
+
+    return { result: '- test tasks', usage: {} as LanguageModelUsage };
+  };
+  // execute pipeline
+  const newPipeline = await litlytics.suggestTasks();
+  // validate pipeline
+  expect(newPipeline).toBeDefined();
+  expect(newPipeline.pipelineTasks?.at(0)).toEqual('test tasks');
+  // validate docs
+  const newTestDoc = litlytics.docs.find((d) => d.id === doc.id);
+  expect(newTestDoc?.summary).toEqual('test summary');
+  const newNonTestDoc = litlytics.docs.find((d) => d.id === docNonTest.id);
+  expect(newNonTestDoc?.summary).toBeUndefined();
 });

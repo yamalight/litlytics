@@ -80,6 +80,8 @@ export async function executeOnLLM({
   // set key
   const modelObj = getModel({ provider, model, key });
   const { text, usage } = await generateText({
+    // default to 4k max tokens output which is what most models support
+    maxTokens: 4096,
     ...modelArgs,
     model: modelObj,
     messages,

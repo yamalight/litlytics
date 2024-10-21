@@ -6,6 +6,7 @@ export interface Pipeline {
   name: string;
   pipelineDescription?: string;
   pipelinePlan?: string;
+  pipelineTasks?: string[];
   source: SourceStep;
   resultDocs?: Doc[];
   results?: Result[];

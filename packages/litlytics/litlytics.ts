@@ -22,6 +22,7 @@ import {
   type PipelineStatus,
 } from './pipeline/Pipeline';
 import { refinePipeline } from './pipeline/refine';
+import { suggestTasks } from './pipeline/suggestTasks';
 import { generateCodeExplain } from './step/explain';
 import { generateStep, type GenerateStepArgs } from './step/generate';
 import { refineStep } from './step/refine';
@@ -248,6 +249,35 @@ export class LitLytics {
 
     return this.setPipeline({
       pipelinePlan: plan ?? '',
+    });
+  };
+
+  suggestTasks = async () => {
+    if (!this.pipeline.source?.docs?.length) {
+      return this.pipeline;
+    }
+
+    const res = await suggestTasks({
+      litlytics: this,
+      pipeline: this.pipeline,
+    });
+
+    const newDocs = this.pipeline.source.docs.map((d) => {
+      // try to find updated doc
+      const upDoc = res.docs.find((newD) => newD.id === d.id);
+      // if exists - return it
+      if (upDoc) {
+        return upDoc;
+      }
+      // otherwise - use original
+      return d;
+    });
+    // update docs
+    this.setDocs(newDocs);
+
+    // update pipeline tasks
+    return this.setPipeline({
+      pipelineTasks: res.tasks,
     });
   };
 

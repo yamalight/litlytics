@@ -13,6 +13,7 @@ import { Field, FieldGroup, Label } from '~/components/catalyst/fieldset';
 import { Textarea } from '~/components/catalyst/textarea';
 import { Spinner } from '~/components/Spinner';
 import { useLitlytics } from '~/store/WithLitLytics';
+import { Listbox, ListboxOption } from '../catalyst/listbox';
 import { RefinePipeline } from './RefinePipeline';
 
 const tabClass = clsx(
@@ -26,6 +27,7 @@ const tabClass = clsx(
 export default function GeneratePipeline() {
   const { litlytics, pipeline, setPipeline, pipelineStatus } = useLitlytics();
   const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTask, setSelectedTask] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error>();
@@ -38,6 +40,23 @@ export default function GeneratePipeline() {
       // generate plan from LLM
       const newPipeline = await litlytics.generatePipeline();
       setPipeline(newPipeline);
+      setLoading(false);
+      setSelectedTab(1);
+    } catch (err) {
+      setError(err as Error);
+      setLoading(false);
+    }
+  };
+
+  const suggestTasks = async () => {
+    try {
+      setLoading(true);
+      setError(undefined);
+
+      // generate plan from LLM
+      const newPipeline = await litlytics.suggestTasks();
+      setPipeline(newPipeline);
+      setSelectedTask(newPipeline.pipelineTasks?.at(0) ?? '');
       setLoading(false);
       setSelectedTab(1);
     } catch (err) {
@@ -108,16 +127,52 @@ export default function GeneratePipeline() {
                     />
                   </Field>
                 </FieldGroup>
-                <div className="flex justify-end">
-                  <Button onClick={runPlan} disabled={loading} className="mt-2">
-                    {loading && (
-                      <div className="flex items-center">
-                        <Spinner className="h-5 w-5" />
-                      </div>
-                    )}
+                <div className="flex justify-between items-center mt-2">
+                  {!pipeline.pipelineTasks?.length && (
+                    <Button onClick={suggestTasks} plain disabled={loading}>
+                      Suggest tasks using test docs
+                    </Button>
+                  )}
+                  {loading && (
+                    <div className="flex items-center">
+                      <Spinner className="h-5 w-5" />
+                    </div>
+                  )}
+                  <Button onClick={runPlan} disabled={loading}>
                     Plan
                   </Button>
                 </div>
+                {pipeline.pipelineTasks?.length && (
+                  <div className="mt-4">
+                    <Field>
+                      <Label>Suggested tasks</Label>
+                      <Listbox
+                        className="!mt-1"
+                        optionsClassName="z-50"
+                        value={selectedTask}
+                        onChange={(e) => setSelectedTask(e)}
+                      >
+                        {pipeline.pipelineTasks.map((task) => (
+                          <ListboxOption key={task} value={task}>
+                            {task}
+                          </ListboxOption>
+                        ))}
+                      </Listbox>
+                    </Field>
+
+                    <Button
+                      onClick={() =>
+                        setPipeline({
+                          ...pipeline,
+                          pipelineDescription: selectedTask,
+                        })
+                      }
+                      disabled={loading}
+                    >
+                      Use suggested task
+                    </Button>
+                  </div>
+                )}
                 {error && (
                   <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 my-2">
                     Error planning: {error.message}

@@ -6,4 +6,5 @@ export interface Doc {
   content: string;
   test?: boolean;
   processingResults: StepResult[];
+  summary?: string;
 }
