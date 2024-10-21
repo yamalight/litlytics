@@ -29,7 +29,7 @@ import {
   DropdownMenu,
   DropdownShortcut,
 } from '~/components/catalyst/dropdown';
-import { configAtom, pipelineUndoAtom, webllmAtom } from '~/store/store';
+import { configAtom, pipelineUndoAtom } from '~/store/store';
 import { useLitlytics } from '~/store/WithLitLytics';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
@@ -65,7 +65,6 @@ export function OverlayUI() {
   const { litlytics, pipeline, setPipeline, setPipelineStatus } =
     useLitlytics();
   const litlyticsConfig = useAtomValue(configAtom);
-  const webllm = useAtomValue(webllmAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
@@ -83,10 +82,10 @@ export function OverlayUI() {
 
   useEffect(() => {
     // show settings if key not set
-    if (!litlyticsConfig.llmKey?.length && webllm.loadProgress !== 1) {
+    if (!litlyticsConfig.llmKey?.length) {
       setIsSettingsOpen(true);
     }
-  }, [litlyticsConfig, webllm]);
+  }, [litlyticsConfig]);
 
   const closeHelp = () => {
     setIsHelpOpen(false);
@@ -182,7 +181,7 @@ export function OverlayUI() {
 
   const closeSettings = () => {
     // disallow closing if no key set
-    if (!litlyticsConfig.llmKey?.length && webllm.loadProgress !== 1) {
+    if (!litlyticsConfig.llmKey?.length) {
       return;
     }
     setIsSettingsOpen(false);
@@ -368,9 +367,7 @@ export function OverlayUI() {
         size="2xl"
         open={isSettingsOpen}
         onClose={closeSettings}
-        canClose={
-          Boolean(litlyticsConfig.llmKey?.length) || webllm.loadProgress === 1
-        }
+        canClose={Boolean(litlyticsConfig.llmKey?.length)}
         topClassName="z-20"
       >
         <DialogTitle className="!text-lg">Settings</DialogTitle>

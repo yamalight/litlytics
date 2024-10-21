@@ -6,7 +6,6 @@ import {
   litlyticsAtom,
   pipelineAtom,
   pipelineStatusAtom,
-  webllmAtom,
 } from './store';
 
 const LitLyticsContext = createContext<{
@@ -28,7 +27,6 @@ const LitLyticsContext = createContext<{
 });
 
 export function WithLitLytics({ children }: { children: React.ReactNode }) {
-  const webllm = useAtomValue(webllmAtom);
   const config = useAtomValue(configAtom);
   const litlytics = useAtomValue(litlyticsAtom);
   const [pipeline, setPipeline] = useAtom(pipelineAtom);
@@ -45,11 +43,7 @@ export function WithLitLytics({ children }: { children: React.ReactNode }) {
     ) {
       litlytics.importConfig(config);
     }
-    // assign webllm engine
-    if (litlytics.engine !== webllm.engine) {
-      litlytics.engine = webllm.engine;
-    }
-  }, [config, webllm, litlytics]);
+  }, [config, litlytics]);
 
   // update pipeline on changes
   useEffect(() => {

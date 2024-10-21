@@ -6,7 +6,6 @@ import { Badge } from '../catalyst/badge';
 export const recommendedForProvider: Record<LLMProviders, LLMModel> = {
   anthropic: 'claude-3-5-sonnet-20240620',
   gemini: 'gemini-1.5-flash-latest',
-  local: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',
   openai: 'gpt-4o-mini',
   ollama: '',
 };
@@ -37,10 +36,6 @@ export function Recommended() {
             <li>
               <span className="text-sm opacity-60">Best free tier:</span>
               <br /> <Badge>Gemini</Badge> gemini-1.5-flash
-            </li>
-            <li>
-              <span className="text-sm opacity-60">Best for privacy:</span>
-              <br /> <Badge>Local</Badge> Llama-3.2-3B-Instruct
             </li>
           </ul>
 

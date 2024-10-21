@@ -5,7 +5,6 @@ import {
   emptyPipeline,
   LitLytics,
   LitLyticsConfig,
-  MLCEngine,
   Pipeline,
   PipelineStatus,
 } from 'litlytics';
@@ -43,16 +42,3 @@ export const litlyticsAtom = atom<LitLytics>(
     key: '',
   })
 );
-
-// webllm instance
-export const webllmAtom = atom<{
-  engine?: MLCEngine;
-  fetchProgress: number;
-  loadProgress: number;
-  status: string;
-}>({
-  engine: undefined,
-  fetchProgress: -1,
-  loadProgress: -1,
-  status: '',
-});

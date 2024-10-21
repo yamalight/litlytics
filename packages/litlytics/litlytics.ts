@@ -1,4 +1,3 @@
-import { MLCEngine } from '@mlc-ai/web-llm';
 import type { Doc } from './doc/Document';
 import { runPipeline } from './engine/runPipeline';
 import {
@@ -33,10 +32,8 @@ import {
 } from './step/Step';
 
 // export types and commonly used vars
-export type { MLCEngine } from '@mlc-ai/web-llm';
 export type { Doc } from './doc/Document';
 export { modelCosts } from './llm/costs';
-export { localModelSizes } from './llm/sizes';
 export {
   LLMModelsList,
   LLMProvidersList,
@@ -57,7 +54,7 @@ export {
   type StepInput,
 } from './step/Step';
 
-export type LLMProviders = LLMProvider | 'local';
+export type LLMProviders = LLMProvider;
 
 export interface LitLyticsConfig {
   // model config
@@ -73,8 +70,6 @@ export class LitLytics {
   provider?: LLMProviders;
   model?: LLMModel;
   #llmKey?: string;
-  // local LLM engine
-  engine?: MLCEngine;
 
   // pipeline
   pipeline: Pipeline = emptyPipeline;
@@ -86,17 +81,14 @@ export class LitLytics {
     provider,
     model,
     key,
-    engine,
   }: {
     provider: LLMProviders;
     model: LLMModel;
     key: string;
-    engine?: MLCEngine;
   }) {
     this.provider = provider;
     this.model = model;
     this.#llmKey = key;
-    this.engine = engine;
   }
 
   /**
@@ -176,16 +168,15 @@ export class LitLytics {
     if (
       !this.provider?.length ||
       !this.model?.length ||
-      (!this.#llmKey?.length && this.provider !== 'local')
+      !this.#llmKey?.length
     ) {
       throw new Error('No provider, model or key set!');
     }
 
     return await runPromptFromMessages({
       provider: this.provider,
-      key: this.#llmKey ?? 'local',
+      key: this.#llmKey,
       model: this.model,
-      engine: this.engine,
       messages,
       args,
     });
@@ -199,16 +190,15 @@ export class LitLytics {
     if (
       !this.provider?.length ||
       !this.model?.length ||
-      (!this.#llmKey?.length && this.provider !== 'local')
+      !this.#llmKey?.length
     ) {
       throw new Error('No provider, model or key set!');
     }
 
     return await runPrompt({
       provider: this.provider,
-      key: this.#llmKey ?? 'local',
+      key: this.#llmKey,
       model: this.model,
-      engine: this.engine,
       system,
       user,
       args,
