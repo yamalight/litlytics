@@ -1,0 +1,31 @@
+name: 'Test and lint code'
+description: 'Performs tests and linting of all the components in the repo'
+runs:
+  using: 'composite'
+  steps:
+    # install bun
+    - name: Install bun for deployment
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+    # install deps
+    - name: Install lib deps
+      working-directory: ./packages/litlytics
+      run: bun install --frozen-lockfile
+    - name: Install app deps
+      run: bun install --frozen-lockfile
+    # lib lint/check/test
+    - name: Run lib typecheck
+      working-directory: ./packages/litlytics
+      run: bun run typecheck
+    - name: Run lib tests
+      working-directory: ./packages/litlytics
+      run: bun run test:ci
+
+    # main app lint/check/test
+    - name: Run app eslint
+      run: bun run lint
+    - name: Run app typecheck
+      run: bun run typecheck
+    - name: Run app test
+      run: bun run test:ci

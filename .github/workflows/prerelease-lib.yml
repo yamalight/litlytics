@@ -1,13 +1,8 @@
 name: Prerelease litlytics library
 
 on:
-  workflow_run:
-    # Run after "Test and lint" workflow
-    workflows: ['Test and lint']
-    types:
-      - completed # Only when it's completed
-    branches:
-      - main # Only run the publish workflow for pushes to main
+  push:
+    branches: ['main'] # Only run the publish workflow for pushes to main
 
 jobs:
   publish-lib-prerelease:
@@ -24,6 +19,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
+
+      # run test-lint
+      - name: Test and lint
+        uses: ./.github/actions/test-lint
 
       # Check for changes in ./packages/litlytics
       - name: Check if changed
