@@ -6,7 +6,7 @@
   "type": "module",
   "version": "0.4.0",
   "scripts": {
-    "build": "bun run build.ts",
+    "build": "NODE_ENV=production bun run build.ts",
     "typecheck": "tsc",
     "test": "vitest",
     "test:ci": "vitest --coverage --run"
