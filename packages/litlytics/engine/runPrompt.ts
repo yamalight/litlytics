@@ -1,14 +1,14 @@
-import type { CoreMessage, CoreTool } from 'ai';
+import type { CoreMessage } from 'ai';
 import type { LLMProviders } from '../litlytics';
 import { executeOnLLM } from '../llm/llm';
-import type { LLMModel, LLMProvider, LLMRequest } from '../llm/types';
+import type { LLMArgs, LLMModel, LLMProvider, LLMRequest } from '../llm/types';
 
 export interface RunPromptFromMessagesArgs {
   provider: LLMProviders;
   key: string;
   model: LLMModel;
   messages: CoreMessage[];
-  args?: Record<string, CoreTool>;
+  args?: LLMArgs;
 }
 export const runPromptFromMessages = async ({
   provider,
@@ -36,7 +36,7 @@ export interface RunPromptArgs {
   model: LLMModel;
   system: string;
   user: string;
-  args?: Record<string, CoreTool>;
+  args?: LLMArgs;
 }
 export const runPrompt = async ({
   provider,

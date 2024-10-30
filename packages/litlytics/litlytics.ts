@@ -9,7 +9,7 @@ import {
 import { runStep, type RunStepArgs } from './engine/runStep';
 import { runLLMStep, type RunLLMStepArgs } from './engine/step/runLLMStep';
 import { testPipelineStep } from './engine/testStep';
-import type { LLMModel, LLMProvider } from './llm/types';
+import type { LLMArgs, LLMModel, LLMProvider } from './llm/types';
 import { OUTPUT_ID } from './output/Output';
 import {
   pipelineFromText,
@@ -38,6 +38,7 @@ export { modelCosts } from './llm/costs';
 export {
   LLMModelsList,
   LLMProvidersList,
+  type LLMArgs,
   type LLMModel,
   type LLMProvider,
 } from './llm/types';
@@ -70,6 +71,7 @@ export class LitLytics {
   // model config
   provider?: LLMProviders;
   model?: LLMModel;
+  llmArgs?: LLMArgs;
   #llmKey?: string;
 
   // pipeline
@@ -82,14 +84,17 @@ export class LitLytics {
     provider,
     model,
     key,
+    llmArgs,
   }: {
     provider: LLMProviders;
     model: LLMModel;
     key: string;
+    llmArgs?: LLMArgs;
   }) {
     this.provider = provider;
     this.model = model;
     this.#llmKey = key;
+    this.llmArgs = llmArgs;
   }
 
   /**
@@ -179,7 +184,10 @@ export class LitLytics {
       key: this.#llmKey,
       model: this.model,
       messages,
-      args,
+      args: {
+        ...args,
+        ...this.llmArgs,
+      },
     });
   };
 
@@ -202,7 +210,10 @@ export class LitLytics {
       model: this.model,
       system,
       user,
-      args,
+      args: {
+        ...args,
+        ...this.llmArgs,
+      },
     });
   };
 

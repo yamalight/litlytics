@@ -1,4 +1,4 @@
-import type { CoreMessage, CoreTool } from 'ai';
+import type { CoreMessage, generateText } from 'ai';
 
 export const LLMProvidersList = [
   'openai',
@@ -40,10 +40,12 @@ export const LLMModelsList = {
 export type LLMModel =
   (typeof LLMModelsList)[keyof typeof LLMModelsList][number];
 
+export type LLMArgs = Partial<Parameters<typeof generateText>[0]>;
+
 export interface LLMRequest {
   provider: LLMProvider;
   key: string;
   model: LLMModel;
   messages: CoreMessage[];
-  modelArgs?: Record<string, CoreTool>;
+  modelArgs?: LLMArgs;
 }

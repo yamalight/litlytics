@@ -1,9 +1,11 @@
 import type { LanguageModelUsage } from 'ai';
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
+import * as run from '../engine/runPrompt';
 import {
   LitLytics,
   OUTPUT_ID,
   type Doc,
+  type LLMArgs,
   type Pipeline,
   type StepInput,
 } from '../litlytics';
@@ -228,4 +230,55 @@ test('should generate suggested tasks for current pipeline', async () => {
   expect(newTestDoc?.summary).toEqual('test summary');
   const newNonTestDoc = litlytics.docs.find((d) => d.id === docNonTest.id);
   expect(newNonTestDoc?.summary).toBeUndefined();
+});
+
+test('should pass llm args when running prompt', async () => {
+  const testArgs: LLMArgs = {
+    temperature: 0.5,
+    maxTokens: 1000,
+  };
+  const litlytics = new LitLytics({
+    provider: 'openai',
+    model: 'test',
+    key: 'test',
+    llmArgs: testArgs,
+  });
+  litlytics.pipeline.pipelineDescription = 'test description';
+
+  const testResult = `Step name: Generate Title and Description
+Step type: llm
+Step input: doc
+Step description: Generate an Etsy product title and description based on the provided document describing the product.
+
+---
+
+Step name: Check for Copyrighted Terms
+Step type: llm
+Step input: result
+Step description: Analyze the generated title and description for possible copyrighted terms and suggest edits.
+`;
+
+  // mock prompt replies
+  const spy = vi
+    .spyOn(run, 'runPrompt')
+    .mockImplementation(
+      async ({
+        user,
+        args,
+      }: {
+        system: string;
+        user: string;
+        args?: LLMArgs;
+      }) => {
+        expect(args).toEqual(testArgs);
+        expect(user).toEqual('test description');
+        return { result: testResult, usage: {} as LanguageModelUsage };
+      }
+    );
+  // run generation
+  await litlytics.generatePipeline();
+  // check that spy was called
+  expect(spy).toHaveBeenCalled();
+  // cleanup
+  spy.mockClear();
 });
