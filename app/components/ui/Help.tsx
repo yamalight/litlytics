@@ -10,7 +10,7 @@ By combining LLMs with javascript, LitLytics allows you to generate complete dat
 With LitLytics, you can transform data, extract insights, and automate routine tasks without having to write any code.
 Just describe the task in plain language, and LitLytics will handle the rest – from parsing and cleaning data to generating output in structured formats.
 
-You can find examples in the repository in the [examples folder](https://github.com/yamalight/litlytics/tree/main/examples).`}
+You can find examples in the repository in the <a href="https://github.com/yamalight/litlytics/tree/main/examples" target="_blank">examples folder</a>.`}
       </CustomMarkdown>
     </div>
   );
