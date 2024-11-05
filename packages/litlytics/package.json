@@ -4,7 +4,7 @@
   "main": "dist/litlytics.js",
   "types": "litlytics.ts",
   "type": "module",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "scripts": {
     "build": "NODE_ENV=production bun run build.ts",
     "typecheck": "tsc",
