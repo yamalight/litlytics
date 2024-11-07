@@ -3,9 +3,11 @@ import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
   Bars3Icon,
+  ChatBubbleBottomCenterIcon,
   Cog8ToothIcon,
   FolderIcon,
   QuestionMarkCircleIcon,
+  QueueListIcon,
   TrashIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
@@ -29,7 +31,7 @@ import {
   DropdownMenu,
   DropdownShortcut,
 } from '~/components/catalyst/dropdown';
-import { configAtom, pipelineUndoAtom } from '~/store/store';
+import { configAtom, pipelineUndoAtom, uiLayoutAtom } from '~/store/store';
 import { useLitlytics } from '~/store/WithLitLytics';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
@@ -66,6 +68,7 @@ export function OverlayUI() {
     useLitlytics();
   const litlyticsConfig = useAtomValue(configAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
+  const [uiLayout, setUiLayout] = useAtom(uiLayoutAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isLoadOpen, setIsLoadOpen] = useState(false);
@@ -266,6 +269,21 @@ export function OverlayUI() {
             </DropdownMenu>
           </Dropdown>
         </MenuHolder>
+
+        <div className="pointer-events-auto">
+          <Button
+            outline
+            onClick={() =>
+              setUiLayout((l) => (l === 'agent' ? 'execution' : 'agent'))
+            }
+          >
+            {uiLayout === 'agent' ? (
+              <QueueListIcon title="Switch to execution UI" />
+            ) : (
+              <ChatBubbleBottomCenterIcon title="Switch to agent UI" />
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* Pipeline reset dialog */}

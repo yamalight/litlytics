@@ -4,11 +4,11 @@ import { OutputNode } from './nodes/output/OutputNode';
 import { SourceNode } from './nodes/source/SourceNode';
 import { StepNode } from './nodes/StepNode';
 
-export function PipelineBuilder() {
+export function PipelineBuilder({ className }: { className?: string }) {
   const { pipeline } = useLitlytics();
 
   return (
-    <Background>
+    <Background className={className}>
       <SourceNode />
       {pipeline.steps
         .sort((a, b) => (a.connectsTo.includes(b.id) ? -1 : 1))

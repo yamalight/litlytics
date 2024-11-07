@@ -33,6 +33,7 @@ import {
 } from './step/Step';
 
 // export types and commonly used vars
+export { tool } from 'ai';
 export type { Doc } from './doc/Document';
 export { modelCosts } from './llm/costs';
 export {
@@ -265,6 +266,11 @@ export class LitLytics {
 
   suggestTasks = async () => {
     if (!this.pipeline.source?.docs?.length) {
+      return this.pipeline;
+    }
+
+    // do not run suggestion if the tasks are already generated
+    if (this.pipeline.pipelineTasks?.length) {
       return this.pipeline;
     }
 

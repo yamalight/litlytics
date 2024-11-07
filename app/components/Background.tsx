@@ -2,7 +2,8 @@ import clsx from 'clsx';
 
 export function Background({
   children,
-  className,
+  // size
+  className = 'w-screen h-screen p-6 overflow-auto',
 }: {
   children: React.ReactNode;
   className?: string;
@@ -11,8 +12,6 @@ export function Background({
     <div
       className={clsx(
         className,
-        // size
-        'w-screen h-screen p-6 overflow-auto',
         // content positioning
         'flex flex-col items-center',
         // bg dots

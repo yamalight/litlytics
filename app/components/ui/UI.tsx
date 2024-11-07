@@ -1,7 +1,10 @@
+import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { PipelineBuilder } from '~/components/pipeline/PipelineBuilder';
 import { OverlayUI } from '~/components/ui/Overlay';
+import { uiLayoutAtom } from '~/store/store';
 import { WithLitLytics } from '~/store/WithLitLytics';
+import { AgentUI } from '../agent/Agent';
 import { Background } from '../Background';
 import { Spinner } from '../Spinner';
 
@@ -33,10 +36,13 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
 }
 
 export function UI() {
+  const uiLayout = useAtomValue(uiLayoutAtom);
+
   return (
     <ClientOnly>
       <OverlayUI />
-      <PipelineBuilder />
+      {uiLayout === 'execution' && <PipelineBuilder />}
+      {uiLayout === 'agent' && <AgentUI />}
     </ClientOnly>
   );
 }

@@ -42,3 +42,11 @@ export const litlyticsAtom = atom<LitLytics>(
     key: '',
   })
 );
+
+// litlytics config, persisted in localStorage
+export const uiLayoutAtom = atomWithStorage<'agent' | 'execution'>(
+  'litlytics.uilayout',
+  'agent',
+  undefined,
+  { getOnInit: true }
+);
