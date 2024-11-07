@@ -10,7 +10,7 @@ LitLytics allows creating custom text document processing pipelines using custom
 
 You have access to following LitLytics functions:
 - Suggest a list of possible pipelines that can be applied to user's documents
-- Generate a suggested pipeline for processing documents
+- Generate a new pipeline for processing documents for given task from user
 - Refine suggested pipeline for processing documents
 - Add a new step to pipeline
 - Edit a step in the pipeline
@@ -72,6 +72,40 @@ export const askAgent = async ({
 ${newPipeline.pipelineTasks?.map((task) => '- ' + task)?.join('\n')}
 
 Generate a text description for user.`,
+            role: 'system',
+          },
+        ]);
+        const result = await litlytics.runPromptFromMessages({
+          messages: agentMessagesWithResult,
+        });
+        resolve(
+          messages.concat({
+            id: String(messages.length),
+            from: 'assistant',
+            text: result.result,
+          })
+        );
+      },
+    }),
+    generatePipeline: tool({
+      description: `Generate a new pipeline for processing documents for given task from user.`,
+      parameters: z.object({
+        task: z.string(),
+      }),
+      execute: async ({ task }) => {
+        litlytics.setPipeline({
+          pipelineDescription: task,
+        });
+        // run task
+        const newPipeline = await litlytics.generatePipeline();
+        setPipeline(newPipeline);
+        // generate a response
+        const agentMessagesWithResult = agentMessages.concat([
+          {
+            content: `Suggested pipeline from function execution:
+${newPipeline.pipelinePlan}
+
+Ask a user if that look fine.`,
             role: 'system',
           },
         ]);

@@ -1,6 +1,6 @@
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { litlyticsAtom, pipelineAtom } from '~/store/store';
 import { Button } from '../catalyst/button';
 import { Input } from '../catalyst/input';
@@ -33,6 +33,7 @@ function MessageRender({ message }: { message: Message }) {
 }
 
 export function Chat() {
+  const messageBoxRef = useRef<HTMLDivElement>(null);
   const litlytics = useAtomValue(litlyticsAtom);
   const setPipeline = useSetAtom(pipelineAtom);
   const [input, setInput] = useState<string>('');
@@ -43,6 +44,16 @@ export function Chat() {
       text: `Hi! I'm Lit. Ask me to do anything for you.`,
     },
   ]);
+
+  useEffect(() => {
+    // scroll to bottom
+    if (messageBoxRef.current) {
+      messageBoxRef.current.scrollTo({
+        top: messageBoxRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [messages]);
 
   const sendMessage = async () => {
     const inputMessage = input;
@@ -72,7 +83,10 @@ export function Chat() {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="flex flex-1 flex-col gap-4 p-3 pt-20">
+      <div
+        ref={messageBoxRef}
+        className="flex flex-1 flex-col gap-4 p-3 pt-20 max-h-screen overflow-auto"
+      >
         {messages.map((m) => (
           <MessageRender key={m.id} message={m} />
         ))}
