@@ -33,7 +33,7 @@ import {
 } from './step/Step';
 
 // export types and commonly used vars
-export { tool } from 'ai';
+export { tool, type CoreTool } from 'ai';
 export type { Doc } from './doc/Document';
 export { modelCosts } from './llm/costs';
 export {

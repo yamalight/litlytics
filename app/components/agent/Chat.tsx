@@ -5,7 +5,8 @@ import { litlyticsAtom, pipelineAtom } from '~/store/store';
 import { Button } from '../catalyst/button';
 import { Input } from '../catalyst/input';
 import { CustomMarkdown } from '../markdown/Markdown';
-import { askAgent, Message } from './agent';
+import { askAgent } from './logic/askAgent';
+import { type Message } from './logic/types';
 
 function MessageRender({ message }: { message: Message }) {
   if (message.from === 'user') {
