@@ -8,7 +8,7 @@ export function AgentUI() {
         <Chat />
       </div>
       <div className="flex flex-1">
-        <PipelineBuilder className="w-full h-full pt-6 p-3" />
+        <PipelineBuilder className="w-full h-full overflow-auto pt-6 p-3" />
       </div>
     </div>
   );

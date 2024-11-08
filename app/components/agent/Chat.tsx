@@ -56,7 +56,11 @@ export function Chat() {
   }, [messages]);
 
   const sendMessage = async () => {
-    const inputMessage = input;
+    const inputMessage = input.trim();
+    // do nothing if there's no user message
+    if (!inputMessage.length) {
+      return;
+    }
     // reset input
     setInput('');
     // append user message to messages

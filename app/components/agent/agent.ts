@@ -7,11 +7,13 @@ You are Lit - a friendly assistant and an expert in data science.
 
 Your task is to help user design a text document processing pipeline using low-code platform called LitLytics.
 LitLytics allows creating custom text document processing pipelines using custom processing steps.
+LitLytics supports text documents and .csv, .doc(x), .pdf, .txt text files.
 
 You have access to following LitLytics functions:
-- Suggest a list of possible pipelines that can be applied to user's documents
-- Generate a new pipeline for processing documents for given task from user
-- Refine suggested pipeline for processing documents
+- Suggest a list of possible pipelines that can be applied to user's documents or files
+- Suggest a new pipeline for processing documents for given task from user
+- Refine suggested pipeline using user request
+- Assemble suggested pipeline
 - Add a new step to pipeline
 - Edit a step in the pipeline
 - Test a step in the pipeline
@@ -57,7 +59,7 @@ export const askAgent = async ({
   // generate tools
   const tools: LLMArgs['tools'] = {
     analyzeDocuments: tool({
-      description: `Suggest a list of possible pipelines that can be applied to user's documents.`,
+      description: `Suggest a list of possible pipelines that can be applied to user's documents`,
       parameters: z.object({
         suggest: z.boolean(),
       }),
@@ -87,8 +89,8 @@ Generate a text description for user.`,
         );
       },
     }),
-    generatePipeline: tool({
-      description: `Generate a new pipeline for processing documents for given task from user.`,
+    suggestPipeline: tool({
+      description: `Suggest a new pipeline for processing documents for given task from user`,
       parameters: z.object({
         task: z.string(),
       }),
@@ -106,6 +108,77 @@ Generate a text description for user.`,
 ${newPipeline.pipelinePlan}
 
 Ask a user if that look fine.`,
+            role: 'system',
+          },
+        ]);
+        const result = await litlytics.runPromptFromMessages({
+          messages: agentMessagesWithResult,
+        });
+        resolve(
+          messages.concat({
+            id: String(messages.length),
+            from: 'assistant',
+            text: result.result,
+          })
+        );
+      },
+    }),
+    refinePipeline: tool({
+      description: `Refine suggested pipeline using user request`,
+      parameters: z.object({
+        refineRequest: z.string(),
+      }),
+      execute: async ({ refineRequest }) => {
+        // run task
+        const newPipeline = await litlytics.refinePipeline({
+          refineRequest: refineRequest,
+        });
+        setPipeline(newPipeline);
+        // generate a response
+        const agentMessagesWithResult = agentMessages.concat([
+          {
+            content: `Refined pipeline from function execution:
+${newPipeline.pipelinePlan}
+
+Ask a user if that look fine.`,
+            role: 'system',
+          },
+        ]);
+        const result = await litlytics.runPromptFromMessages({
+          messages: agentMessagesWithResult,
+        });
+        resolve(
+          messages.concat({
+            id: String(messages.length),
+            from: 'assistant',
+            text: result.result,
+          })
+        );
+      },
+    }),
+    createSuggestedPipeline: tool({
+      description: `Assemble suggested pipeline`,
+      parameters: z.object({
+        assemble: z.boolean(),
+      }),
+      execute: async () => {
+        // run task
+        // generate plan from LLM
+        const newPipeline = await litlytics.pipelineFromText(
+          ({ step, totalSteps }) => {
+            if (step > totalSteps) {
+              // setProgress('');
+              return;
+            }
+
+            // setProgress(`Generating steps: ${step} / ${totalSteps}`);
+          }
+        );
+        setPipeline(newPipeline);
+        // generate a response
+        const agentMessagesWithResult = agentMessages.concat([
+          {
+            content: `Pipeline assembled. Notify user. Be brief.`,
             role: 'system',
           },
         ]);
