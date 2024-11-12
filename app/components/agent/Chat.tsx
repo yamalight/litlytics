@@ -5,6 +5,7 @@ import { litlyticsAtom, pipelineAtom } from '~/store/store';
 import { Button } from '../catalyst/button';
 import { Input } from '../catalyst/input';
 import { CustomMarkdown } from '../markdown/Markdown';
+import { Spinner } from '../Spinner';
 import { askAgent } from './logic/askAgent';
 import { type Message } from './logic/types';
 
@@ -45,6 +46,8 @@ export function Chat() {
       text: `Hi! I'm Lit. Ask me to do anything for you.`,
     },
   ]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
     // scroll to bottom
@@ -64,6 +67,8 @@ export function Chat() {
     }
     // reset input
     setInput('');
+    // reset error
+    setError(undefined);
     // append user message to messages
     const messagesWithUser: Message[] = [
       ...messages,
@@ -75,15 +80,22 @@ export function Chat() {
     ];
     setMessages(messagesWithUser);
 
-    // TODO: show loading state
-
+    // show loading state
+    setLoading(true);
     // run new messages through agent
-    const newMessages = await askAgent({
-      messages: messagesWithUser,
-      litlytics,
-      setPipeline,
-    });
-    setMessages(newMessages);
+    try {
+      const newMessages = await askAgent({
+        messages: messagesWithUser,
+        litlytics,
+        setPipeline,
+      });
+      setMessages(newMessages);
+    } catch (err) {
+      // catch and display error
+      setError(err as Error);
+    }
+    // disable loading state
+    setLoading(false);
   };
 
   return (
@@ -95,6 +107,16 @@ export function Chat() {
         {messages.map((m) => (
           <MessageRender key={m.id} message={m} />
         ))}
+        {loading && (
+          <div className="flex items-center justify-end gap-2">
+            <Spinner className="h-5 w-5" /> Thinking...
+          </div>
+        )}
+        {error && (
+          <div className="flex items-center justify-between bg-red-400 dark:bg-red-700 rounded-xl py-1 px-2 my-2">
+            Error while thinking: {error.message}
+          </div>
+        )}
       </div>
       <div className="flex items-center min-h-16 p-2">
         <Input
