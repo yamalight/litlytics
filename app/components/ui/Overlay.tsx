@@ -3,11 +3,10 @@ import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
   Bars3Icon,
-  ChatBubbleBottomCenterIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
   Cog8ToothIcon,
   FolderIcon,
   QuestionMarkCircleIcon,
-  QueueListIcon,
   TrashIcon,
 } from '@heroicons/react/24/solid';
 import { useAtom, useAtomValue } from 'jotai';
@@ -196,10 +195,24 @@ export function OverlayUI() {
 
   return (
     <div className="fixed pointer-events-none my-6 px-4 z-10 h-screen w-screen bg-transparent">
-      <div className="flex justify-between w-full h-fit">
+      <div
+        className={`flex w-full h-fit items-center ${
+          uiLayout === 'agent' ? 'justify-between' : 'justify-normal'
+        }`}
+      >
+        <div className="pointer-events-auto">
+          <Button
+            onClick={() =>
+              setUiLayout((l) => (l === 'agent' ? 'execution' : 'agent'))
+            }
+          >
+            <ChatBubbleOvalLeftEllipsisIcon title="Toggle chat UI" />
+          </Button>
+        </div>
+
         <MenuHolder>
           <Dropdown>
-            <DropdownButton>
+            <DropdownButton className={uiLayout === 'agent' ? 'ml-4' : ''}>
               <Bars3Icon />
             </DropdownButton>
             <DropdownMenu
@@ -270,20 +283,7 @@ export function OverlayUI() {
           </Dropdown>
         </MenuHolder>
 
-        <div className="pointer-events-auto">
-          <Button
-            outline
-            onClick={() =>
-              setUiLayout((l) => (l === 'agent' ? 'execution' : 'agent'))
-            }
-          >
-            {uiLayout === 'agent' ? (
-              <QueueListIcon title="Switch to execution UI" />
-            ) : (
-              <ChatBubbleBottomCenterIcon title="Switch to agent UI" />
-            )}
-          </Button>
-        </div>
+        {uiLayout === 'agent' ? <div className="flex" /> : <></>}
       </div>
 
       {/* Pipeline reset dialog */}

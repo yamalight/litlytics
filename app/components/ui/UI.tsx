@@ -21,7 +21,7 @@ function ClientOnly({ children }: { children: React.ReactNode }) {
   if (!hasMounted) {
     return (
       <main className="relative min-h-screen min-w-screen">
-        <Background className="items-center justify-center">
+        <Background className="items-center justify-center min-h-screen min-w-screen">
           <Spinner /> Loading...
         </Background>
       </main>
