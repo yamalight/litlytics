@@ -27,10 +27,20 @@ export const askAgent = async ({
   const functionsList = agentTools.map((t) => `- ${t.description}`).join('\n');
   // prepend system message
   const agentMessages: RunPromptFromMessagesArgs['messages'] = [
+    // system prompt
     {
       role: 'system',
       content: agentSystemPrompt.trim().replace('{{FUNCTIONS}}', functionsList),
     },
+    // current pipeline for context
+    {
+      role: 'system',
+      content: `Current pipeline:
+\`\`\`
+${JSON.stringify(litlytics.pipeline, null, 2)}
+\`\`\``,
+    },
+    // user messages
     ...inputMessages,
   ];
   console.log(agentMessages);

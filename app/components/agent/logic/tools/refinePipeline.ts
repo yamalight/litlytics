@@ -2,7 +2,7 @@ import { tool } from 'litlytics';
 import { z } from 'zod';
 import { ToolDefinition } from '../types';
 
-const description = `Refine suggested pipeline using user request`;
+const description = `Function description: Refine suggested pipeline using user request`;
 
 export const refinePipeline: ToolDefinition = {
   name: 'refinePipeline',

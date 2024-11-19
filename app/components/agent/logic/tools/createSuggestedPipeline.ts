@@ -2,7 +2,7 @@ import { tool } from 'litlytics';
 import { z } from 'zod';
 import { ToolDefinition } from '../types';
 
-const description = `Assemble suggested pipeline`;
+const description = `Function description: Assemble suggested pipeline`;
 
 export const createSuggestedPipeline: ToolDefinition = {
   name: 'createSuggestedPipeline',
