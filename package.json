@@ -38,7 +38,8 @@
     "rehype-raw": "^7.0.0",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.0",
-    "turndown": "^7.2.0"
+    "turndown": "^7.2.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.13.1",

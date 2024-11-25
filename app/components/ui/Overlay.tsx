@@ -3,6 +3,7 @@ import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
   Bars3Icon,
+  ChatBubbleOvalLeftEllipsisIcon,
   Cog8ToothIcon,
   FolderIcon,
   QuestionMarkCircleIcon,
@@ -29,7 +30,7 @@ import {
   DropdownMenu,
   DropdownShortcut,
 } from '~/components/catalyst/dropdown';
-import { configAtom, pipelineUndoAtom } from '~/store/store';
+import { configAtom, pipelineUndoAtom, uiLayoutAtom } from '~/store/store';
 import { useLitlytics } from '~/store/WithLitLytics';
 import { Field, FieldGroup, Label } from '../catalyst/fieldset';
 import { Input } from '../catalyst/input';
@@ -66,6 +67,7 @@ export function OverlayUI() {
     useLitlytics();
   const litlyticsConfig = useAtomValue(configAtom);
   const { undo, redo, canUndo, canRedo } = useAtomValue(pipelineUndoAtom);
+  const [uiLayout, setUiLayout] = useAtom(uiLayoutAtom);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const [isLoadOpen, setIsLoadOpen] = useState(false);
@@ -193,10 +195,24 @@ export function OverlayUI() {
 
   return (
     <div className="fixed pointer-events-none my-6 px-4 z-10 h-screen w-screen bg-transparent">
-      <div className="flex justify-between w-full h-fit">
+      <div
+        className={`flex w-full h-fit items-center ${
+          uiLayout === 'agent' ? 'justify-between' : 'justify-normal'
+        }`}
+      >
+        <div className="pointer-events-auto">
+          <Button
+            onClick={() =>
+              setUiLayout((l) => (l === 'agent' ? 'execution' : 'agent'))
+            }
+          >
+            <ChatBubbleOvalLeftEllipsisIcon title="Toggle chat UI" />
+          </Button>
+        </div>
+
         <MenuHolder>
           <Dropdown>
-            <DropdownButton>
+            <DropdownButton className={uiLayout === 'agent' ? 'ml-4' : ''}>
               <Bars3Icon />
             </DropdownButton>
             <DropdownMenu
@@ -266,6 +282,8 @@ export function OverlayUI() {
             </DropdownMenu>
           </Dropdown>
         </MenuHolder>
+
+        {uiLayout === 'agent' ? <div className="flex" /> : <></>}
       </div>
 
       {/* Pipeline reset dialog */}
