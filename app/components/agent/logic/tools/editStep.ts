@@ -4,7 +4,7 @@ import { ToolDefinition } from '../types';
 
 const description = `Function description: Edit an existing step in the pipeline
   Function arguments: step name, refine request
-  Extra instructions: User must specify arguments themselves. If step name loosely matches existing step - use full step name instead.`;
+  Extra instructions: User must specify arguments themselves. If user doesn't specify step - ask them for missing information. If step name loosely matches existing step - use full step name instead.`;
 
 export const editStep: ToolDefinition = {
   name: 'editStep',

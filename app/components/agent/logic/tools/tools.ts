@@ -4,6 +4,7 @@ import { createSuggestedPipeline } from './createSuggestedPipeline';
 import { editStep } from './editStep';
 import { refinePipeline } from './refinePipeline';
 import { suggestPipeline } from './suggestPipeline';
+import { testStep } from './testStep';
 
 export const agentTools = [
   analyzeDocuments,
@@ -12,4 +13,5 @@ export const agentTools = [
   createSuggestedPipeline,
   addNewStep,
   editStep,
+  testStep,
 ];
